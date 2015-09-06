@@ -1,7 +1,12 @@
 package xpy.sound_flock;
 
 import ddf.minim.AudioOutput;
+import ddf.minim.spi.AudioOut;
+import ddf.minim.ugens.Instrument;
 import processing.core.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Blibliki
@@ -13,39 +18,59 @@ public class Blibliki extends PApplet implements BitListener {
     ToneInstrument instrument;
 
     long duration;
+
     int noteLength;
-    public int meterLength;
+    int meterLength;
     int phraseMeters;
     int phraseLength;
     long nextCheck;
     int loops = 0;
     long beatTime;
 
-    float noteValue;
+    private List<Note> notes = new ArrayList<>();
 
-    Blibliki(ToneInstrument instrument, AudioOutput out,float noteValue) {
+
+    Blibliki(ToneInstrument instrument, AudioOutput out) {
         this.out = out;
         this.instrument = instrument;
+
         noteLength = 8;
         meterLength = 4;
         phraseLength = 1;
         phraseMeters = meterLength * phraseLength;
         beatTime = (long) (60000f / 120f);
         duration = meterLength * phraseLength * beatTime;
-        this.noteValue =noteValue;
         println(beatTime);
         println(duration);
         println("==========================");
     }
 
+    public void createNotes() {
+
+        for (int i = 0; i < noteLength; i++) {
+            Note noteToAdd = new Note(Note.getRandomNote(), .5f);
+            println(noteToAdd.pitch);
+            notes.add(noteToAdd);
+        }
+    }
+
     public void setNotes(/*float offset*/) {
         out.pauseNotes();
-        for (int i = 0; i < noteLength; i++) {
-            out.playNoteAtBeat(phraseMeters, i * noteValue, 0.1f, new ToneInstrument(instrument));
+        int i = 0;
+        for (Note note : notes) {
+//            ToneInstrument inst = new ToneInstrument(note.pitch, 0.49f,out);
+
+            out.playNoteAtBeat(phraseMeters, i++ * note.duration, 0.1f, new ToneInstrument(note.pitch, 0.49f,out));
         }
+
+        /*
+        for (int i = 0; i < noteLength; i++) {
+            out.playNoteAtBeat(phraseMeters, i * 1, 0.1f, new ToneInstrument(instrument));
+        }*/
 
         out.resumeNotes();
     }
+
 
     @Override
     public void tick() {

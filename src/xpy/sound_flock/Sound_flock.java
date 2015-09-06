@@ -45,8 +45,8 @@ public class Sound_flock extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
         println(out.sampleRate());
-        blibliki = new Blibliki(new ToneInstrument(75f, 0.49f, out), out,1);
-        blibliki2 = new Blibliki(new ToneInstrument(175f, 0.49f, out), out,.5f);
+        blibliki = new Blibliki(new ToneInstrument(329f, 0.49f, out), out);
+//        blibliki2 = new Blibliki(new ToneInstrument(175f, 0.49f, out), out);
 
         // pause time when adding a bunch of notes at once
    /*      out.pauseNotes();
@@ -73,8 +73,10 @@ public class Sound_flock extends PApplet {
         }
 */
         // resume time after a bunch of notes are added at once
+        blibliki.createNotes();
+//        blibliki2.createNotes();
         blibliki.start();
-        blibliki2.start();
+//        blibliki2.start();
     }
 
     // draw is run many times
@@ -93,7 +95,7 @@ public class Sound_flock extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
         blibliki.update();
-        blibliki2.update();
+//        blibliki2.update();
 
 
     }
