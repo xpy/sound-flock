@@ -1,8 +1,6 @@
 package xpy.sound_flock;
 
 import ddf.minim.AudioOutput;
-import ddf.minim.spi.AudioOut;
-import ddf.minim.ugens.Instrument;
 import processing.core.*;
 
 import java.util.ArrayList;
@@ -34,9 +32,9 @@ public class Blibliki extends PApplet implements BitListener {
         this.out = out;
         this.instrument = instrument;
 
-        noteLength = 8;
+        noteLength = 20;
         meterLength = 4;
-        phraseLength = 1;
+        phraseLength = 2;
         phraseMeters = meterLength * phraseLength;
         beatTime = (long) (60000f / 120f);
         duration = meterLength * phraseLength * beatTime;
@@ -47,20 +45,25 @@ public class Blibliki extends PApplet implements BitListener {
 
     public void createNotes() {
 
+        notes = Note.getRandomPhrase(phraseLength,meterLength,noteLength);
+
+ /*       float k = 0;
         for (int i = 0; i < noteLength; i++) {
-            Note noteToAdd = new Note(Note.getRandomNote(), .5f);
-            println(noteToAdd.pitch);
+            Note noteToAdd = new Note(Note.getRandomPitch(), Note.getRandomDuration());
+            k += noteToAdd.duration;
+
+            println("NotePitch: " + noteToAdd.pitch + " | " + "NoteDuration: " + noteToAdd.duration + " | " + "NoteStartTime: " + (k));
             notes.add(noteToAdd);
-        }
+        }*/
     }
 
     public void setNotes(/*float offset*/) {
         out.pauseNotes();
-        int i = 0;
+        float i = 0;
         for (Note note : notes) {
 //            ToneInstrument inst = new ToneInstrument(note.pitch, 0.49f,out);
-
-            out.playNoteAtBeat(phraseMeters, i++ * note.duration, 0.1f, new ToneInstrument(note.pitch, 0.49f,out));
+            i += note.duration;
+            out.playNoteAtBeat(phraseMeters, i, 0.1f, new ToneInstrument(note.pitch, 0.49f, out));
         }
 
         /*
@@ -80,7 +83,7 @@ public class Blibliki extends PApplet implements BitListener {
 
     public void update() {
 
-        if (System.currentTimeMillis() - nextCheck >= 0 && loops < 2) {
+        if (System.currentTimeMillis() - nextCheck >= 0 && loops < 20) {
             println("loops:" + loops);
             loops++;
             setNotes();
