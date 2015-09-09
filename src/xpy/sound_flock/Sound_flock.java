@@ -3,7 +3,6 @@ package xpy.sound_flock;
 import processing.core.*;
 import ddf.minim.Minim;
 import ddf.minim.AudioOutput;
-import ddf.minim.ugens.*;
 
 /**
  * Sound Flock
@@ -31,8 +30,10 @@ public class Sound_flock extends PApplet {
     AudioOutput out;
     Blibliki blibliki;
     Blibliki blibliki2;
+    Long startTime;
+
     // Every instrument must implement the Instrument interface so
-// playNote() can call the instrument's methods.
+    // playNote() can call the instrument's methods.
 
 
     // setup is run once at the beginning
@@ -44,39 +45,22 @@ public class Sound_flock extends PApplet {
         minim = new Minim(this);
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
-        println(out.sampleRate());
-        blibliki = new Blibliki(new ToneInstrument(329f, 0.49f, out), out);
-//        blibliki2 = new Blibliki(new ToneInstrument(175f, 0.49f, out), out);
 
-        // pause time when adding a bunch of notes at once
-   /*      out.pauseNotes();
+        blibliki = new Blibliki(4,4,1, out);
+//        blibliki = Blibliki.createRandomBlibliki( out);
+        blibliki2 =  new Blibliki(8,4,2, out);
+//        blibliki2 = Blibliki.createRandomBlibliki(out);
 
-        // make four repetitions of the same pattern
-       for (int i = 0; i < 4; i++) {
-            // add some low notes
-            out.playNote(1.25f + i * 2.0f, 0.3f,new ToneInstrument(75f , 0.49f,out));
-            out.playNote(2.50f+ i * 2.0f, 0.3f , new ToneInstrument(75, 0.49f,out));
 
-            // add some middle notes
-            out.playNote(1.75f + i * 2.0f, 0.3f, new ToneInstrument(175f, 0.4f,out));
-            out.playNote(2.75f + i * 2.0f, 0.3f, new ToneInstrument(175f, 0.4f,out));
-
-            // add some high notes
-            out.playNote(1.25f + i * 2.0f, 0.3f, new ToneInstrument(3750f, 0.07f,out));
-            out.playNote(1.5f + i * 2.0f, 0.3f, new ToneInstrument(1750f, 0.02f,out));
-            out.playNote(1.75f + i * 2.0f, 0.3f, new ToneInstrument(3750f, 0.07f,out));
-            out.playNote(2.0f + i * 2.0f, 0.3f, new ToneInstrument(1750f, 0.02f,out));
-            out.playNote(2.25f + i * 2.0f, 0.3f, new ToneInstrument(3750f, 0.07f,out));
-            out.playNote(2.5f + i * 2.0f, 0.3f, new ToneInstrument(5550f, 0.09f,out));
-            out.playNote(2.75f + i * 2.0f, 0.3f, new ToneInstrument(3750f, 0.07f,out));
-
-        }
-*/
-        // resume time after a bunch of notes are added at once
-        blibliki.createNotes();
-//        blibliki2.createNotes();
+        blibliki.createPhraseAroundPitch(87.31f);
         blibliki.start();
-//        blibliki2.start();
+
+        blibliki2.createPhraseAroundPitch(349.23f);
+        blibliki2.start();
+
+        startTime = System.currentTimeMillis();
+
+
     }
 
     // draw is run many times
@@ -95,7 +79,8 @@ public class Sound_flock extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
         blibliki.update();
-//        blibliki2.update();
+//        if(System.currentTimeMillis() - startTime > 5000)
+        blibliki2.update();
 
 
     }
