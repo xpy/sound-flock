@@ -54,6 +54,28 @@ public class Note extends PApplet {
         return NoteDistance;
     }
 
+    public static int toNormalIndex(int index) {
+
+        switch (index) {
+            case 0:
+                return 0;
+            case 2:
+                return 1;
+            case 4:
+                return 2;
+            case 5:
+                return 3;
+            case 7:
+                return 4;
+            case 9:
+                return 5;
+            case 11:
+                return 6;
+
+        }
+        return 0;
+    }
+
 
     public static String getRandomPitch() {
 
@@ -120,7 +142,7 @@ public class Note extends PApplet {
     }
 
     public static int getIndexOfPitch(float pitch) {
-        return (int) Math.ceil(Math.log(pitch / 440) / LogOfTwelfthRootOfTwo);
+        return (int) Math.round(Math.log(pitch / 440) / LogOfTwelfthRootOfTwo);
     }
 
 
@@ -145,9 +167,16 @@ public class Note extends PApplet {
     }
 
     public static float getPitchOffset(float pitch, int offset) {
+        if (offset == 0)
+            return pitch;
         int index = getIndexOfPitch(pitch);
-        int indexPosition = index % 12;
-        indexPosition = indexPosition < 0 ? 12 + indexPosition : indexPosition;
+        int indexPosition = (index + 9) % 12;
+//        println("index: " + index);
+//        println("index+9: " + (index + 9));
+//        println("indexPosition: " + indexPosition);
+//        println("offset: " + offset);
+        indexPosition = toNormalIndex(indexPosition < 0 ? 12 + indexPosition : indexPosition);
+//        println("normalIndexPosition: " + indexPosition);
         int factor = (offset < 0 ? -1 : 1);
 
         int halfNoteSum = 0;
@@ -160,8 +189,9 @@ public class Note extends PApplet {
 
             halfNoteSum += octaveNoteDistance.get(normalizedIndexPosition) /* * factor */;
         }
-        float a = getPitchOfIndex(index + halfNoteSum * factor);
-        println(a);
-        return a;
+//        println("halfNoteSum: " + halfNoteSum);
+
+
+        return getPitchOfIndex(index + halfNoteSum * factor);
     }
 }

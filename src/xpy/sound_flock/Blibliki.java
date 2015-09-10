@@ -51,14 +51,17 @@ public class Blibliki extends PApplet implements BitListener {
         out.pauseNotes();
         float i = 0;
         if(loops % 2 == 0){
-            offset--;
+            offset++;
         }
 
         for (Note note : phrase.notes) {
             i += note.duration;
             out.playNoteAtBeat(phrase.getPhraseMeters(), i, 0.1f, new ToneInstrument(note.pitchOffset(offset), 0.49f, out));
+            println("Note With Offset: "+note.pitchOffset(offset));
+
         }
 
+        println("=============");
         out.resumeNotes();
     }
 

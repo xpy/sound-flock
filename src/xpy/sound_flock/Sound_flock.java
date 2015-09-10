@@ -67,7 +67,7 @@ public class Sound_flock extends PApplet {
         blibliki.start();
 
 
-        Phrase phrase2 = new Phrase();
+  /*      Phrase phrase2 = new Phrase();
         phrase2.baseNoteLength = 0;
         phrase2.numOfNotes = 24;
         phrase2.phraseLength = 4;
@@ -78,7 +78,7 @@ public class Sound_flock extends PApplet {
 
 
         blibliki2.addPhrase(phrase2);
-        blibliki2.start();
+        blibliki2.start();*/
 
         startTime = System.currentTimeMillis();
 
