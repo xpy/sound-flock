@@ -35,6 +35,12 @@ public class Note extends PApplet {
         this.pitch = Frequency.ofPitch(pitchName).asHz();
     }
 
+    public Note(Note note) {
+        this.duration = note.duration;
+        this.pitch = note.pitch;
+
+    }
+
     private static ArrayList<Integer> initializeOctaveNoteDistance() {
         ArrayList<Integer> NoteDistance = new ArrayList<>();
         NoteDistance.add(0, 2);
@@ -74,20 +80,33 @@ public class Note extends PApplet {
     public static float getRandomPitchAroundPitch(float pitch) {
 
         int indexOfPitch = getIndexOfPitch(pitch);
-        int normalizedIndex = indexOfPitch + 9;
+
         Random r = new Random();
         int nextIndex = r.nextInt(6);
         int halfNoteSum = 0;
-        int factor = (nextIndex<3?-1:1);
-        for(int i = 3;i!=nextIndex; i+= factor){
-            halfNoteSum+= octaveNoteDistance.get(i)*factor;
+        int factor = (nextIndex < 3 ? -1 : 1);
+        for (int i = 3; i != nextIndex; i += factor) {
+            halfNoteSum += octaveNoteDistance.get(i) * factor;
         }
         println(halfNoteSum);
         println(halfNoteSum);
         println(indexOfPitch);
-        println(indexOfPitch+halfNoteSum);
-        return getPitchOfIndex(indexOfPitch+halfNoteSum);
+        println(indexOfPitch + halfNoteSum);
+        return getPitchOfIndex(indexOfPitch + halfNoteSum);
     }
+
+    public static float getRandomPitchAbove(float pitch) {
+
+        return getPitchOffset(pitch, (new Random().nextInt(3) + 1));
+
+    }
+
+    public static float getRandomPitchBelow(float pitch) {
+
+        return getPitchOffset(pitch, (new Random().nextInt(6) + 1));
+
+    }
+
 
     /**
      * indices are half tones.
@@ -121,81 +140,28 @@ public class Note extends PApplet {
         return new Note(Note.getRandomPitch(), Note.getRandomDuration(maxDuration));
     }
 
-    public static List<Note> getRandomPhrase(int phraseLength, int meterLength, int numOfNotes) {
-
-        List<Note> noteList = new ArrayList<>();
-
-        int phraseMeters = phraseLength * meterLength;
-        float currentDuration = 0;
-        float biggestNoteDuration;
-
-        // Just in case I need to make it more "average"?
-        float averageDuration = (float) phraseMeters / (float) numOfNotes;
-
-        for (int i = 1; i < numOfNotes; i++) {
-            biggestNoteDuration = Math.min(2f, phraseMeters - currentDuration - ((numOfNotes - i) * .25f));
-
-            println("biggestNoteDuration: " + biggestNoteDuration);
-
-            Note noteToAdd = Note.getRandomNote(biggestNoteDuration);
-            currentDuration += noteToAdd.duration;
-
-            println("Added Note Duration: " + noteToAdd.duration);
-            println("currentDuration: " + currentDuration);
-            println("--End of Note Creation--");
-
-            noteList.add(noteToAdd);
-        }
-        biggestNoteDuration = phraseMeters - currentDuration;
-        Note noteToAdd = new Note(Note.getRandomPitch(), biggestNoteDuration);
-        currentDuration += noteToAdd.duration;
-        println("---Adding Last Note");
-        println("biggestNoteDuration: " + biggestNoteDuration);
-        println("Added Note Duration: " + noteToAdd.duration);
-        println("currentDuration: " + currentDuration);
-        println("--End of Last Note Creation--");
-        noteList.add(noteToAdd);
-        return noteList;
+    public float pitchOffset(int offset) {
+        return getPitchOffset(pitch, offset);
     }
 
-    public static List<Note> getRandomPhraseAroundPitch(float pitch,int phraseLength, int meterLength, int numOfNotes) {
+    public static float getPitchOffset(float pitch, int offset) {
+        int index = getIndexOfPitch(pitch);
+        int indexPosition = index % 12;
+        indexPosition = indexPosition < 0 ? 12 + indexPosition : indexPosition;
+        int factor = (offset < 0 ? -1 : 1);
 
-        List<Note> noteList = new ArrayList<>();
+        int halfNoteSum = 0;
 
-        int phraseMeters = phraseLength * meterLength;
-        float currentDuration = 0;
-        float biggestNoteDuration;
+        int normalizedIndexPosition;
+        for (int i = 0; i != offset; i += factor) {
+            normalizedIndexPosition = ((indexPosition + i) % 7);
 
-        // Just in case I need to make it more "average"?
-        float averageDuration = (float) phraseMeters / (float) numOfNotes;
+            normalizedIndexPosition = normalizedIndexPosition < 0 ? 7 + normalizedIndexPosition : normalizedIndexPosition;
 
-        for (int i = 1; i < numOfNotes; i++) {
-
-            biggestNoteDuration = Math.min(2f, phraseMeters - currentDuration - ((numOfNotes - i) * .25f));
-
-            println("biggestNoteDuration: " + biggestNoteDuration);
-
-            Note noteToAdd = new Note(Note.getRandomPitchAroundPitch(pitch), Note.getRandomDuration(biggestNoteDuration) );
-            currentDuration += noteToAdd.duration;
-
-            println("Added Note Duration: " + noteToAdd.duration);
-            println("currentDuration: " + currentDuration);
-            println("--End of Note Creation--");
-
-            noteList.add(noteToAdd);
+            halfNoteSum += octaveNoteDistance.get(normalizedIndexPosition) /* * factor */;
         }
-
-        biggestNoteDuration = phraseMeters - currentDuration;
-        Note noteToAdd = new Note(Note.getRandomPitchAroundPitch(pitch),Note.getRandomDuration(biggestNoteDuration) );
-        currentDuration += noteToAdd.duration;
-
-        println("---Adding Last Note");
-        println("biggestNoteDuration: " + biggestNoteDuration);
-        println("Added Note Duration: " + noteToAdd.duration);
-        println("currentDuration: " + currentDuration);
-        println("--End of Last Note Creation--");
-
-        noteList.add(noteToAdd);
-        return noteList;
+        float a = getPitchOfIndex(index + halfNoteSum * factor);
+        println(a);
+        return a;
     }
 }

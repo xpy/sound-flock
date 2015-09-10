@@ -16,87 +16,48 @@ public class Blibliki extends PApplet implements BitListener {
     AudioOutput out;
     ToneInstrument instrument;
 
-    long duration;
+//    long duration;
 
-    int numOfNotes;
-    int meterLength;
-    int phraseMeters;
-    int phraseLength;
     long nextCheck;
     int loops = 0;
-    long beatTime;
+    long beatTime = (long) (60000f / 120f);
+    int offset =0;
 
-    private List<Note> notes = new ArrayList<>();
+    private Phrase phrase;
 
-
-    Blibliki( AudioOutput out) {
+    Blibliki(AudioOutput out) {
         this.out = out;
-//        this.instrument = instrument;
-
-        numOfNotes = 20;
-        meterLength = 4;
-        phraseLength = 2;
-        phraseMeters = meterLength * phraseLength;
-        beatTime = (long) (60000f / 120f);
-        duration = meterLength * phraseLength * beatTime;
-        println(beatTime);
-        println(duration);
-        println("==========================");
     }
 
     Blibliki(int numOfNotes, int meterLength, int phraseLength, /*ToneInstrument instrument,*/ AudioOutput out) {
         this.out = out;
-//        this.instrument = instrument;
-
-        this.numOfNotes = numOfNotes;
-        this.meterLength = meterLength;
-        this.phraseLength = phraseLength;
-
-        phraseMeters = meterLength * phraseLength;
-        beatTime = (long) (60000f / 120f);
-        duration = meterLength * phraseLength * beatTime;
-/*
-        println(beatTime);
-        println(duration);
-        println("==========================");
-*/
     }
 
-    public static Blibliki createRandomBlibliki(/*ToneInstrument instrument,*/ AudioOutput out){
-        Random r = new Random();
-        int phraseLength = r.nextInt(3)+1;
-        int meterLength = r.nextInt(1)+3;
-        int phraseMeters = meterLength * phraseLength;
+    public static Blibliki createRandomBlibliki(AudioOutput out) {
 
-        int numOfNotes = r.nextInt(phraseMeters+phraseMeters/2)+phraseMeters/2;
-
-        return new Blibliki(numOfNotes,meterLength,phraseLength,out);
+        Blibliki ret = new Blibliki(out);
+        Phrase p = new Phrase();
+        p.randomizePhrase();
+        ret.addPhrase(p);
+        return ret;
     }
 
-    public void createPhrase() {
+    public void addPhrase(Phrase phraseToAdd) {
 
-        notes = Note.getRandomPhrase(phraseLength, meterLength, numOfNotes);
-
-    }
-    public void createPhraseAroundPitch(float pitch) {
-
-        notes = Note.getRandomPhraseAroundPitch(pitch,phraseLength, meterLength, numOfNotes);
-
+        phrase = phraseToAdd;
     }
 
     public void setNotes(/*float offset*/) {
         out.pauseNotes();
         float i = 0;
-        for (Note note : notes) {
-//            ToneInstrument inst = new ToneInstrument(note.pitch, 0.49f,out);
-            i += note.duration;
-            out.playNoteAtBeat(phraseMeters, i, 0.1f, new ToneInstrument(note.pitch, 0.49f, out));
+        if(loops % 2 == 0){
+            offset--;
         }
 
-        /*
-        for (int i = 0; i < numOfNotes; i++) {
-            out.playNoteAtBeat(phraseMeters, i * 1, 0.1f, new ToneInstrument(instrument));
-        }*/
+        for (Note note : phrase.notes) {
+            i += note.duration;
+            out.playNoteAtBeat(phrase.getPhraseMeters(), i, 0.1f, new ToneInstrument(note.pitchOffset(offset), 0.49f, out));
+        }
 
         out.resumeNotes();
     }
@@ -114,7 +75,7 @@ public class Blibliki extends PApplet implements BitListener {
             println("loops:" + loops);
             loops++;
             setNotes();
-            nextCheck = System.currentTimeMillis()+ duration/2;
+            nextCheck = System.currentTimeMillis() + phrase.getDuration() ;
         }
     }
 
@@ -125,7 +86,7 @@ public class Blibliki extends PApplet implements BitListener {
 
     public void start() {
 //        setNotes();
-        nextCheck = System.currentTimeMillis() + duration / 2;
+        nextCheck = System.currentTimeMillis();
 //        loopEnd = System.currentTimeMillis();
 //        update();
     }

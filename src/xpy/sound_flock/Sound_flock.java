@@ -51,15 +51,36 @@ public class Sound_flock extends PApplet {
         blibliki2 =  new Blibliki(8,4,2, out);
 //        blibliki2 = Blibliki.createRandomBlibliki(out);
 
+        Phrase phrase1 = new Phrase();
+        phrase1.meterLength = 3;
+        phrase1.numOfNotes = 3;
+        phrase1.phraseLength = 1;
+        phrase1.repeatNotes = 2;
+        phrase1.pitchPattern = Phrase.PITCH_PATTERN_ASC;
+        phrase1.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_METER;
 
-        blibliki.createPhraseAroundPitch(87.31f);
+        phrase1.baseNotePitch = 87.31f;
+        phrase1.generatePhrase();
+
+//        blibliki.createPhraseAroundPitch(87.31f);
+        blibliki.addPhrase(phrase1);
         blibliki.start();
 
-        blibliki2.createPhraseAroundPitch(349.23f);
+
+        Phrase phrase2 = new Phrase();
+        phrase2.baseNoteLength = 0;
+        phrase2.numOfNotes = 24;
+        phrase2.phraseLength = 4;
+        phrase2.baseNotePitch = 349.23f;
+        phrase2.pitchPattern = Phrase.PITCH_PATTERN_RANDOM;
+        phrase2.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
+        phrase2.generatePhrase();
+
+
+        blibliki2.addPhrase(phrase2);
         blibliki2.start();
 
         startTime = System.currentTimeMillis();
-
 
     }
 
@@ -80,7 +101,7 @@ public class Sound_flock extends PApplet {
         }
         blibliki.update();
 //        if(System.currentTimeMillis() - startTime > 5000)
-        blibliki2.update();
+//        blibliki2.update();
 
 
     }
