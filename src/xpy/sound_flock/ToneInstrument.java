@@ -18,7 +18,8 @@ class ToneInstrument implements Instrument {
     // constructor for this instrument
     ToneInstrument(float frequency, float amplitude, AudioOutput out) {
         // create new instances of any UGen objects as necessary
-        sineOsc = new Oscil(frequency, amplitude, Waves.TRIANGLE);
+        Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1, 2}, new float[] { 1, 1 }, new float[] { 0, 0 });
+        sineOsc = new Oscil(frequency, amplitude, wave);
         adsr = new ADSR(0.5f, 0.01f, 0.05f, 0.5f, 0.5f);
         this.out = out;
         this.frequency = frequency;

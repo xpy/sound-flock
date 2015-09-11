@@ -119,13 +119,13 @@ public class Note extends PApplet {
 
     public static float getRandomPitchAbove(float pitch) {
 
-        return getPitchOffset(pitch, (new Random().nextInt(3) + 1));
+        return getPitchOffset(pitch, (new Random().nextInt(6) + 1));
 
     }
 
     public static float getRandomPitchBelow(float pitch) {
 
-        return getPitchOffset(pitch, (new Random().nextInt(6) + 1));
+        return getPitchOffset(pitch, (new Random().nextInt(6)*-1 - 1));
 
     }
 
