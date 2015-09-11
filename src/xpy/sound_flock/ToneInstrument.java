@@ -8,7 +8,7 @@ import ddf.minim.ugens.*;
  * Created by xpy on 05-Sep-15.
  */
 class ToneInstrument implements Instrument {
-    // create all variables that must be used througout the class
+    // create all variables that must be used throughout the class
     Oscil sineOsc;
     ADSR adsr;
     public AudioOutput out;

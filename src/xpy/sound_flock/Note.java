@@ -15,6 +15,8 @@ public class Note extends PApplet {
 
     public float duration;
     public float pitch;
+    public int pitchIndex;
+    public int indexPosition;
     public String pitchName;
 
     public static float twelfthRootOfTwo = (float) Math.pow(2f, 1f / 12f);
@@ -26,6 +28,9 @@ public class Note extends PApplet {
 
         this.duration = duration;
         this.pitch = pitch;
+        this.pitchIndex = getIndexOfPitch(pitch);
+        this.indexPosition = (pitchIndex + 9) % 12;
+        this.indexPosition = toNormalIndex(indexPosition < 0 ? 12 + indexPosition : indexPosition);
     }
 
     Note(String pitchName, float duration) {
@@ -33,12 +38,14 @@ public class Note extends PApplet {
         this.duration = duration;
         this.pitchName = pitchName;
         this.pitch = Frequency.ofPitch(pitchName).asHz();
+        this.pitchIndex = getIndexOfPitch(pitch);
     }
 
-    public Note(Note note) {
+    Note(Note note) {
         this.duration = note.duration;
         this.pitch = note.pitch;
-
+        this.pitchIndex = note.pitchIndex;
+        this.indexPosition = note.indexPosition;
     }
 
     private static ArrayList<Integer> initializeOctaveNoteDistance() {
@@ -110,10 +117,7 @@ public class Note extends PApplet {
         for (int i = 3; i != nextIndex; i += factor) {
             halfNoteSum += octaveNoteDistance.get(i) * factor;
         }
-        println(halfNoteSum);
-        println(halfNoteSum);
-        println(indexOfPitch);
-        println(indexOfPitch + halfNoteSum);
+
         return getPitchOfIndex(indexOfPitch + halfNoteSum);
     }
 
@@ -125,7 +129,7 @@ public class Note extends PApplet {
 
     public static float getRandomPitchBelow(float pitch) {
 
-        return getPitchOffset(pitch, (new Random().nextInt(6)*-1 - 1));
+        return getPitchOffset(pitch, (new Random().nextInt(6) * -1 - 1));
 
     }
 
@@ -163,7 +167,22 @@ public class Note extends PApplet {
     }
 
     public float pitchOffset(int offset) {
-        return getPitchOffset(pitch, offset);
+        if (offset == 0)
+            return pitch;
+
+        int factor = (offset < 0 ? -1 : 1);
+        int halfNoteSum = 0;
+        int normalizedIndexPosition;
+
+        for (int i = 0; i != offset; i += factor) {
+            normalizedIndexPosition = ((indexPosition + i) % 7);
+
+            normalizedIndexPosition = normalizedIndexPosition < 0 ? 7 + normalizedIndexPosition : normalizedIndexPosition;
+
+            halfNoteSum += octaveNoteDistance.get(normalizedIndexPosition) /* * factor */;
+        }
+
+        return getPitchOfIndex(pitchIndex + halfNoteSum * factor);
     }
 
     public static float getPitchOffset(float pitch, int offset) {
@@ -171,12 +190,7 @@ public class Note extends PApplet {
             return pitch;
         int index = getIndexOfPitch(pitch);
         int indexPosition = (index + 9) % 12;
-//        println("index: " + index);
-//        println("index+9: " + (index + 9));
-//        println("indexPosition: " + indexPosition);
-//        println("offset: " + offset);
         indexPosition = toNormalIndex(indexPosition < 0 ? 12 + indexPosition : indexPosition);
-//        println("normalIndexPosition: " + indexPosition);
         int factor = (offset < 0 ? -1 : 1);
 
         int halfNoteSum = 0;
@@ -189,8 +203,6 @@ public class Note extends PApplet {
 
             halfNoteSum += octaveNoteDistance.get(normalizedIndexPosition) /* * factor */;
         }
-//        println("halfNoteSum: " + halfNoteSum);
-
 
         return getPitchOfIndex(index + halfNoteSum * factor);
     }

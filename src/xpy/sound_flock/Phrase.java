@@ -38,6 +38,7 @@ public class Phrase extends PApplet {
     public static final int DURATION_PATTERN_FIXED = 1;
     public static final int DURATION_PATTERN_UNIFORM_METER = 2;
     public static final int DURATION_PATTERN_UNIFORM_PHRASE = 3;
+    public static final int DURATION_PATTERN_METER_DIVISIONS = 4;
 
     Phrase() {
 
@@ -50,16 +51,16 @@ public class Phrase extends PApplet {
         pitchFeed = baseNotePitch;
         switch (durationPattern) {
             case DURATION_PATTERN_FIXED:
-                noteList.add( new Note(pitchFeed, baseNoteLength));
+                noteList.add(new Note(pitchFeed, baseNoteLength));
                 for (int i = 1; i < numOfNotes; i++) {
-                    noteList.add(new Note(getPitchByPattern( pitchFeed), baseNoteLength));
+                    noteList.add(new Note(getPitchByPattern(pitchFeed), baseNoteLength));
                 }
                 break;
             case DURATION_PATTERN_UNIFORM_METER:
                 noteLength = ((float) meterLength / numOfNotes) / repeatNotes;
-                noteList.add( new Note(pitchFeed, noteLength));
+                noteList.add(new Note(pitchFeed, noteLength));
                 for (int i = 1; i < numOfNotes; i++) {
-                    noteList.add(new Note(getPitchByPattern( pitchFeed), noteLength));
+                    noteList.add(new Note(getPitchByPattern(pitchFeed), noteLength));
                 }
                 for (int j = 1; j < repeatNotes; j++) {
                     for (int i = 0; i < numOfNotes; i++) {
@@ -70,10 +71,17 @@ public class Phrase extends PApplet {
                 break;
             case DURATION_PATTERN_UNIFORM_PHRASE:
                 noteLength = (float) getPhraseMeters() / numOfNotes;
-                noteList.add( new Note(pitchFeed, baseNoteLength));
+                noteList.add(new Note(pitchFeed, noteLength));
 
                 for (int i = 1; i < numOfNotes; i++) {
-                    noteList.add(new Note(getPitchByPattern( pitchFeed), noteLength));
+                    noteList.add(new Note(getPitchByPattern(pitchFeed), noteLength));
+                }
+
+                break;
+            case DURATION_PATTERN_METER_DIVISIONS:
+                Random r = new Random();
+                for (int i = 0; i < numOfNotes; i++) {
+                    noteList.add(new Note(getPitchByPattern(pitchFeed), (float) (meterLength / Math.pow(2.0, (double) r.nextInt(3) + 1))));
                 }
 
                 break;
@@ -89,10 +97,11 @@ public class Phrase extends PApplet {
                 break;
         }
 
-        for(Note n :noteList){
-            println("Note: "+n.pitch);
-        }
+/*
+        for (Note n : noteList)
+            println("Note: " + n.pitch);
         println("============");
+*/
         notes = noteList;
     }
 
@@ -112,7 +121,7 @@ public class Phrase extends PApplet {
 
     public float getPitchByPattern(float pitch) {
 
-        pitchFeed = getPitchByPattern(pitchPattern,pitch);
+        pitchFeed = getPitchByPattern(pitchPattern, pitch);
 
         return pitchFeed;
     }

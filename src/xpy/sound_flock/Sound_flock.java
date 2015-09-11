@@ -4,6 +4,8 @@ import processing.core.*;
 import ddf.minim.Minim;
 import ddf.minim.AudioOutput;
 
+import java.util.Random;
+
 /**
  * Sound Flock
  * Created by xpy on 05-Sep-15.
@@ -46,9 +48,9 @@ public class Sound_flock extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        blibliki = new Blibliki(4,4,1, out);
+        blibliki = new Blibliki(4, 4, 1, out);
 //        blibliki = Blibliki.createRandomBlibliki( out);
-        blibliki2 =  new Blibliki(8,4,2, out);
+        blibliki2 = new Blibliki(8, 4, 2, out);
 //        blibliki2 = Blibliki.createRandomBlibliki(out);
 
         Phrase phrase1 = new Phrase();
@@ -56,10 +58,10 @@ public class Sound_flock extends PApplet {
         phrase1.numOfNotes = 3;
         phrase1.phraseLength = 1;
         phrase1.repeatNotes = 2;
-        phrase1.pitchPattern = Phrase.PITCH_PATTERN_ASC;
+        phrase1.pitchPattern = Phrase.PITCH_PATTERN_DESC;
         phrase1.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_METER;
-
-        phrase1.baseNotePitch = 123.47f;
+        Random r = new Random();
+        phrase1.baseNotePitch = Note.getPitchOfIndex(r.nextInt(9)*-1 -18);
         phrase1.generatePhrase();
 
 //        blibliki.createPhraseAroundPitch(87.31f);
@@ -71,10 +73,10 @@ public class Sound_flock extends PApplet {
         phrase2.baseNoteLength = 0;
         phrase2.meterLength = 3;
         phrase2.numOfNotes = 12;
-        phrase2.phraseLength = 4;
+        phrase2.phraseLength = 3;
         phrase2.baseNotePitch = 349.23f;
         phrase2.pitchPattern = Phrase.PITCH_PATTERN_AROUND;
-        phrase2.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
+        phrase2.durationPattern = Phrase.DURATION_PATTERN_METER_DIVISIONS;
         phrase2.generatePhrase();
 
 
@@ -101,8 +103,8 @@ public class Sound_flock extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
         blibliki.update();
-        if(System.currentTimeMillis() - startTime > 5000)
-        blibliki2.update();
+        if (System.currentTimeMillis() - startTime > 5000)
+            blibliki2.update();
 
 
     }

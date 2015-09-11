@@ -57,11 +57,11 @@ public class Blibliki extends PApplet implements BitListener {
         for (Note note : phrase.notes) {
             out.playNoteAtBeat(phrase.getPhraseMeters(), i, 0.1f, new ToneInstrument(note.pitchOffset(offset), 0.49f, out));
             i += note.duration;
-            println("Note With Offset: "+note.pitchOffset(offset));
+//            println("Note With Offset: "+note.pitchOffset(offset));
 
         }
 
-        println("=============");
+//        println("=============");
         out.resumeNotes();
     }
 
@@ -78,13 +78,12 @@ public class Blibliki extends PApplet implements BitListener {
             println("loops:" + loops);
             setNotes();
             loops++;
-            println("nextMeterStart:"+out.nextMeterStart(phrase.getPhraseMeters()));
+//            println("nextMeterStart:"+out.nextMeterStart(phrase.getPhraseMeters()));
             nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters() ) +100;
         }
     }
 
     public float millisToBeats(long millis) {
-        println(millis);
         return ((float) millis / (float) beatTime);
     }
 
