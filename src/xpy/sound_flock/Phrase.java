@@ -19,10 +19,13 @@ public class Phrase extends PApplet {
     public int numOfNotes   = 3;
     public int repeatNotes  = 1;
 
-    public  float baseNoteLength = 0;
-    public  float baseNotePitch  = 440f;
-    private float pitchFeed      = baseNotePitch;
-
+    public  float         baseNoteLength  = 0;
+    public  float         baseNotePitch   = 440f;
+    private float         pitchFeed       = baseNotePitch;
+    public  int           numOfPitchPeaks = 1;
+    public  int           pitchPeakIndex  = 0;
+    public  int           pitchIndex      = 0;
+    public  List<Integer> pitchPeakList   = new ArrayList<>();
 
     public int pitchPattern    = 0;
     public int durationPattern = 0;
@@ -33,6 +36,9 @@ public class Phrase extends PApplet {
     public static final int PITCH_PATTERN_AROUND = 1;
     public static final int PITCH_PATTERN_ASC    = 2;
     public static final int PITCH_PATTERN_DESC   = 3;
+    public static final int PITCH_PATTERN_PEAKS  = 4;
+    public static final int PITCH_PATTERN_ABOVE  = 5;
+    public static final int PITCH_PATTERN_BELOW  = 6;
 
     public static final int DURATION_PATTERN_RANDOM          = 0;
     public static final int DURATION_PATTERN_FIXED           = 1;
@@ -49,6 +55,21 @@ public class Phrase extends PApplet {
         List<Note> noteList = new ArrayList<>();
         float      noteLength;
         pitchFeed = baseNotePitch;
+        if (pitchPattern == PITCH_PATTERN_PEAKS) {
+            pitchIndex = 0;
+            pitchPeakIndex = (int) Math.floor(numOfNotes / (numOfPitchPeaks + 1));
+            println("numOfPitchPeaks: " + numOfPitchPeaks);
+            println("numOfNotes: " + numOfNotes);
+            println("pitchPeakIndex: " + pitchPeakIndex);
+
+            int pitchPeakDir = 0;
+            for (int i = 0; i < numOfNotes; i++) {
+                if (i % pitchPeakIndex == 0) {
+                    pitchPeakDir = pitchPeakDir == PITCH_PATTERN_ASC ? PITCH_PATTERN_DESC : PITCH_PATTERN_ASC;
+                }
+                pitchPeakList.add(pitchPeakDir);
+            }
+        }
         switch (durationPattern) {
             case DURATION_PATTERN_FIXED:
                 noteList.add(new Note(pitchFeed, baseNoteLength));
@@ -80,7 +101,9 @@ public class Phrase extends PApplet {
                 break;
             case DURATION_PATTERN_METER_DIVISIONS:
                 Random r = new Random();
-                for (int i = 0; i < numOfNotes; i++) {
+                noteList.add(new Note(pitchFeed, (float) (meterLength / Math.pow(2.0, (double) r.nextInt(3) + 1))));
+
+                for (int i = 1; i < numOfNotes; i++) {
                     noteList.add(new Note(getPitchByPattern(pitchFeed), (float) (meterLength / Math.pow(2.0, (double) r.nextInt(3) + 1))));
                 }
 
@@ -121,7 +144,16 @@ public class Phrase extends PApplet {
 
     public float getPitchByPattern (float pitch) {
 
-        pitchFeed = getPitchByPattern(pitchPattern, pitch);
+        if (pitchPattern == PITCH_PATTERN_ABOVE) {
+            pitchFeed = getPitchByPattern(PITCH_PATTERN_ASC, baseNotePitch);
+        } else if (pitchPattern == PITCH_PATTERN_BELOW) {
+            pitchFeed = getPitchByPattern(PITCH_PATTERN_DESC, baseNotePitch);
+        } else if (pitchPattern == PITCH_PATTERN_PEAKS) {
+            println(pitchPeakList.get(pitchIndex));
+            pitchFeed = getPitchByPattern(pitchPeakList.get(++pitchIndex), pitch);
+        } else {
+            pitchFeed = getPitchByPattern(pitchPattern, pitch);
+        }
 
         return pitchFeed;
     }
