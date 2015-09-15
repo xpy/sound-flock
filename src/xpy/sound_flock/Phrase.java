@@ -116,6 +116,21 @@ public class Phrase extends PApplet {
                     case PITCH_PATTERN_AROUND:
                         noteList = getRandomPhraseAroundPitch(pitchFeed, phraseLength, meterLength, numOfNotes);
                         break;
+                    default:
+                        int phraseMeters = phraseLength * meterLength;
+                        float currentDuration = 0;
+                        float biggestNoteDuration;
+
+                        for (int i = 1; i < numOfNotes; i++) {
+                            biggestNoteDuration = Math.min(2f, phraseMeters - currentDuration - ((numOfNotes - i) * .25f));
+                            Note noteToAdd = new Note(getPitchByPattern(pitchFeed), Note.getRandomDuration(biggestNoteDuration));
+                            currentDuration += noteToAdd.duration;
+                            noteList.add(noteToAdd);
+                        }
+                        biggestNoteDuration = phraseMeters - currentDuration;
+                        Note noteToAdd = new Note(Note.getRandomPitch(), biggestNoteDuration);
+                        noteList.add(0,noteToAdd);
+                        break;
                 }
                 break;
         }
