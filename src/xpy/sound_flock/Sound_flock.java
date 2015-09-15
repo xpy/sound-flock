@@ -70,13 +70,13 @@ public class Sound_flock extends PApplet {
 
 
         Phrase phrase2 = new Phrase();
-        phrase2.baseNoteLength = 0;
+        phrase2.baseNoteLength = .5f;
         phrase2.meterLength = 3;
-        phrase2.numOfNotes = 12;
-        phrase2.phraseLength = 3;
+        phrase2.numOfNotes = 2;
+        phrase2.phraseLength = 2;
         phrase2.baseNotePitch = 349.23f;
         phrase2.pitchPattern = Phrase.PITCH_PATTERN_AROUND;
-        phrase2.durationPattern = Phrase.DURATION_PATTERN_METER_DIVISIONS;
+        phrase2.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_METER;
         phrase2.generatePhrase();
 
 
@@ -103,7 +103,7 @@ public class Sound_flock extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
         blibliki.update();
-        if (System.currentTimeMillis() - startTime > 5000)
+        if (System.currentTimeMillis() - startTime > 3000)
             blibliki2.update();
 
 

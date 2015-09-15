@@ -13,18 +13,22 @@ import java.util.Random;
  */
 public class Note extends PApplet {
 
-    public float duration;
-    public float pitch;
-    public int pitchIndex;
-    public int indexPosition;
+    public float  duration;
+    public float  defaultDuration;
+    public float  pitch;
+    public float  defaultPitch;
+    public int    pitchIndex;
+    public int    defaultPitchIndex;
+    public int    indexPosition;
+    public int    defaultIndexPosition;
     public String pitchName;
 
-    public static float twelfthRootOfTwo = (float) Math.pow(2f, 1f / 12f);
+    public static float  twelfthRootOfTwo      = (float) Math.pow(2f, 1f / 12f);
     public static double LogOfTwelfthRootOfTwo = Math.log(twelfthRootOfTwo);
 
     public static ArrayList<Integer> octaveNoteDistance = initializeOctaveNoteDistance();
 
-    Note(float pitch, float duration) {
+    Note (float pitch, float duration) {
 
         this.duration = duration;
         this.pitch = pitch;
@@ -33,7 +37,7 @@ public class Note extends PApplet {
         this.indexPosition = toNormalIndex(indexPosition < 0 ? 12 + indexPosition : indexPosition);
     }
 
-    Note(String pitchName, float duration) {
+    Note (String pitchName, float duration) {
 
         this.duration = duration;
         this.pitchName = pitchName;
@@ -41,14 +45,29 @@ public class Note extends PApplet {
         this.pitchIndex = getIndexOfPitch(pitch);
     }
 
-    Note(Note note) {
+    Note (Note note) {
         this.duration = note.duration;
         this.pitch = note.pitch;
         this.pitchIndex = note.pitchIndex;
         this.indexPosition = note.indexPosition;
     }
 
-    private static ArrayList<Integer> initializeOctaveNoteDistance() {
+    public void save () {
+        defaultDuration = duration;
+        defaultIndexPosition = indexPosition;
+        defaultPitch = pitch;
+        defaultPitchIndex = pitchIndex;
+    }
+
+    public void reset () {
+        duration = defaultDuration;
+        indexPosition = defaultIndexPosition;
+        pitch = defaultPitch;
+        pitchIndex = defaultPitchIndex;
+
+    }
+
+    private static ArrayList<Integer> initializeOctaveNoteDistance () {
         ArrayList<Integer> NoteDistance = new ArrayList<>();
         NoteDistance.add(0, 2);
         NoteDistance.add(1, 2);
@@ -61,7 +80,7 @@ public class Note extends PApplet {
         return NoteDistance;
     }
 
-    public static int toNormalIndex(int index) {
+    public static int toNormalIndex (int index) {
 
         switch (index) {
             case 0:
@@ -84,18 +103,18 @@ public class Note extends PApplet {
     }
 
 
-    public static String getRandomPitch() {
+    public static String getRandomPitch () {
 
         Random r = new Random();
-        char c = (char) (r.nextInt(6) + 'A');
+        char   c = (char) (r.nextInt(6) + 'A');
 
         return c + "4";
     }
 
-    public static String getRandomPitch(int octave) {
+    public static String getRandomPitch (int octave) {
 
         Random r = new Random();
-        char c = (char) (r.nextInt(6) + 'A');
+        char   c = (char) (r.nextInt(6) + 'A');
 
         return c + "" + octave;
     }
@@ -106,14 +125,14 @@ public class Note extends PApplet {
      * @param pitch The Pitch
      * @return Random Pitch
      */
-    public static float getRandomPitchAroundPitch(float pitch) {
+    public static float getRandomPitchAroundPitch (float pitch) {
 
         int indexOfPitch = getIndexOfPitch(pitch);
 
-        Random r = new Random();
-        int nextIndex = r.nextInt(6);
-        int halfNoteSum = 0;
-        int factor = (nextIndex < 3 ? -1 : 1);
+        Random r           = new Random();
+        int    nextIndex   = r.nextInt(6);
+        int    halfNoteSum = 0;
+        int    factor      = (nextIndex < 3 ? -1 : 1);
         for (int i = 3; i != nextIndex; i += factor) {
             halfNoteSum += octaveNoteDistance.get(i) * factor;
         }
@@ -121,13 +140,13 @@ public class Note extends PApplet {
         return getPitchOfIndex(indexOfPitch + halfNoteSum);
     }
 
-    public static float getRandomPitchAbove(float pitch) {
+    public static float getRandomPitchAbove (float pitch) {
 
         return getPitchOffset(pitch, (new Random().nextInt(6) + 1));
 
     }
 
-    public static float getRandomPitchBelow(float pitch) {
+    public static float getRandomPitchBelow (float pitch) {
 
         return getPitchOffset(pitch, (new Random().nextInt(6) * -1 - 1));
 
@@ -141,36 +160,36 @@ public class Note extends PApplet {
      * @param index The pitch Index
      * @return Index of Pitch
      */
-    public static float getPitchOfIndex(int index) {
+    public static float getPitchOfIndex (int index) {
         return 440f * (float) Math.pow(twelfthRootOfTwo, index);
     }
 
-    public static int getIndexOfPitch(float pitch) {
+    public static int getIndexOfPitch (float pitch) {
         return (int) Math.round(Math.log(pitch / 440) / LogOfTwelfthRootOfTwo);
     }
 
 
-    public static float getRandomDuration() {
+    public static float getRandomDuration () {
 
         return getRandomDuration(1f);
 
     }
 
-    public static float getRandomDuration(float maxDuration) {
+    public static float getRandomDuration (float maxDuration) {
 
         return Math.min((new Random().nextInt(7) + 1) / 4f, maxDuration);
 
     }
 
-    public static Note getRandomNote(float maxDuration) {
+    public static Note getRandomNote (float maxDuration) {
         return new Note(Note.getRandomPitch(), Note.getRandomDuration(maxDuration));
     }
 
-    public float pitchOffset(int offset) {
+    public float pitchOffset (int offset) {
         if (offset == 0)
             return pitch;
 
-        int factor = (offset < 0 ? -1 : 1);
+        int factor      = (offset < 0 ? -1 : 1);
         int halfNoteSum = 0;
         int normalizedIndexPosition;
 
@@ -185,10 +204,10 @@ public class Note extends PApplet {
         return getPitchOfIndex(pitchIndex + halfNoteSum * factor);
     }
 
-    public static float getPitchOffset(float pitch, int offset) {
+    public static float getPitchOffset (float pitch, int offset) {
         if (offset == 0)
             return pitch;
-        int index = getIndexOfPitch(pitch);
+        int index         = getIndexOfPitch(pitch);
         int indexPosition = (index + 9) % 12;
         indexPosition = toNormalIndex(indexPosition < 0 ? 12 + indexPosition : indexPosition);
         int factor = (offset < 0 ? -1 : 1);

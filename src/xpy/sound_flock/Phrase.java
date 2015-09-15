@@ -15,39 +15,39 @@ public class Phrase extends PApplet {
     public List<Note> notes;
 
     public int phraseLength = 1;
-    public int meterLength = 4;
-    public int numOfNotes = 3;
-    public int repeatNotes = 1;
+    public int meterLength  = 4;
+    public int numOfNotes   = 3;
+    public int repeatNotes  = 1;
 
-    public float baseNoteLength = 0;
-    public float baseNotePitch = 440f;
-    float pitchFeed = baseNotePitch;
+    public  float baseNoteLength = 0;
+    public  float baseNotePitch  = 440f;
+    private float pitchFeed      = baseNotePitch;
 
 
-    public int pitchPattern = 0;
+    public int pitchPattern    = 0;
     public int durationPattern = 0;
 
     public long beatTime = (long) (60000f / 120f);
 
     public static final int PITCH_PATTERN_RANDOM = 0;
     public static final int PITCH_PATTERN_AROUND = 1;
-    public static final int PITCH_PATTERN_ASC = 2;
-    public static final int PITCH_PATTERN_DESC = 3;
+    public static final int PITCH_PATTERN_ASC    = 2;
+    public static final int PITCH_PATTERN_DESC   = 3;
 
-    public static final int DURATION_PATTERN_RANDOM = 0;
-    public static final int DURATION_PATTERN_FIXED = 1;
-    public static final int DURATION_PATTERN_UNIFORM_METER = 2;
-    public static final int DURATION_PATTERN_UNIFORM_PHRASE = 3;
+    public static final int DURATION_PATTERN_RANDOM          = 0;
+    public static final int DURATION_PATTERN_FIXED           = 1;
+    public static final int DURATION_PATTERN_UNIFORM_METER   = 2;
+    public static final int DURATION_PATTERN_UNIFORM_PHRASE  = 3;
     public static final int DURATION_PATTERN_METER_DIVISIONS = 4;
 
-    Phrase() {
+    Phrase () {
 
     }
 
-    public void generatePhrase() {
+    public void generatePhrase () {
 
         List<Note> noteList = new ArrayList<>();
-        float noteLength;
+        float      noteLength;
         pitchFeed = baseNotePitch;
         switch (durationPattern) {
             case DURATION_PATTERN_FIXED:
@@ -105,7 +105,7 @@ public class Phrase extends PApplet {
         notes = noteList;
     }
 
-    public static float getPitchByPattern(int pattern, float pitch) {
+    public static float getPitchByPattern (int pattern, float pitch) {
 
         switch (pattern) {
             case PITCH_PATTERN_AROUND:
@@ -119,14 +119,14 @@ public class Phrase extends PApplet {
         }
     }
 
-    public float getPitchByPattern(float pitch) {
+    public float getPitchByPattern (float pitch) {
 
         pitchFeed = getPitchByPattern(pitchPattern, pitch);
 
         return pitchFeed;
     }
 
-    public void randomizePhrase() {
+    public void randomizePhrase () {
         Random r = new Random();
 
         this.phraseLength = r.nextInt(3) + 1;
@@ -138,11 +138,11 @@ public class Phrase extends PApplet {
 
     }
 
-    public static List<Note> getRandomPhrase(int phraseLength, int meterLength, int numOfNotes) {
+    public static List<Note> getRandomPhrase (int phraseLength, int meterLength, int numOfNotes) {
 
         List<Note> noteList = new ArrayList<>();
 
-        int phraseMeters = phraseLength * meterLength;
+        int   phraseMeters    = phraseLength * meterLength;
         float currentDuration = 0;
         float biggestNoteDuration;
 
@@ -175,11 +175,11 @@ public class Phrase extends PApplet {
         return noteList;
     }
 
-    public static List<Note> getRandomPhraseAroundPitch(float pitch, int phraseLength, int meterLength, int numOfNotes) {
+    public static List<Note> getRandomPhraseAroundPitch (float pitch, int phraseLength, int meterLength, int numOfNotes) {
 
         List<Note> noteList = new ArrayList<>();
 
-        int phraseMeters = phraseLength * meterLength;
+        int   phraseMeters    = phraseLength * meterLength;
         float currentDuration = 0;
         float biggestNoteDuration;
 
@@ -216,11 +216,11 @@ public class Phrase extends PApplet {
         return noteList;
     }
 
-    public int getPhraseMeters() {
+    public int getPhraseMeters () {
         return meterLength * phraseLength;
     }
 
-    public long getDuration() {
+    public long getDuration () {
         return meterLength * phraseLength * beatTime;
     }
 
