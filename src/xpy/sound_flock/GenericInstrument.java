@@ -12,7 +12,8 @@ public abstract class GenericInstrument implements Instrument {
     Oscil osc;
     ADSR  adsr;
     public AudioOutput out;
-    public float       frequency;
+    public float       baseFrequency;
+    public float       initialFrequency;
     public float       amplitude;
 
     GenericInstrument () {
@@ -24,7 +25,7 @@ public abstract class GenericInstrument implements Instrument {
         osc = new Oscil(frequency, amplitude,  Waves.SQUARE);
         adsr = new ADSR(0.5f, 0.01f, 0.05f, 0.5f, 0.5f);
         this.out = out;
-        this.frequency = frequency;
+        this.baseFrequency = frequency;
         this.amplitude = amplitude;
         // patch everything together up to the final output
         osc.patch(adsr);
@@ -39,7 +40,7 @@ public abstract class GenericInstrument implements Instrument {
         osc = new Oscil(120f, newInstrument.amplitude, wave);
         ol.patch(ml);
 
-        ml.patch(osc.frequency);
+        ml.patch(osc.baseFrequency);
         adsr = new ADSR(1f, 0.001f, 0.1f, .7f, .5f);
         this.out = newInstrument.out;
         // patch everything together up to the final output

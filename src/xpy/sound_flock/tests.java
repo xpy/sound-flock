@@ -26,16 +26,18 @@ public class tests extends PApplet {
 
     ToneInstrument instrument;
 
+    SynthInstrumentTemplate sit = new SynthInstrumentTemplate();
+
     public void setup () {
-        size(600,800);
+        size(600, 800);
         // initialize the minim and out objects
         minim = new Minim(this);
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 //        wave = WavetableGenerator.gen9(4096, new float[]{1, 2f}, new float[]{.5f, .5f}, new float[]{0, 0});
 //       wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[] { 1f }, new float[] { 0});
-        instrument = new ToneInstrument(frequency,.5f,out);
-//        oscil = new Oscil(frequency, 0.5f, wave);
+        instrument = new ToneInstrument(frequency, .5f, out);
+//        oscil = new Oscil(baseFrequency, 0.5f, wave);
         // patch the Oscil to the output
 //        oscil.patch(out);
     }
@@ -56,11 +58,11 @@ public class tests extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
 
-        Wavetable wave = (Wavetable)new ToneInstrument(instrument).sineOsc.getWaveform();
+        Wavetable wave = (Wavetable) new ToneInstrument(instrument).sineOsc.getWaveform();
 
-stroke(255,0,0);
+        stroke(255, 0, 0);
 
-        for (int i = 0; i <wave.size() - 1; i++) {
+        for (int i = 0; i < wave.size() - 1; i++) {
             // find the x position of each buffer value
             float x1 = map(i, 0, wave.size(), 0, width);
             float x2 = map(i + 1, 0, wave.size(), 0, width);
@@ -101,7 +103,9 @@ stroke(255,0,0);
 
             } else if (key == ' ') {
 //                waveChanged = true;
-                out.playNote(0,5f,new SynthInstrument(100,1,out));
+                out.playNote(0, 4f, new SynthInstrument(440, .5f, out, sit));
+                out.playNote(4f, 4f, new SynthInstrument(440 * .75f, .5f, out, sit));
+                out.playNote(8f, 4f, new SynthInstrument(440 * .5f, .5f, out, sit));
             }
 
         }
@@ -109,7 +113,7 @@ stroke(255,0,0);
 //            wave = WavetableGenerator.gen9(4096, new float[]{1, 2}, new float[]{amp, 1f - amp}, new float[]{0, partial2});
 //            wave2 = Waves.add(new float[]{.3f, .3f, .3f}, Waves.SQUARE, Waves.SINE, Waves.SAW);
 //            oscil.setWaveform(wave2);
-//            oscil.setFrequency(frequency);
+//            oscil.setFrequency(baseFrequency);
 
         }
     }
