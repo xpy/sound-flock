@@ -21,15 +21,13 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
     private Phrase phrase;
 
-    Blibliki (AudioOutput out) {
-        this.out = out;
-    }
-
-    Blibliki (int numOfNotes, int meterLength, int phraseLength, InstrumentGenerator instrumentGenerator, AudioOutput out) {
+    Blibliki (Phrase phrase, InstrumentGenerator instrumentGenerator, AudioOutput out) {
+        this.phrase = phrase;
         this.out = out;
         this.instrumentGenerator = instrumentGenerator;
     }
 
+/*
     public static Blibliki createRandomBlibliki (AudioOutput out) {
 
         Blibliki ret = new Blibliki(out);
@@ -38,13 +36,14 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         ret.addPhrase(p);
         return ret;
     }
+*/
 
     public void addPhrase (Phrase phraseToAdd) {
 
         phrase = phraseToAdd;
     }
 
-    public void setNotes (/*float offset*/) {
+    public void setNotes () {
         out.pauseNotes();
         float i = 0;
         if (loops % 2 == 0 && loops != 0) {
@@ -54,11 +53,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         for (Note note : phrase.notes) {
             out.playNoteAtBeat(phrase.getPhraseMeters(), i, note.duration, instrumentGenerator.createInstrument(note.pitchOffset(offset), 0.49f, out));
             i += note.duration;
-//            println("Note With Offset: "+note.pitchOffset(offset));
-
         }
-
-//        println("=============");
         out.resumeNotes();
     }
 
@@ -69,7 +64,6 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
             println("loops:" + loops);
             setNotes();
             loops++;
-//            println("nextMeterStart:"+out.nextMeterStart(phrase.getPhraseMeters()));
             nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters()) + 100;
         }
     }
@@ -79,9 +73,6 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     }
 
     public void start () {
-//        setNotes();
-        nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters()) + 100;
-//        loopEnd = System.currentTimeMillis();
-//        update();
+        nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.meterLength) + 100;
     }
 }

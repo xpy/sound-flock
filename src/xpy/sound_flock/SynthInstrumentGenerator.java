@@ -92,7 +92,8 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
             moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{1});
             moogModulatorWavetable.offset(1f);
             moogModulatorWavetable.normalize();
-            moogModulatorWavetable.offset(.5f);
+            moogModulatorWavetable.offset(.7f);
+            moogModulatorWavetable.normalize();
 
             for (int i = 0; i < template.numOfOScillators; i++) {
                 Oscil osc = new Oscil(initialFrequency * template.oscillatorFrequencyFactor.get(i), amplitude, getWaveTable(template.oscillatorWave.get(i)));
@@ -108,8 +109,8 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
 //        ml = new Multiplier((r.nextInt(7) + 2) * initialFrequency);
             ml = new Multiplier(5 * initialFrequency);
 
-            moogFilter = new MoogFilter(10 * initialFrequency, .7f, MoogFilter.Type.LP);
-            moogModulator = new Oscil(initialFrequency, amplitude, moogModulatorWavetable);
+            moogFilter = new MoogFilter(10 * baseFrequency, .7f, MoogFilter.Type.LP);
+            moogModulator = new Oscil(.5f, amplitude, moogModulatorWavetable);
             moogModulator.patch(ml).patch(moogFilter.frequency);
 //        moogFilter = new MoogFilter((r.nextInt(7) + 2) * initialFrequency, .7f, MoogFilter.Type.LP);
 

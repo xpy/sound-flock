@@ -28,18 +28,18 @@ public class Sound_flock extends PApplet {
 
     // create all of the variables that will need to be accessed in
 // more than one methods (setup(), draw(), stop()).
-    Minim minim;
+    Minim       minim;
     AudioOutput out;
-    Blibliki blibliki;
-    Blibliki blibliki2;
-    Long startTime;
+    Blibliki    blibliki;
+    Blibliki    blibliki2;
+    Long        startTime;
 
     // Every instrument must implement the Instrument interface so
     // playNote() can call the instrument's methods.
 
 
     // setup is run once at the beginning
-    public void setup() {
+    public void setup () {
         // initialize the drawing window
         size(512, 200);
 
@@ -49,25 +49,21 @@ public class Sound_flock extends PApplet {
         out.setTempo(120);
 
         SynthInstrumentGenerator synthGenerator = new SynthInstrumentGenerator();
-        ToneInstrumentGenerator toneGenerator = new ToneInstrumentGenerator();
-        blibliki = new Blibliki(1, 4, 1,synthGenerator, out);
+        ToneInstrumentGenerator  toneGenerator  = new ToneInstrumentGenerator();
 //        blibliki = Blibliki.createRandomBlibliki( out);
-        blibliki2 = new Blibliki(8, 4, 2,toneGenerator, out);
 //        blibliki2 = Blibliki.createRandomBlibliki(out);
 
         Phrase phrase1 = new Phrase();
-        phrase1.meterLength = 3;
-        phrase1.numOfNotes = 3;
-        phrase1.phraseLength = 1;
-        phrase1.repeatNotes = 2;
+        phrase1.meterLength = 4;
+        phrase1.numOfNotes = 2;
+        phrase1.phraseLength = 4;
         phrase1.pitchPattern = Phrase.PITCH_PATTERN_DESC;
-        phrase1.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_METER;
-        Random r = new Random();
-        phrase1.baseNotePitch = Note.getPitchOfIndex(r.nextInt(9)*-1 -18);
+        phrase1.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
+        phrase1.baseNotePitch = 440f;
         phrase1.generatePhrase();
 
 //        blibliki.createPhraseAroundPitch(87.31f);
-        blibliki.addPhrase(phrase1);
+        blibliki = new Blibliki(phrase1, synthGenerator, out);
         blibliki.start();
 
 
@@ -84,7 +80,7 @@ public class Sound_flock extends PApplet {
         phrase2.generatePhrase();
 
 
-        blibliki2.addPhrase(phrase2);
+        blibliki2 = new Blibliki(phrase2, toneGenerator, out);
         blibliki2.start();
 
         startTime = System.currentTimeMillis();
@@ -92,7 +88,7 @@ public class Sound_flock extends PApplet {
     }
 
     // draw is run many times
-    public void draw() {
+    public void draw () {
         // erase the window to black
         background(0);
         // draw using a white stroke
@@ -107,8 +103,8 @@ public class Sound_flock extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
         blibliki.update();
-//        if (System.currentTimeMillis() - startTime > 3000)
-//            blibliki2.update();
+        if (System.currentTimeMillis() - startTime > 3000)
+            blibliki2.update();
 
 
     }
