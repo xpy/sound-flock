@@ -141,7 +141,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
 
     }
 
-    public class Template implements InstrumentGenerator.Template {
+    public static class Template implements InstrumentGenerator.Template {
 
         List<Float>   oscillatorFrequencyFactor = new ArrayList<>();
         List<Integer> oscillatorWave            = new ArrayList<>();

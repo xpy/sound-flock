@@ -10,16 +10,16 @@ import ddf.minim.ugens.*;
 public interface InstrumentGenerator {
 
     interface Instrument extends ddf.minim.ugens.Instrument {
-
-
     }
 
     interface Template {
     }
 
-    public Template createTemplate ();
+    static Template createTemplate (){
+        return null;
+    }
 
-    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out);
+    Instrument createInstrument (float frequency, float amplitude, AudioOutput out);
 
 
 }

@@ -10,7 +10,7 @@ import processing.core.*;
 public class Blibliki extends PApplet/* implements BitListener*/ {
 
     AudioOutput         out;
-    InstrumentGenerator instrument;
+    InstrumentGenerator instrumentGenerator;
 
 //    long duration;
 
@@ -25,33 +25,34 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         this.out = out;
     }
 
-    Blibliki (int numOfNotes, int meterLength, int phraseLength, InstrumentGenerator instrument, AudioOutput out) {
+    Blibliki (int numOfNotes, int meterLength, int phraseLength, InstrumentGenerator instrumentGenerator, AudioOutput out) {
         this.out = out;
+        this.instrumentGenerator = instrumentGenerator;
     }
 
     public static Blibliki createRandomBlibliki (AudioOutput out) {
 
         Blibliki ret = new Blibliki(out);
-        Phrase p = new Phrase();
+        Phrase   p   = new Phrase();
         p.randomizePhrase();
         ret.addPhrase(p);
         return ret;
     }
 
-    public void addPhrase(Phrase phraseToAdd) {
+    public void addPhrase (Phrase phraseToAdd) {
 
         phrase = phraseToAdd;
     }
 
-    public void setNotes(/*float offset*/) {
+    public void setNotes (/*float offset*/) {
         out.pauseNotes();
         float i = 0;
-        if(loops % 2 == 0 && loops!=0){
+        if (loops % 2 == 0 && loops != 0) {
             offset++;
         }
 
         for (Note note : phrase.notes) {
-            out.playNoteAtBeat(phrase.getPhraseMeters(), i, note.duration, new ToneInstrumentGenerator(note.pitchOffset(offset), 0.49f, out));
+            out.playNoteAtBeat(phrase.getPhraseMeters(), i, note.duration, instrumentGenerator.createInstrument(note.pitchOffset(offset), 0.49f, out));
             i += note.duration;
 //            println("Note With Offset: "+note.pitchOffset(offset));
 
@@ -62,24 +63,24 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     }
 
 
-    public void update() {
+    public void update () {
 
         if (System.currentTimeMillis() - nextCheck >= 0 && loops < 20) {
             println("loops:" + loops);
             setNotes();
             loops++;
 //            println("nextMeterStart:"+out.nextMeterStart(phrase.getPhraseMeters()));
-            nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters() ) +100;
+            nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters()) + 100;
         }
     }
 
-    public float millisToBeats(long millis) {
+    public float millisToBeats (long millis) {
         return ((float) millis / (float) beatTime);
     }
 
-    public void start() {
+    public void start () {
 //        setNotes();
-        nextCheck = System.currentTimeMillis()+ out.nextMeterStart(phrase.getPhraseMeters() ) +100;
+        nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters()) + 100;
 //        loopEnd = System.currentTimeMillis();
 //        update();
     }
