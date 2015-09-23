@@ -1,14 +1,13 @@
 package xpy.sound_flock;
 
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
 
 /**
- * ToneInstrument
+ * ToneInstrumentGenerator
  * Created by xpy on 05-Sep-15.
  */
-class ToneInstrument implements Instrument {
+class ToneInstrumentGenerator implements InstrumentGenerator {
     // create all variables that must be used throughout the class
     Oscil sineOsc;
     ADSR adsr;
@@ -18,7 +17,7 @@ class ToneInstrument implements Instrument {
 
     Line fl;
     // constructor for this instrument
-    ToneInstrument(float frequency, float amplitude, AudioOutput out) {
+    ToneInstrumentGenerator (float frequency, float amplitude, AudioOutput out) {
         // create new instances of any UGen objects as necessary
         Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1, 2}, new float[] { 1, 1 }, new float[] { 0, 0 });
         sineOsc = new Oscil(frequency, amplitude,  Waves.SQUARE);
@@ -30,7 +29,7 @@ class ToneInstrument implements Instrument {
         sineOsc.patch(adsr);
     }
 
-    ToneInstrument(ToneInstrument newInstrument) {
+    ToneInstrumentGenerator (ToneInstrumentGenerator newInstrument) {
         Wavetable wave = Waves.SINE;
 
         fl = new Line(0.02f, 660f, 80f);
@@ -54,7 +53,7 @@ class ToneInstrument implements Instrument {
     // every instrument must have a noteOn( float ) method
     public void noteOn(float dur) {
         // turn on the ADSR
-        fl.activate();
+//        fl.activate();
         adsr.noteOn();
 
         // patch to the output
@@ -67,5 +66,15 @@ class ToneInstrument implements Instrument {
         adsr.unpatchAfterRelease(out);
         // call the noteOff
         adsr.noteOff();
+    }
+
+
+    public Template createTemplate () {
+        return null;
+    }
+
+    @Override
+    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+        return null;
     }
 }

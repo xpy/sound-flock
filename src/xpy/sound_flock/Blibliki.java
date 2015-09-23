@@ -3,37 +3,33 @@ package xpy.sound_flock;
 import ddf.minim.AudioOutput;
 import processing.core.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 /**
  * Blibliki
  * Created by xpy on 05-Sep-15.
  */
-public class Blibliki extends PApplet implements BitListener {
+public class Blibliki extends PApplet/* implements BitListener*/ {
 
-    AudioOutput out;
-    ToneInstrument instrument;
+    AudioOutput         out;
+    InstrumentGenerator instrument;
 
 //    long duration;
 
     long nextCheck;
-    int loops = 0;
+    int  loops    = 0;
     long beatTime = (long) (60000f / 120f);
-    int offset =0;
+    int  offset   = 0;
 
     private Phrase phrase;
 
-    Blibliki(AudioOutput out) {
+    Blibliki (AudioOutput out) {
         this.out = out;
     }
 
-    Blibliki(int numOfNotes, int meterLength, int phraseLength, /*ToneInstrument instrument,*/ AudioOutput out) {
+    Blibliki (int numOfNotes, int meterLength, int phraseLength, InstrumentGenerator instrument, AudioOutput out) {
         this.out = out;
     }
 
-    public static Blibliki createRandomBlibliki(AudioOutput out) {
+    public static Blibliki createRandomBlibliki (AudioOutput out) {
 
         Blibliki ret = new Blibliki(out);
         Phrase p = new Phrase();
@@ -55,7 +51,7 @@ public class Blibliki extends PApplet implements BitListener {
         }
 
         for (Note note : phrase.notes) {
-            out.playNoteAtBeat(phrase.getPhraseMeters(), i, note.duration, new ToneInstrument(note.pitchOffset(offset), 0.49f, out));
+            out.playNoteAtBeat(phrase.getPhraseMeters(), i, note.duration, new ToneInstrumentGenerator(note.pitchOffset(offset), 0.49f, out));
             i += note.duration;
 //            println("Note With Offset: "+note.pitchOffset(offset));
 
@@ -65,12 +61,6 @@ public class Blibliki extends PApplet implements BitListener {
         out.resumeNotes();
     }
 
-
-    @Override
-    public void tick() {
-
-        out.playNote(0, 0.1f, new ToneInstrument(instrument));
-    }
 
     public void update() {
 

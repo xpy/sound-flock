@@ -24,7 +24,7 @@ public class tests extends PApplet {
     Wavetable wave2;
 //    Oscil     oscil;
 
-    ToneInstrument instrument;
+    ToneInstrumentGenerator instrument;
 
     SynthInstrumentTemplate sit = new SynthInstrumentTemplate();
 
@@ -36,7 +36,7 @@ public class tests extends PApplet {
         out.setTempo(120);
 //        wave = WavetableGenerator.gen9(4096, new float[]{1, 2f}, new float[]{.5f, .5f}, new float[]{0, 0});
 //       wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[] { 1f }, new float[] { 0});
-        instrument = new ToneInstrument(frequency, .5f, out);
+        instrument = new ToneInstrumentGenerator(frequency, .5f, out);
 //        oscil = new Oscil(baseFrequency, 0.5f, wave);
         // patch the Oscil to the output
 //        oscil.patch(out);
@@ -58,7 +58,7 @@ public class tests extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
 
-        Wavetable wave = (Wavetable) new ToneInstrument(instrument).sineOsc.getWaveform();
+        Wavetable wave = (Wavetable) new ToneInstrumentGenerator(instrument).sineOsc.getWaveform();
 
         stroke(255, 0, 0);
 
@@ -103,9 +103,9 @@ public class tests extends PApplet {
 
             } else if (key == ' ') {
 //                waveChanged = true;
-                out.playNote(0, 4f, new SynthInstrument(440, .5f, out, sit));
-                out.playNote(4f, 4f, new SynthInstrument(440 * .75f, .5f, out, sit));
-                out.playNote(8f, 4f, new SynthInstrument(440 * .5f, .5f, out, sit));
+                out.playNote(0, 4f, new SynthInstrumentGenerator(440, .5f, out, sit));
+                out.playNote(4f, 4f, new SynthInstrumentGenerator(440 * .75f, .5f, out, sit));
+                out.playNote(8f, 4f, new SynthInstrumentGenerator(440 * .5f, .5f, out, sit));
             }
 
         }
