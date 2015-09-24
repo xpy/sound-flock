@@ -19,12 +19,12 @@ public class tests extends PApplet {
     Long        startTime;
     float amp       = .5f;
     float partial2  = 0f;
-    float frequency = 100;
+    float frequency = 5;
     Wavetable wave;
     Wavetable wave2;
 //    Oscil     oscil;
 
-    KickInstrumentGenerator instrumentGenerator;
+    SnareInstrumentGenerator instrumentGenerator;
 
 
     public void setup () {
@@ -34,7 +34,7 @@ public class tests extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        instrumentGenerator = new KickInstrumentGenerator();
+        instrumentGenerator = new SnareInstrumentGenerator();
 
     }
 
@@ -55,7 +55,7 @@ public class tests extends PApplet {
         }
 /*
 
-        Wavetable wave = (Wavetable) new KickInstrumentGenerator(instrument).sineOsc.getWaveform();
+        Wavetable wave = (Wavetable) new SnareInstrumentGenerator(instrument).sineOsc.getWaveform();
 
         stroke(255, 0, 0);
 
