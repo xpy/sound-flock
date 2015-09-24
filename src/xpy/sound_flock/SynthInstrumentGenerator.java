@@ -19,6 +19,7 @@ import static processing.core.PApplet.println;
 public class SynthInstrumentGenerator implements InstrumentGenerator {
 
     Template template;
+    public float amplitude = .45f;
 
 
     SynthInstrumentGenerator () {
@@ -58,6 +59,15 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
         return new SynthInstrument(frequency, amplitude, out);
     }
 
+    @Override
+    public float getAmplitude () {
+        return amplitude;
+    }
+
+    @Override
+    public float getMaxDuration () {
+        return 10f;
+    }
 
 
     public class SynthInstrument implements Instrument {
@@ -89,7 +99,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
             this.initialFrequency = baseFrequency;
             this.amplitude = amplitude;
 
-            moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{1});
+            moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{0});
             moogModulatorWavetable.offset(1f);
             moogModulatorWavetable.normalize();
             moogModulatorWavetable.offset(.7f);
@@ -114,7 +124,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
             moogModulator.patch(ml).patch(moogFilter.frequency);
 //        moogFilter = new MoogFilter((r.nextInt(7) + 2) * initialFrequency, .7f, MoogFilter.Type.LP);
 
-            adsr = new ADSR(.8f, 0.3f, .3f, 0.7f, 0.3f);
+            adsr = new ADSR(amplitude, 0.3f, .3f, amplitude, 0.3f);
             s.patch(moogFilter).patch(adsr);
 
         }

@@ -5,8 +5,6 @@ import ddf.minim.Minim;
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
 
-import static xpy.sound_flock.SynthInstrumentGenerator.*;
-
 
 /**
  * tests
@@ -26,22 +24,18 @@ public class tests extends PApplet {
     Wavetable wave2;
 //    Oscil     oscil;
 
-    ToneInstrumentGenerator instrument;
+    ToneInstrumentGenerator instrumentGenerator;
 
-    SynthInstrumentGenerator.Template sit = new SynthInstrumentGenerator.Template();
 
     public void setup () {
-        size(600, 800);
+        size(600, 300);
         // initialize the minim and out objects
         minim = new Minim(this);
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
-//        wave = WavetableGenerator.gen9(4096, new float[]{1, 2f}, new float[]{.5f, .5f}, new float[]{0, 0});
-//       wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[] { 1f }, new float[] { 0});
-        instrument = new ToneInstrumentGenerator();
-//        oscil = new Oscil(baseFrequency, 0.5f, wave);
-        // patch the Oscil to the output
-//        oscil.patch(out);
+
+        instrumentGenerator = new ToneInstrumentGenerator();
+
     }
 
     public void draw () {
@@ -79,50 +73,19 @@ public class tests extends PApplet {
     public void keyPressed () {
         boolean waveChanged = false;
         if (key == CODED) {
-            if (keyCode == UP) {
-                waveChanged = true;
-                amp += .05f;
-            } else if (keyCode == DOWN) {
-                waveChanged = true;
-
-                amp -= .05f;
-            } else if (keyCode == LEFT) {
-                waveChanged = true;
-
-
-                partial2 -= .5f;
-            } else if (keyCode == RIGHT) {
-                waveChanged = true;
-
-                partial2 += .5f;
-            }
 
         } else {
-            if (key == 'q') {
+            if (key == ' ') {
                 waveChanged = true;
-                frequency += 10;
-            } else if (key == 'a') {
-                frequency -= 10;
-                waveChanged = true;
-
-            } else if (key == ' ') {
-                return;
-//                waveChanged = true;
-//                out.playNote(0, 4f, new SynthInstrumentGenerator(440, .5f, out, sit));
+                out.playNote(0, .5f, instrumentGenerator.createInstrument(440, .5f, out));
 //                out.playNote(4f, 4f, new SynthInstrumentGenerator(440 * .75f, .5f, out, sit));
 //                out.playNote(8f, 4f, new SynthInstrumentGenerator(440 * .5f, .5f, out, sit));
             }
 
         }
-/*
         if (waveChanged) {
-            wave = WavetableGenerator.gen9(4096, new float[]{1, 2}, new float[]{amp, 1f - amp}, new float[]{0, partial2});
-            wave2 = Waves.add(new float[]{.3f, .3f, .3f}, Waves.SQUARE, Waves.SINE, Waves.SAW);
-            oscil.setWaveform(wave2);
-            oscil.setFrequency(baseFrequency);
-
+            waveChanged = false;
         }
-*/
     }
 
 

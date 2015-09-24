@@ -21,5 +21,7 @@ public interface InstrumentGenerator {
 
     Instrument createInstrument (float frequency, float amplitude, AudioOutput out);
 
+    float getAmplitude();
+    float getMaxDuration();
 
 }
