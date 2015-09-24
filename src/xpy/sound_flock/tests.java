@@ -24,7 +24,7 @@ public class tests extends PApplet {
     Wavetable wave2;
 //    Oscil     oscil;
 
-    ToneInstrumentGenerator instrumentGenerator;
+    KickInstrumentGenerator instrumentGenerator;
 
 
     public void setup () {
@@ -34,7 +34,7 @@ public class tests extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        instrumentGenerator = new ToneInstrumentGenerator();
+        instrumentGenerator = new KickInstrumentGenerator();
 
     }
 
@@ -55,7 +55,7 @@ public class tests extends PApplet {
         }
 /*
 
-        Wavetable wave = (Wavetable) new ToneInstrumentGenerator(instrument).sineOsc.getWaveform();
+        Wavetable wave = (Wavetable) new KickInstrumentGenerator(instrument).sineOsc.getWaveform();
 
         stroke(255, 0, 0);
 
@@ -74,12 +74,18 @@ public class tests extends PApplet {
         boolean waveChanged = false;
         if (key == CODED) {
 
+
         } else {
             if (key == ' ') {
                 waveChanged = true;
-                out.playNote(0, .5f, instrumentGenerator.createInstrument(440, .5f, out));
-//                out.playNote(4f, 4f, new SynthInstrumentGenerator(440 * .75f, .5f, out, sit));
-//                out.playNote(8f, 4f, new SynthInstrumentGenerator(440 * .5f, .5f, out, sit));
+                out.playNote(0, .5f, instrumentGenerator.createInstrument(frequency, .5f, out));
+            }
+            if(key == 'q'){
+                frequency+=5;
+            }else if(key == 'a'){
+                frequency-=5;
+
+
             }
 
         }

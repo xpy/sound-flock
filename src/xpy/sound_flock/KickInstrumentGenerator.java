@@ -6,15 +6,15 @@ import ddf.minim.ugens.*;
 import java.util.Random;
 
 /**
- * ToneInstrumentGenerator
- * Created by xpy on 05-Sep-15.
+ * KickInstrumentGenerator
+ * Created by xpy on 24-Sep-15.
  */
-class ToneInstrumentGenerator implements InstrumentGenerator {
+public class KickInstrumentGenerator implements InstrumentGenerator {
 
     Template template;
     public float amplitude = .65f;
 
-    ToneInstrumentGenerator () {
+    KickInstrumentGenerator () {
         template = createTemplate();
     }
 
@@ -22,9 +22,10 @@ class ToneInstrumentGenerator implements InstrumentGenerator {
         return new Template();
     }
 
+
     @Override
     public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
-        return new ToneInstrument(frequency, amplitude, out);
+        return new KickInstrument(frequency, amplitude, out);
     }
 
     @Override
@@ -37,37 +38,36 @@ class ToneInstrumentGenerator implements InstrumentGenerator {
         return template.maxDuration;
     }
 
-    class ToneInstrument implements Instrument {
+
+    public class KickInstrument implements Instrument {
 
         Oscil osc;
         Oscil modulator;
         ADSR  adsr;
-
+        ADSR  adsrModulator;
+        Line  l;
         public AudioOutput out;
         public float       frequency;
         public float       amplitude;
 
-        MoogFilter moogFilter;
-
-
-        ToneInstrument (float frequency, float amplitude, AudioOutput out) {
-
-            this.out = out;
+        public KickInstrument (float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
             this.amplitude = amplitude;
+            this.out = out;
 
-            Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{amplitude}, new float[]{1});
-            modulator = new Oscil(frequency * template.modulatorFactor, amplitude, wave);
-            osc = new Oscil(frequency, amplitude, Waves.SQUARE);
-            adsr = new ADSR(amplitude, 0.01f, 0.05f, amplitude, 0.5f);
-            moogFilter = new MoogFilter(frequency * template.moogFactor, .5f, MoogFilter.Type.LP);
+            Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{1}, new float[]{0});
+            l = new Line(1000, 2 * frequency*template.frequencyAmp);
 
-            // patch everything together up to the final output
-//            modulator.patch(sineOsc).patch(moogFilter).patch(adsr);
-           (osc).patch(moogFilter).patch(adsr);
+            osc = new Oscil(frequency*template.frequencyAmp, amplitude, wave);
+            adsr = new ADSR(amplitude, 0.001f, 0.05f, amplitude, 0.3f);
+            adsrModulator = new ADSR(1f, 0.001f, 0.05f, .2f, 0.3f);
+            l.patch(adsrModulator).patch(osc.frequency);
+            osc.patch(adsr);
         }
 
         public void noteOn (float dur) {
+            l.activate();
+            adsrModulator.noteOn();
             adsr.noteOn();
 
             adsr.patch(out);
@@ -76,23 +76,23 @@ class ToneInstrumentGenerator implements InstrumentGenerator {
         // every instrumentGenerator must have a noteOff() method
         public void noteOff () {
             adsr.unpatchAfterRelease(out);
+
+            adsrModulator.noteOff();
             adsr.noteOff();
         }
-
     }
+
 
     public static class Template implements InstrumentGenerator.Template {
 
-        float maxDuration;
-        float modulatorFactor;
-        float moogFactor;
+        float maxDuration = .5f;
+        float frequencyAmp;
 
         public Template () {
             Random r = new Random();
-
-            this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
-            this.modulatorFactor = (r.nextInt(10) + 1) * .05f;
-            this.moogFactor = r.nextFloat() +.25f;
+            frequencyAmp = (r.nextInt(4)+4)*.125f;
+//            this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
         }
     }
+
 }

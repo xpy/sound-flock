@@ -49,6 +49,7 @@ public class Sound_flock extends PApplet {
         out.setTempo(120);
 
         SynthInstrumentGenerator synthGenerator = new SynthInstrumentGenerator();
+        KickInstrumentGenerator kickGenerator = new KickInstrumentGenerator();
         ToneInstrumentGenerator  toneGenerator  = new ToneInstrumentGenerator();
 //        blibliki = Blibliki.createRandomBlibliki( out);
 //        blibliki2 = Blibliki.createRandomBlibliki(out);
@@ -80,7 +81,7 @@ public class Sound_flock extends PApplet {
         phrase2.generatePhrase();
 
 
-        blibliki2 = new Blibliki(phrase2, toneGenerator, out);
+        blibliki2 = new Blibliki(phrase2, kickGenerator, out);
         blibliki2.start();
 
         startTime = System.currentTimeMillis();
