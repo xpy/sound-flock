@@ -16,13 +16,13 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 //    long duration;
 
     long nextCheck;
-    int  loops      = 0;
+    public int loops = 0;
     long beatTime   = (long) (60000f / 120f);
     int  offset     = 0;
     int  offsetFlag = 1;
     private Phrase phrase;
 
-    Blibliki (Phrase phrase, InstrumentGenerator instrumentGenerator, AudioOutput out) {
+    public Blibliki (Phrase phrase, InstrumentGenerator instrumentGenerator, AudioOutput out) {
         this.phrase = phrase;
         this.out = out;
         this.instrumentGenerator = instrumentGenerator;
@@ -48,8 +48,8 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         out.pauseNotes();
         float i = 0;
         if (loops % 2 == 0 && loops != 0) {
-            offset += offsetFlag;
-            offsetFlag*=-1;
+//            offset += offsetFlag;
+//            offsetFlag *= -1;
         }
 
         for (Note note : phrase.notes) {
@@ -77,5 +77,9 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
     public void start () {
         nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.meterLength) + 100;
+    }
+
+    public void tunePhrase (Integer[] noteIndexes, Integer[] tuneAmounts) {
+        phrase.tune(noteIndexes, tuneAmounts);
     }
 }

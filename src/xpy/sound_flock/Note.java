@@ -269,6 +269,7 @@ public class Note extends PApplet {
     }
 
     public void tune (int amount) {
+        println(amount);
         this.pitchIndex += amount;
         this.pitch = getPitchOfIndex(pitchIndex);
         this.indexPosition = getIndexPosition(pitchIndex);

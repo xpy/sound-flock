@@ -46,7 +46,7 @@ public class Phrase extends PApplet {
     public static final int DURATION_PATTERN_UNIFORM_PHRASE  = 3;
     public static final int DURATION_PATTERN_METER_DIVISIONS = 4;
 
-    Phrase () {
+    public Phrase () {
 
     }
 
@@ -129,7 +129,7 @@ public class Phrase extends PApplet {
                         }
                         biggestNoteDuration = phraseMeters - currentDuration;
                         Note noteToAdd = new Note(Note.getRandomPitch(), biggestNoteDuration);
-                        noteList.add(0,noteToAdd);
+                        noteList.add(0, noteToAdd);
                         break;
                 }
                 break;
@@ -271,6 +271,38 @@ public class Phrase extends PApplet {
 
     public long getDuration () {
         return meterLength * phraseLength * beatTime;
+    }
+
+    public void tune (Integer[] noteIndexes,Integer[] tuneAmounts) {
+        if(noteIndexes.length != tuneAmounts.length){
+            System.err.println("noteIndexes != tuneAmounts");
+            return;
+
+        }
+            for (int i = 0; i < noteIndexes.length; i++) {
+            if (noteIndexes[i] > numOfNotes) {
+                System.err.println("noteIndex " + i + " (" + noteIndexes[i] + ") bigger than numOfNotes");
+                return;
+            }
+        }
+
+
+        for (int i = 0; i < tuneAmounts.length; i++) {
+
+            notes.get(noteIndexes[i]).tune(tuneAmounts[i]);
+        }
+
+    }
+
+    public void tune(int tuneAmount){
+        for (Note note : notes) {
+            note.tune(tuneAmount);
+        }
+
+    }
+
+    public void reset(){
+        notes.forEach(xpy.sound_flock.Note::reset);
     }
 
 }
