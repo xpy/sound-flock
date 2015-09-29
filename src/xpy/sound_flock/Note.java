@@ -13,14 +13,19 @@ import java.util.Random;
  */
 public class Note extends PApplet {
 
-    public float  duration;
-    public float  defaultDuration;
-    public float  pitch;
-    public float  defaultPitch;
-    public int    pitchIndex;
-    public int    defaultPitchIndex;
-    public int    indexPosition;
-    public int    defaultIndexPosition;
+
+    public float duration;
+    public float defaultDuration;
+
+    public float pitch;
+    public float defaultPitch;
+
+    public int pitchIndex;
+    public int defaultPitchIndex;
+
+    public int indexPosition;
+    public int defaultIndexPosition;
+
     public String pitchName;
 
     public static float  twelfthRootOfTwo      = (float) Math.pow(2f, 1f / 12f);
@@ -33,8 +38,8 @@ public class Note extends PApplet {
         this.duration = duration;
         this.pitch = pitch;
         this.pitchIndex = getIndexOfPitch(pitch);
-        this.indexPosition = (pitchIndex + 9) % 12;
-        this.indexPosition = toNormalIndex(indexPosition < 0 ? 12 + indexPosition : indexPosition);
+        this.indexPosition = getIndexPosition(pitchIndex);
+        this.save();
     }
 
     Note (String pitchName, float duration) {
@@ -43,6 +48,7 @@ public class Note extends PApplet {
         this.pitchName = pitchName;
         this.pitch = Frequency.ofPitch(pitchName).asHz();
         this.pitchIndex = getIndexOfPitch(pitch);
+        this.save();
     }
 
     Note (Note note) {
@@ -50,21 +56,12 @@ public class Note extends PApplet {
         this.pitch = note.pitch;
         this.pitchIndex = note.pitchIndex;
         this.indexPosition = note.indexPosition;
+        this.save();
     }
 
-    public void save () {
-        defaultDuration = duration;
-        defaultIndexPosition = indexPosition;
-        defaultPitch = pitch;
-        defaultPitchIndex = pitchIndex;
-    }
-
-    public void reset () {
-        duration = defaultDuration;
-        indexPosition = defaultIndexPosition;
-        pitch = defaultPitch;
-        pitchIndex = defaultPitchIndex;
-
+    public static int getIndexPosition (int pitchIndex) {
+        int indexPosition = (pitchIndex + 9) % 12;
+        return toNormalIndex(indexPosition < 0 ? 12 + indexPosition : indexPosition);
     }
 
     private static ArrayList<Integer> initializeOctaveNoteDistance () {
@@ -103,6 +100,32 @@ public class Note extends PApplet {
     }
 
 
+    /**
+     * Save the Notes variables
+     */
+    public void save () {
+        defaultDuration = duration;
+        defaultIndexPosition = indexPosition;
+        defaultPitch = pitch;
+        defaultPitchIndex = pitchIndex;
+    }
+
+    /**
+     * Restore the note Variables to the saved ones
+     */
+    public void reset () {
+        duration = defaultDuration;
+        indexPosition = defaultIndexPosition;
+        pitch = defaultPitch;
+        pitchIndex = defaultPitchIndex;
+
+    }
+
+    /**
+     * Get a random pitch as a text e.g. A4,C2...
+     *
+     * @return String
+     */
     public static String getRandomPitch () {
 
         Random r = new Random();
@@ -111,6 +134,12 @@ public class Note extends PApplet {
         return c + "4";
     }
 
+    /**
+     * Get a Random pitch into a give octave
+     *
+     * @param octave The octave number
+     * @return String
+     */
     public static String getRandomPitch (int octave) {
 
         Random r = new Random();
@@ -120,10 +149,11 @@ public class Note extends PApplet {
     }
 
     /**
+     * Get a random Pitch around a given pitch
      * fn = f0 * (a)n
      *
-     * @param pitch The Pitch
-     * @return Random Pitch
+     * @param pitch The Pitch that will be used as a center pitch
+     * @return Float
      */
     public static float getRandomPitchAroundPitch (float pitch) {
 
@@ -140,12 +170,24 @@ public class Note extends PApplet {
         return getPitchOfIndex(indexOfPitch + halfNoteSum);
     }
 
+    /**
+     * Get a Random pitch above a given pitch
+     *
+     * @param pitch The pitch that will be used as a starting pitch
+     * @return Float
+     */
     public static float getRandomPitchAbove (float pitch) {
 
         return getPitchOffset(pitch, (new Random().nextInt(6) + 1));
 
     }
 
+    /**
+     * Get a Random pitch below a given pitch
+     *
+     * @param pitch The pitch that will be used as a starting pitch
+     * @return Float
+     */
     public static float getRandomPitchBelow (float pitch) {
 
         return getPitchOffset(pitch, (new Random().nextInt(6) * -1 - 1));
@@ -225,4 +267,11 @@ public class Note extends PApplet {
 
         return getPitchOfIndex(index + halfNoteSum * factor);
     }
+
+    public void tune (int amount) {
+        this.pitchIndex += amount;
+        this.pitch = getPitchOfIndex(pitchIndex);
+        this.indexPosition = getIndexPosition(pitchIndex);
+    }
+
 }
