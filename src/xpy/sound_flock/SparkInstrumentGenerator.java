@@ -58,7 +58,7 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
 
 //            Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{1}, new float[]{0});
 
-            moogFilter = new MoogFilter(template.wooo, .2f, MoogFilter.Type.HP);
+            moogFilter = new MoogFilter(template.wooo, .2f, MoogFilter.Type.BP);
 
             osc = new Oscil(frequency, amplitude,template.wavetable);
             osc.patch(moogFilter);
@@ -84,7 +84,7 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
 
         float maxDuration = .05f;
         float frequencyAmp;
-        float wooo = 1000;
+        float wooo = 2000;
         Wavetable wavetable;
 
         public Template () {

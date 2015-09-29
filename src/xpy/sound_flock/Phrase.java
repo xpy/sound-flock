@@ -27,7 +27,7 @@ public class Phrase extends PApplet {
     public  int           pitchIndex      = 0;
     public  List<Integer> pitchPeakList   = new ArrayList<>();
 
-    public int pitchPattern    = 0;
+    public int pitchPattern    = -1;
     public int durationPattern = 0;
 
     public long beatTime = (long) (60000f / 120f);
@@ -152,8 +152,10 @@ public class Phrase extends PApplet {
                 return Note.getRandomPitchAbove(pitch);
             case PITCH_PATTERN_DESC:
                 return Note.getRandomPitchBelow(pitch);
-            default:
+            case PITCH_PATTERN_RANDOM:
                 return Note.getPitchOfIndex((new Random()).nextInt(20));
+            default:
+                return pitch;
         }
     }
 

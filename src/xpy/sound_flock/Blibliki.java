@@ -15,10 +15,10 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 //    long duration;
 
     long nextCheck;
-    int  loops    = 0;
-    long beatTime = (long) (60000f / 120f);
-    int  offset   = 0;
-
+    int  loops      = 0;
+    long beatTime   = (long) (60000f / 120f);
+    int  offset     = 0;
+    int  offsetFlag = 1;
     private Phrase phrase;
 
     Blibliki (Phrase phrase, InstrumentGenerator instrumentGenerator, AudioOutput out) {
@@ -47,12 +47,13 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         out.pauseNotes();
         float i = 0;
         if (loops % 2 == 0 && loops != 0) {
-            offset++;
+            offset += offsetFlag;
+            offsetFlag*=-1;
         }
 
         for (Note note : phrase.notes) {
 
-            out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(note.duration,instrumentGenerator.getMaxDuration()), instrumentGenerator.createInstrument(note.pitchOffset(offset), instrumentGenerator.getAmplitude(), out));
+            out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrumentGenerator.createInstrument(note.pitchOffset(offset), instrumentGenerator.getAmplitude(), out));
             i += note.duration;
         }
         out.resumeNotes();
@@ -61,7 +62,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
     public void update () {
 
-        if (System.currentTimeMillis() - nextCheck >= 0 && loops < 20) {
+        if (System.currentTimeMillis() - nextCheck >= 0 && loops < 100) {
             println("loops:" + loops);
             setNotes();
             loops++;

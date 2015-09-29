@@ -32,6 +32,9 @@ public class Sound_flock extends PApplet {
     AudioOutput out;
     Blibliki    blibliki;
     Blibliki    blibliki2;
+    Blibliki    blibliki3;
+    Blibliki    blibliki4;
+    Blibliki    blibliki5;
     Long        startTime;
 
     // Every instrument must implement the Instrument interface so
@@ -49,9 +52,9 @@ public class Sound_flock extends PApplet {
         out.setTempo(120);
 
         SynthInstrumentGenerator synthGenerator = new SynthInstrumentGenerator();
-        KickInstrumentGenerator kickGenerator = new KickInstrumentGenerator();
-        SparkInstrumentGenerator SparkGenerator = new SparkInstrumentGenerator();
-        SnareInstrumentGenerator SnareGenerator = new SnareInstrumentGenerator();
+        KickInstrumentGenerator  kickGenerator  = new KickInstrumentGenerator();
+        SparkInstrumentGenerator sparkGenerator = new SparkInstrumentGenerator();
+        SnareInstrumentGenerator snareGenerator = new SnareInstrumentGenerator();
         ToneInstrumentGenerator  toneGenerator  = new ToneInstrumentGenerator();
 //        blibliki = Blibliki.createRandomBlibliki( out);
 //        blibliki2 = Blibliki.createRandomBlibliki(out);
@@ -59,7 +62,7 @@ public class Sound_flock extends PApplet {
         Phrase phrase1 = new Phrase();
         phrase1.meterLength = 4;
         phrase1.numOfNotes = 2;
-        phrase1.phraseLength = 4;
+        phrase1.phraseLength = 2;
         phrase1.pitchPattern = Phrase.PITCH_PATTERN_DESC;
         phrase1.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
         phrase1.baseNotePitch = 220f;
@@ -78,13 +81,57 @@ public class Sound_flock extends PApplet {
         phrase2.phraseLength = 1;
         phrase2.baseNotePitch = 40;
         phrase2.numOfPitchPeaks = 2;
-        phrase2.pitchPattern = Phrase.PITCH_PATTERN_BELOW;
+        phrase2.pitchPattern = Phrase.PITCH_PATTERN_AROUND;
         phrase2.durationPattern = Phrase.DURATION_PATTERN_RANDOM;
         phrase2.generatePhrase();
 
 
-        blibliki2 = new Blibliki(phrase2, SnareGenerator, out);
+        Phrase phrase3 = new Phrase();
+        phrase3.baseNoteLength = .5f;
+        phrase3.meterLength = 4;
+//        phrase2.repeatNotes = 2;
+        phrase3.numOfNotes = 4;
+        phrase3.phraseLength = 1;
+        phrase3.baseNotePitch = 100;
+        phrase3.numOfPitchPeaks = 2;
+//        phrase3.pitchPattern = Phrase.PITCH_PATTERN_BELOW;
+        phrase3.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_METER;
+        phrase3.generatePhrase();
+
+        Phrase phrase4 = new Phrase();
+        phrase4.baseNoteLength = .5f;
+        phrase4.meterLength = 4;
+        phrase4.numOfNotes = 6;
+        phrase4.phraseLength = 2;
+        phrase4.baseNotePitch = 80;
+        phrase4.numOfPitchPeaks = 2;
+        phrase4.pitchPattern = Phrase.PITCH_PATTERN_BELOW;
+        phrase4.durationPattern = Phrase.DURATION_PATTERN_METER_DIVISIONS;
+        phrase4.generatePhrase();
+
+        Phrase phrase5 = new Phrase();
+        phrase5.baseNoteLength = .5f;
+        phrase5.meterLength = 4;
+        phrase5.numOfNotes = 6;
+        phrase5.phraseLength = 1;
+        phrase5.baseNotePitch = 220;
+        phrase5.numOfPitchPeaks = 1;
+        phrase5.pitchPattern = Phrase.PITCH_PATTERN_PEAKS;
+        phrase5.durationPattern = Phrase.DURATION_PATTERN_METER_DIVISIONS;
+        phrase5.generatePhrase();
+
+        blibliki2 = new Blibliki(phrase2, sparkGenerator, out);
         blibliki2.start();
+
+
+        blibliki3 = new Blibliki(phrase3, kickGenerator, out);
+        blibliki3.start();
+
+        blibliki4 = new Blibliki(phrase4, snareGenerator, out);
+        blibliki4.start();
+
+        blibliki5 = new Blibliki(phrase5, toneGenerator, out);
+        blibliki5.start();
 
         startTime = System.currentTimeMillis();
 
@@ -106,8 +153,14 @@ public class Sound_flock extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
         blibliki.update();
-        if (System.currentTimeMillis() - startTime > 10000)
+        if (blibliki.loops >= 2)
             blibliki2.update();
+        if (blibliki.loops >= 4)
+            blibliki3.update();
+        if (blibliki.loops >= 5)
+            blibliki4.update();
+        if (blibliki.loops >= 6)
+            blibliki5.update();
 
 
     }

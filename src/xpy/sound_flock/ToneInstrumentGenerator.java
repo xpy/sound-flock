@@ -5,6 +5,9 @@ import ddf.minim.ugens.*;
 
 import java.util.Random;
 
+import static processing.core.PApplet.println;
+
+
 /**
  * ToneInstrumentGenerator
  * Created by xpy on 05-Sep-15.
@@ -52,6 +55,7 @@ class ToneInstrumentGenerator implements InstrumentGenerator {
 
         ToneInstrument (float frequency, float amplitude, AudioOutput out) {
 
+            println("amplitude: "+amplitude);
             this.out = out;
             this.frequency = frequency;
             this.amplitude = amplitude;

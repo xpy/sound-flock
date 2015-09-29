@@ -19,12 +19,12 @@ public class tests extends PApplet {
     Long        startTime;
     float amp       = .5f;
     float partial2  = 0f;
-    float frequency = 80;
+    float frequency = 440;
     Wavetable wave;
     Wavetable wave2;
 //    Oscil     oscil;
 
-    SparkInstrumentGenerator instrumentGenerator;
+    SnareInstrumentGenerator instrumentGenerator;
 
 
     public void setup () {
@@ -34,7 +34,7 @@ public class tests extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        instrumentGenerator = new SparkInstrumentGenerator();
+        instrumentGenerator = new SnareInstrumentGenerator();
 
     }
 
@@ -55,7 +55,7 @@ public class tests extends PApplet {
         }
 /*
 
-        Wavetable wave = (Wavetable) new SparkInstrumentGenerator(instrument).sineOsc.getWaveform();
+        Wavetable wave = (Wavetable) new SnareInstrumentGenerator(instrument).sineOsc.getWaveform();
 
         stroke(255, 0, 0);
 
@@ -78,11 +78,11 @@ public class tests extends PApplet {
         } else {
             if (key == ' ') {
                 waveChanged = true;
-                out.playNote(0, .05f, instrumentGenerator.createInstrument(frequency, .5f, out));
-                out.playNote(1f, .05f, instrumentGenerator.createInstrument(frequency/2, .5f, out));
-                out.playNote(1.5f, .05f, instrumentGenerator.createInstrument(frequency/4, .5f, out));
-                instrumentGenerator.template.wooo *=1.125;
-                println(instrumentGenerator.template.wooo);
+                out.playNote(0, .5f, instrumentGenerator.createInstrument(frequency, .5f, out));
+//                out.playNote(1f, .05f, instrumentGenerator.createInstrument(frequency/2, .5f, out));
+//                out.playNote(1.5f, .05f, instrumentGenerator.createInstrument(frequency/4, .5f, out));
+//                instrumentGenerator.template.wooo *=1.125;
+//                println(instrumentGenerator.template.wooo);
 //                frequency*=.75f;
             }
             if(key == 'q'){
