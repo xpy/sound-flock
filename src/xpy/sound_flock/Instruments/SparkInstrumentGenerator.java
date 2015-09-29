@@ -24,7 +24,7 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
 
 
     @Override
-    public ddf.minim.ugens.Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new SparkInstrument(frequency, amplitude, out);
     }
 
@@ -39,7 +39,7 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public class SparkInstrument implements ddf.minim.ugens.Instrument {
+    public class SparkInstrument implements InstrumentGenerator.Instrument {
 
         Oscil osc;
         ADSR  adsr;
@@ -76,6 +76,16 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
 //            adsr.unpatchAfterRelease(out);
             moogFilter.unpatch(out);
 //            adsr.noteOff();
+        }
+
+        @Override
+        public Sink getSink () {
+            return null;
+        }
+
+        @Override
+        public EnvelopeFollower getEnvFollower () {
+            return null;
         }
     }
 

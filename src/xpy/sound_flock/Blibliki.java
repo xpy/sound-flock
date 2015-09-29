@@ -62,15 +62,14 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         float i = 0;
 
         for (LoopEvent loopEvent : loopEvents) {
-            println("LOOPEVENT");
             loopEvent.fire(loops);
         }
 //            offset += offsetFlag;
 //            offsetFlag *= -1;
 
         for (Note note : phrase.notes) {
-            Instrument instrument = instrumentGenerator.createInstrument(note.pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
-
+            InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(note.pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
+            body.attachInstrument(instrument);
             out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrument);
             i += note.duration;
         }

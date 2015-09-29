@@ -10,6 +10,8 @@ import ddf.minim.ugens.*;
 public interface InstrumentGenerator {
 
     interface Instrument extends ddf.minim.ugens.Instrument {
+        Sink getSink();
+        EnvelopeFollower getEnvFollower();
     }
 
     interface Template {
@@ -19,9 +21,10 @@ public interface InstrumentGenerator {
         return null;
     }
 
-    ddf.minim.ugens.Instrument createInstrument (float frequency, float amplitude, AudioOutput out);
+    Instrument createInstrument (float frequency, float amplitude, AudioOutput out);
 
     float getAmplitude();
     float getMaxDuration();
+
 
 }

@@ -55,7 +55,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
         return new SynthInstrumentGenerator.Template();
     }
 
-    public ddf.minim.ugens.Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new SynthInstrument(frequency, amplitude, out);
     }
 
@@ -70,7 +70,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public class SynthInstrument implements ddf.minim.ugens.Instrument {
+    public class SynthInstrument implements InstrumentGenerator.Instrument {
 
         List<Oscil> oscillators = new ArrayList<>();
 
@@ -150,6 +150,15 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
 
         }
 
+        @Override
+        public Sink getSink () {
+            return null;
+        }
+
+        @Override
+        public EnvelopeFollower getEnvFollower () {
+            return null;
+        }
     }
 
     public static class Template implements InstrumentGenerator.Template {

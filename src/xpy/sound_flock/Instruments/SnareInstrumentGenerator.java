@@ -24,7 +24,7 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
 
 
     @Override
-    public ddf.minim.ugens.Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new SnareInstrument(frequency, amplitude, out);
     }
 
@@ -39,7 +39,7 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public class SnareInstrument implements ddf.minim.ugens.Instrument {
+    public class SnareInstrument implements InstrumentGenerator.Instrument {
 
         Oscil osc;
         Oscil modulator;
@@ -85,6 +85,16 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
 
             adsrModulator.noteOff();
             adsr.noteOff();
+        }
+
+        @Override
+        public Sink getSink () {
+            return null;
+        }
+
+        @Override
+        public EnvelopeFollower getEnvFollower () {
+            return null;
         }
     }
 

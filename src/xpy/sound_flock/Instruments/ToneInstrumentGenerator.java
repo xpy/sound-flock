@@ -26,7 +26,7 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
     }
 
     @Override
-    public ddf.minim.ugens.Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new ToneInstrument(frequency, amplitude, out);
     }
 
@@ -40,6 +40,7 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
         return template.maxDuration;
     }
 
+
     class ToneInstrument implements Instrument {
 
         Oscil osc;
@@ -48,7 +49,7 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
 
         public AudioOutput out;
         public Sink             sink             = new Sink();
-        public EnvelopeFollower envelopeFollower = new EnvelopeFollower(0,.1f,1024);
+        public EnvelopeFollower envelopeFollower = new EnvelopeFollower(0,.2f,256);
 
         public float frequency;
         public float amplitude;
@@ -77,6 +78,7 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
             adsr.noteOn();
 
             adsr.patch(envelopeFollower).patch(sink).patch(out);
+            adsr.patch(out);
         }
 
         // every instrumentGenerator must have a noteOff() method
@@ -85,6 +87,15 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
             adsr.noteOff();
         }
 
+        @Override
+        public Sink getSink () {
+            return sink;
+        }
+
+        @Override
+        public EnvelopeFollower getEnvFollower () {
+            return envelopeFollower;
+        }
     }
 
     public static class Template implements InstrumentGenerator.Template {

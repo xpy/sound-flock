@@ -24,7 +24,7 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
 
 
     @Override
-    public ddf.minim.ugens.Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new KickInstrument(frequency, amplitude, out);
     }
 
@@ -39,7 +39,7 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public class KickInstrument implements ddf.minim.ugens.Instrument {
+    public class KickInstrument implements InstrumentGenerator.Instrument {
 
         Oscil osc;
         Oscil modulator;
@@ -79,6 +79,16 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
 
             adsrModulator.noteOff();
             adsr.noteOff();
+        }
+
+        @Override
+        public Sink getSink () {
+            return null;
+        }
+
+        @Override
+        public EnvelopeFollower getEnvFollower () {
+            return null;
         }
     }
 

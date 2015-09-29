@@ -29,6 +29,7 @@ public class BliblikiMaterializing extends PApplet {
 
         // initialize the minim and out objects
         minim = new Minim(this);
+//        minim.debugOn();
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 

@@ -1,6 +1,7 @@
 package xpy.sound_flock.Body;
 
 import ddf.minim.ugens.Instrument;
+import xpy.sound_flock.Instruments.InstrumentGenerator;
 
 /**
  * Body
@@ -11,6 +12,6 @@ public interface Body {
 
     void update ();
 
-    void attachInstrument(Instrument instrument);
+    void attachInstrument(InstrumentGenerator.Instrument instrument);
 
 }
