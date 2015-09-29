@@ -14,7 +14,7 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
     Template template;
     public float amplitude = .65f;
 
-    SnareInstrumentGenerator () {
+    public SnareInstrumentGenerator () {
         template = createTemplate();
     }
 

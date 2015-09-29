@@ -1,9 +1,11 @@
-package xpy.sound_flock;
+package tests;
 
 import processing.core.*;
 import ddf.minim.Minim;
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
+import xpy.sound_flock.Blibliki;
+import xpy.sound_flock.SnareInstrumentGenerator;
 
 
 /**
