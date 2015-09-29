@@ -1,7 +1,9 @@
 package xpy.sound_flock;
 
 import ddf.minim.AudioOutput;
+import ddf.minim.ugens.Instrument;
 import processing.core.*;
+import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     int  offset     = 0;
     int  offsetFlag = 1;
     private Phrase phrase;
+    private Body   body;
 
     public Blibliki (Phrase phrase, InstrumentGenerator instrumentGenerator, AudioOutput out) {
         this.phrase = phrase;
@@ -49,6 +52,11 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         phrase = phraseToAdd;
     }
 
+    public void addBody (Body bodyToAdd) {
+
+        body = bodyToAdd;
+    }
+
     public void setNotes () {
         out.pauseNotes();
         float i = 0;
@@ -61,8 +69,9 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 //            offsetFlag *= -1;
 
         for (Note note : phrase.notes) {
+            Instrument instrument = instrumentGenerator.createInstrument(note.pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
 
-            out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrumentGenerator.createInstrument(note.pitchOffset(offset), instrumentGenerator.getAmplitude(), out));
+            out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrument);
             i += note.duration;
         }
         out.resumeNotes();
@@ -77,6 +86,8 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
             loops++;
             nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters()) + 100;
         }
+
+        body.update();
     }
 
     public float millisToBeats (long millis) {
@@ -95,9 +106,10 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         phrase.tune(tuneAmount);
     }
 
-    public void resetPhrase(){
+    public void resetPhrase () {
         phrase.reset();
     }
+
     public void addLoopEvent (LoopEvent loopEvent) {
         loopEvents.add(loopEvent);
     }

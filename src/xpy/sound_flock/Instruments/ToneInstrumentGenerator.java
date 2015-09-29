@@ -47,8 +47,11 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
         ADSR  adsr;
 
         public AudioOutput out;
-        public float       frequency;
-        public float       amplitude;
+        public Sink             sink             = new Sink();
+        public EnvelopeFollower envelopeFollower = new EnvelopeFollower(0,.1f,1024);
+
+        public float frequency;
+        public float amplitude;
 
         MoogFilter moogFilter;
 
@@ -67,13 +70,13 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
 
             // patch everything together up to the final output
 //            modulator.patch(sineOsc).patch(moogFilter).patch(adsr);
-           (osc).patch(moogFilter).patch(adsr);
+            (osc).patch(moogFilter).patch(adsr);
         }
 
         public void noteOn (float dur) {
             adsr.noteOn();
 
-            adsr.patch(out);
+            adsr.patch(envelopeFollower).patch(sink).patch(out);
         }
 
         // every instrumentGenerator must have a noteOff() method
