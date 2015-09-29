@@ -55,13 +55,12 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
 
         ToneInstrument (float frequency, float amplitude, AudioOutput out) {
 
-            println("amplitude: "+amplitude);
             this.out = out;
             this.frequency = frequency;
             this.amplitude = amplitude;
 
             Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{amplitude}, new float[]{1});
-            modulator = new Oscil(frequency * template.modulatorFactor, amplitude, wave);
+//            modulator = new Oscil(frequency * template.modulatorFactor, amplitude, wave);
             osc = new Oscil(frequency, amplitude, Waves.SQUARE);
             adsr = new ADSR(amplitude, 0.01f, 0.05f, amplitude, 0.5f);
             moogFilter = new MoogFilter(frequency * template.moogFactor, .5f, MoogFilter.Type.LP);
@@ -96,7 +95,7 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
 
             this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
             this.modulatorFactor = (r.nextInt(10) + 1) * .05f;
-            this.moogFactor = r.nextFloat() +.25f;
+            this.moogFactor = r.nextFloat() +.5f;
         }
     }
 }

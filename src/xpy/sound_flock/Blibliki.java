@@ -4,6 +4,9 @@ import ddf.minim.AudioOutput;
 import processing.core.*;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Blibliki
  * Created by xpy on 05-Sep-15.
@@ -12,6 +15,8 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
     AudioOutput         out;
     InstrumentGenerator instrumentGenerator;
+
+    List<LoopEvent> loopEvents = new ArrayList<>();
 
 //    long duration;
 
@@ -47,10 +52,13 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     public void setNotes () {
         out.pauseNotes();
         float i = 0;
-        if (loops % 2 == 0 && loops != 0) {
+
+        for (LoopEvent loopEvent : loopEvents) {
+            println("LOOPEVENT");
+            loopEvent.fire(loops);
+        }
 //            offset += offsetFlag;
 //            offsetFlag *= -1;
-        }
 
         for (Note note : phrase.notes) {
 
@@ -81,5 +89,25 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
     public void tunePhrase (Integer[] noteIndexes, Integer[] tuneAmounts) {
         phrase.tune(noteIndexes, tuneAmounts);
+    }
+
+    public void tunePhrase (Integer tuneAmount) {
+        phrase.tune(tuneAmount);
+    }
+
+    public void resetPhrase(){
+        phrase.reset();
+    }
+    public void addLoopEvent (LoopEvent loopEvent) {
+        loopEvents.add(loopEvent);
+    }
+
+    /**
+     * Created by xpy on 29-Sep-15.
+     */
+    public static class LoopEvent {
+        public void fire (int loopNum) {
+
+        }
     }
 }

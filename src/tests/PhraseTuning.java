@@ -44,6 +44,21 @@ public class PhraseTuning extends PApplet {
 
         blibliki = new Blibliki(phrase, toneGenerator, out);
         blibliki.start();
+        blibliki.addLoopEvent(new Blibliki.LoopEvent(){
+            @Override
+            public void fire (int loopNum) {
+//                if (loopNum % 2 == 0 && loopNum !=0) {
+                    blibliki.tunePhrase(new Integer []{0,1,2},new Integer []{1,2,3});
+//                }
+//                println("loopNum: "+loopNum);
+//                println("loopNum % 2: "+loopNum % 2);
+//                if (loopNum % 4 == 0 && loopNum !=0) {
+//                    blibliki.resetPhrase();
+//                    blibliki.tunePhrase(-1);
+//                }
+
+            }
+        });
         startTime = System.currentTimeMillis();
 
 
@@ -64,14 +79,7 @@ public class PhraseTuning extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
         blibliki.update();
-        if (blibliki.loops % 2 == 0 && blibliki.loops!=0&& !tuned) {
-            blibliki.tunePhrase(new Integer []{2,3},new Integer []{1,2});
-            tuned = true;
-        }
-        if(blibliki.loops % 2 == 1){
-            tuned = false;
 
-        }
 
     }
 

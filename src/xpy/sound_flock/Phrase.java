@@ -166,7 +166,6 @@ public class Phrase extends PApplet {
         } else if (pitchPattern == PITCH_PATTERN_BELOW) {
             pitchFeed = getPitchByPattern(PITCH_PATTERN_DESC, baseNotePitch);
         } else if (pitchPattern == PITCH_PATTERN_PEAKS) {
-            println(pitchPeakList.get(pitchIndex));
             pitchFeed = getPitchByPattern(pitchPeakList.get(++pitchIndex), pitch);
         } else {
             pitchFeed = getPitchByPattern(pitchPattern, pitch);
