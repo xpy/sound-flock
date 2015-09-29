@@ -1,4 +1,4 @@
-package xpy.sound_flock;
+package xpy.sound_flock.Instruments;
 
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
@@ -22,7 +22,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
     public float amplitude = .45f;
 
 
-    SynthInstrumentGenerator () {
+    public SynthInstrumentGenerator () {
 
         this.template = createTemplate();
     }
@@ -55,7 +55,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
         return new SynthInstrumentGenerator.Template();
     }
 
-    public SynthInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public ddf.minim.ugens.Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new SynthInstrument(frequency, amplitude, out);
     }
 
@@ -70,7 +70,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public class SynthInstrument implements Instrument {
+    public class SynthInstrument implements ddf.minim.ugens.Instrument {
 
         List<Oscil> oscillators = new ArrayList<>();
 

@@ -2,6 +2,7 @@ package xpy.sound_flock;
 
 import ddf.minim.AudioOutput;
 import processing.core.*;
+import xpy.sound_flock.Instruments.InstrumentGenerator;
 
 /**
  * Blibliki

@@ -3,8 +3,7 @@ package xpy.sound_flock;
 import processing.core.*;
 import ddf.minim.Minim;
 import ddf.minim.AudioOutput;
-
-import java.util.Random;
+import xpy.sound_flock.Instruments.*;
 
 /**
  * Sound Flock

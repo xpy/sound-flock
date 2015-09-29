@@ -1,4 +1,4 @@
-package xpy.sound_flock;
+package xpy.sound_flock.Instruments;
 
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
@@ -19,7 +19,7 @@ public interface InstrumentGenerator {
         return null;
     }
 
-    Instrument createInstrument (float frequency, float amplitude, AudioOutput out);
+    ddf.minim.ugens.Instrument createInstrument (float frequency, float amplitude, AudioOutput out);
 
     float getAmplitude();
     float getMaxDuration();

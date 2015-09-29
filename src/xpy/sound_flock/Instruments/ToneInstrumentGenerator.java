@@ -1,4 +1,4 @@
-package xpy.sound_flock;
+package xpy.sound_flock.Instruments;
 
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
@@ -12,12 +12,12 @@ import static processing.core.PApplet.println;
  * ToneInstrumentGenerator
  * Created by xpy on 05-Sep-15.
  */
-class ToneInstrumentGenerator implements InstrumentGenerator {
+public class ToneInstrumentGenerator implements InstrumentGenerator {
 
     Template template;
     public float amplitude = .65f;
 
-    ToneInstrumentGenerator () {
+    public ToneInstrumentGenerator () {
         template = createTemplate();
     }
 
@@ -26,7 +26,7 @@ class ToneInstrumentGenerator implements InstrumentGenerator {
     }
 
     @Override
-    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public ddf.minim.ugens.Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new ToneInstrument(frequency, amplitude, out);
     }
 

@@ -1,4 +1,4 @@
-package xpy.sound_flock;
+package xpy.sound_flock.Instruments;
 
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
@@ -14,7 +14,7 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
     Template template;
     public float amplitude = .3f;
 
-    SparkInstrumentGenerator () {
+    public SparkInstrumentGenerator () {
         template = createTemplate();
     }
 
@@ -24,7 +24,7 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
 
 
     @Override
-    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public ddf.minim.ugens.Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new SparkInstrument(frequency, amplitude, out);
     }
 
@@ -39,7 +39,7 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public class SparkInstrument implements Instrument {
+    public class SparkInstrument implements ddf.minim.ugens.Instrument {
 
         Oscil osc;
         ADSR  adsr;
