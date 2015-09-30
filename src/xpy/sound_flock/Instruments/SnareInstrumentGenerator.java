@@ -39,7 +39,7 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public class SnareInstrument implements InstrumentGenerator.Instrument {
+    public class SnareInstrument extends BaseInstrument {
 
         Oscil      osc;
         Oscil      modulator;
@@ -47,15 +47,11 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
         ADSR       adsrModulator;
         Line       l;
         MoogFilter moogFilter;
-        private boolean isComplete = false;
-
-        public AudioOutput out;
-        public float       frequency;
-        public float       amplitude;
 
         public SnareInstrument (float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
             this.amplitude = amplitude;
+            this.releaseTime = .2f;
             this.out = out;
 
             l = new Line(frequency * template.frequencyAmp, frequency);
@@ -63,7 +59,7 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
 //            Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{amplitude}, new float[]{1});
             osc = new Oscil(frequency * template.frequencyAmp, amplitude, template.wavetable);
 //            Oscil osc2 = new Oscil(frequency,2*amplitude,wave);
-            adsr = new ADSR(amplitude * 2, 0.0001f, 0.05f, 0, 0.2f);
+            adsr = new ADSR(amplitude * 2, 0.0001f, 0.05f, 0, releaseTime);
             adsrModulator = new ADSR(.1f, 0.1f, 0.5f, 1f, 0.1f);
             moogFilter = new MoogFilter(frequency * 5, .1f, MoogFilter.Type.BP);
             l.patch(adsrModulator).patch(osc.frequency);
@@ -77,7 +73,7 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
             adsrModulator.noteOn();
             adsr.noteOn();
 
-            adsr.patch(out);
+            patch(adsr, dur);
         }
 
         // every instrumentGenerator must have a noteOff() method
@@ -86,23 +82,9 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
 
             adsrModulator.noteOff();
             adsr.noteOff();
-            isComplete = true;
+            setComplete();
+            unpatch();
 
-        }
-
-        @Override
-        public Sink getSink () {
-            return null;
-        }
-
-        @Override
-        public EnvelopeFollower getEnvFollower () {
-            return null;
-        }
-
-        @Override
-        public boolean isComplete () {
-            return isComplete;
         }
 
     }

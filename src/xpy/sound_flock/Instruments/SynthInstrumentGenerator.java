@@ -70,7 +70,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public class SynthInstrument implements InstrumentGenerator.Instrument {
+    public class SynthInstrument extends BaseInstrument {
 
         List<Oscil> oscillators = new ArrayList<>();
 
@@ -79,17 +79,14 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
 
         Multiplier ml;
 
-        AudioOutput out;
-        float       baseFrequency;
-        float       initialFrequency;
-        float       amplitude;
-        ADSR        adsr;
+        float baseFrequency;
+        float initialFrequency;
 
+        ADSR       adsr;
         Oscil      modulator;
         Oscil      moogModulator;
         Wavetable  moogModulatorWavetable;
         MoogFilter moogFilter;
-        private boolean isComplete = false;
 
 
         public SynthInstrument (float frequency, float amplitude, AudioOutput out) {
@@ -99,6 +96,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
             this.baseFrequency = frequency;
             this.initialFrequency = baseFrequency;
             this.amplitude = amplitude;
+            releaseTime = 0.3f;
 
             moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{0});
             moogModulatorWavetable.offset(1f);
@@ -125,7 +123,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
             moogModulator.patch(ml).patch(moogFilter.frequency);
 //        moogFilter = new MoogFilter((r.nextInt(7) + 2) * initialFrequency, .7f, MoogFilter.Type.LP);
 
-            adsr = new ADSR(amplitude, 0.3f, .3f, amplitude, 0.3f);
+            adsr = new ADSR(amplitude, 0.3f, .3f, amplitude, releaseTime);
             s.patch(moogFilter).patch(adsr);
 
         }
@@ -135,12 +133,12 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
         }
 
         @Override
-        public void noteOn (float v) {
+        public void noteOn (float dur) {
 //        l.activate();
             adsr.noteOn();
 //        adsr2.noteOn();
             // patch to the output
-            adsr.patch(out);
+            patch(adsr, dur);
         }
 
         @Override
@@ -148,23 +146,12 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
             adsr.unpatchAfterRelease(out);
             // call the noteOff
             adsr.noteOff();
-            isComplete = true;
+            setComplete();
+            unpatch();
 
         }
 
-        @Override
-        public Sink getSink () {
-            return null;
-        }
 
-        @Override
-        public EnvelopeFollower getEnvFollower () {
-            return null;
-        }
-        @Override
-        public boolean isComplete () {
-            return isComplete;
-        }
     }
 
     public static class Template implements InstrumentGenerator.Template {

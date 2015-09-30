@@ -39,18 +39,13 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public class SparkInstrument implements InstrumentGenerator.Instrument {
+    public class SparkInstrument extends BaseInstrument {
 
         Oscil osc;
         ADSR  adsr;
         Line  l;
         Random r = new Random();
-        private boolean isComplete = false;
 
-
-        public AudioOutput out;
-        public float       frequency;
-        public float       amplitude;
         MoogFilter moogFilter;
 
         public SparkInstrument (float frequency, float amplitude, AudioOutput out) {
@@ -62,39 +57,21 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
 
             moogFilter = new MoogFilter(template.wooo, .2f, MoogFilter.Type.BP);
 
-            osc = new Oscil(frequency, amplitude,template.wavetable);
+            osc = new Oscil(frequency, amplitude, template.wavetable);
             osc.patch(moogFilter);
         }
 
         public void noteOn (float dur) {
-//            l.activate();
-//            adsr.noteOn();
-
-            moogFilter.patch(out);
+            patch(moogFilter, dur);
         }
 
         // every instrumentGenerator must have a noteOff() method
         public void noteOff () {
-//            adsr.unpatchAfterRelease(out);
             moogFilter.unpatch(out);
-            isComplete = true;
-
-//            adsr.noteOff();
+            unpatch();
+            setComplete();
         }
 
-        @Override
-        public Sink getSink () {
-            return null;
-        }
-
-        @Override
-        public EnvelopeFollower getEnvFollower () {
-            return null;
-        }
-        @Override
-        public boolean isComplete () {
-            return isComplete;
-        }
 
     }
 
@@ -109,7 +86,7 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
         public Template () {
             frequencyAmp = 1;//(r.nextInt(4)+4)*.125f;
             wavetable = Waves.randomNoise();
-            wavetable.warp(1f,.1f);
+            wavetable.warp(1f, .1f);
 
 //            this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
         }

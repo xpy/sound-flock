@@ -39,29 +39,25 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public class KickInstrument implements InstrumentGenerator.Instrument {
+    public class KickInstrument extends BaseInstrument {
 
         Oscil osc;
         Oscil modulator;
         ADSR  adsr;
         ADSR  adsrModulator;
         Line  l;
-        private boolean isComplete = false;
-
-        public AudioOutput out;
-        public float       frequency;
-        public float       amplitude;
 
         public KickInstrument (float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
             this.amplitude = amplitude;
+            this.releaseTime = .3f;
             this.out = out;
 
             Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{1}, new float[]{0});
-            l = new Line(1000, 2 * frequency*template.frequencyAmp);
+            l = new Line(1000, 2 * frequency * template.frequencyAmp);
 
-            osc = new Oscil(frequency*template.frequencyAmp, amplitude, wave);
-            adsr = new ADSR(amplitude, 0.001f, 0.05f, amplitude, 0.3f);
+            osc = new Oscil(frequency * template.frequencyAmp, amplitude, wave);
+            adsr = new ADSR(amplitude, 0.001f, 0.05f, amplitude, releaseTime);
             adsrModulator = new ADSR(1f, 0.001f, 0.05f, .2f, 0.3f);
             l.patch(adsrModulator).patch(osc.frequency);
             osc.patch(adsr);
@@ -71,31 +67,17 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
             l.activate();
             adsrModulator.noteOn();
             adsr.noteOn();
-            adsr.patch(out);
+            patch(adsr, dur);
         }
 
         // every instrumentGenerator must have a noteOff() method
         public void noteOff () {
             adsr.unpatchAfterRelease(out);
-
             adsrModulator.noteOff();
             adsr.noteOff();
-            isComplete = true;
 
-        }
-
-        @Override
-        public Sink getSink () {
-            return null;
-        }
-
-        @Override
-        public EnvelopeFollower getEnvFollower () {
-            return null;
-        }
-        @Override
-        public boolean isComplete () {
-            return isComplete;
+            unpatch();
+            setComplete();
         }
 
     }
@@ -108,7 +90,7 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
 
         public Template () {
             Random r = new Random();
-            frequencyAmp = (r.nextInt(4)+4)*.125f;
+            frequencyAmp = (r.nextInt(4) + 4) * .125f;
 //            this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
         }
     }

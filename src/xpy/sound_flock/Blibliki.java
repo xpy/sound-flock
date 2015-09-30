@@ -29,6 +29,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     int  offsetFlag = 1;
     private Phrase phrase;
     private Body   body;
+    private boolean hasBody = false;
 
     public Blibliki (Phrase phrase, InstrumentGenerator instrumentGenerator, Body body, AudioOutput out) {
 
@@ -36,8 +37,8 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         this.body = body;
         this.out = out;
         this.instrumentGenerator = instrumentGenerator;
-
-        body.attachPhrase(this.phrase);
+        if (hasBody)
+            body.attachPhrase(this.phrase);
     }
 
 /*
@@ -59,6 +60,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     public void addBody (Body bodyToAdd) {
 
         body = bodyToAdd;
+        hasBody = true;
     }
 
     public void setNotes () {
@@ -70,14 +72,20 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         }
 //            offset += offsetFlag;
 //            offsetFlag *= -1;
+        if (hasBody)
+            for (Member member : body.getMembers()) {
 
-        for (Member member : body.getMembers()) {
-
-            InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(member.getNote().pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
-            member.attachInstrument(instrument);
-            out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
-            i += member.getNote().duration;
-        }
+                InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(member.getNote().pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
+                member.attachInstrument(instrument);
+                out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
+                i += member.getNote().duration;
+            }
+        else
+            for (Note note : phrase.notes) {
+                InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(note.pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
+                out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrument);
+                i += note.duration;
+            }
         out.resumeNotes();
     }
 
@@ -90,8 +98,8 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
             loops++;
             nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters()) + 100;
         }
-
-        body.update();
+        if (hasBody)
+            body.update();
     }
 
     public float millisToBeats (long millis) {
