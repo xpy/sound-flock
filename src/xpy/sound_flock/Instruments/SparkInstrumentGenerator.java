@@ -45,6 +45,8 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
         ADSR  adsr;
         Line  l;
         Random r = new Random();
+        private boolean isComplete = false;
+
 
         public AudioOutput out;
         public float       frequency;
@@ -75,6 +77,8 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
         public void noteOff () {
 //            adsr.unpatchAfterRelease(out);
             moogFilter.unpatch(out);
+            isComplete = true;
+
 //            adsr.noteOff();
         }
 
@@ -87,6 +91,11 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
         public EnvelopeFollower getEnvFollower () {
             return null;
         }
+        @Override
+        public boolean isComplete () {
+            return isComplete;
+        }
+
     }
 
 

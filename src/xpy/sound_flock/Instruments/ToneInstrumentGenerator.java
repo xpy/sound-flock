@@ -15,7 +15,7 @@ import static processing.core.PApplet.println;
 public class ToneInstrumentGenerator implements InstrumentGenerator {
 
     Template template;
-    public float amplitude = .65f;
+    public  float   amplitude   = .65f;
 
     public ToneInstrumentGenerator () {
         template = createTemplate();
@@ -49,10 +49,13 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
 
         public AudioOutput out;
         public Sink             sink             = new Sink();
-        public EnvelopeFollower envelopeFollower = new EnvelopeFollower(0,.2f,256);
+        public EnvelopeFollower envelopeFollower = new EnvelopeFollower(0, .2f, 256);
 
         public float frequency;
         public float amplitude;
+
+        private boolean isComplete  = false;
+        private long    completesAt = 0;
 
         MoogFilter moogFilter;
 
@@ -85,6 +88,8 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
         public void noteOff () {
             adsr.unpatchAfterRelease(out);
             adsr.noteOff();
+            isComplete = true;
+            completesAt = System.currentTimeMillis() + ((long) (0.5f * 1000));
         }
 
         @Override
@@ -95,6 +100,11 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
         @Override
         public EnvelopeFollower getEnvFollower () {
             return envelopeFollower;
+        }
+
+        @Override
+        public boolean isComplete () {
+            return isComplete && System.currentTimeMillis() > completesAt;
         }
     }
 
@@ -109,7 +119,7 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
 
             this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
             this.modulatorFactor = (r.nextInt(10) + 1) * .05f;
-            this.moogFactor = r.nextFloat() +.5f;
+            this.moogFactor = r.nextFloat() + .5f;
         }
     }
 }

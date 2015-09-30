@@ -1,9 +1,9 @@
 package xpy.sound_flock;
 
 import ddf.minim.AudioOutput;
-import ddf.minim.ugens.Instrument;
 import processing.core.*;
 import xpy.sound_flock.Body.Body;
+import xpy.sound_flock.Body.Member;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 
 import java.util.ArrayList;
@@ -30,10 +30,14 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     private Phrase phrase;
     private Body   body;
 
-    public Blibliki (Phrase phrase, InstrumentGenerator instrumentGenerator, AudioOutput out) {
+    public Blibliki (Phrase phrase, InstrumentGenerator instrumentGenerator, Body body, AudioOutput out) {
+
         this.phrase = phrase;
+        this.body = body;
         this.out = out;
         this.instrumentGenerator = instrumentGenerator;
+
+        body.attachPhrase(this.phrase);
     }
 
 /*
@@ -67,11 +71,12 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 //            offset += offsetFlag;
 //            offsetFlag *= -1;
 
-        for (Note note : phrase.notes) {
-            InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(note.pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
-            body.attachInstrument(instrument);
-            out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrument);
-            i += note.duration;
+        for (Member member : body.getMembers()) {
+
+            InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(member.getNote().pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
+            member.attachInstrument(instrument);
+            out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
+            i += member.getNote().duration;
         }
         out.resumeNotes();
     }

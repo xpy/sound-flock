@@ -12,6 +12,8 @@ public interface InstrumentGenerator {
     interface Instrument extends ddf.minim.ugens.Instrument {
         Sink getSink();
         EnvelopeFollower getEnvFollower();
+        boolean isComplete();
+
     }
 
     interface Template {

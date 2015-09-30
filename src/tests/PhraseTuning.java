@@ -5,6 +5,7 @@ import processing.core.*;
 import ddf.minim.Minim;
 import ddf.minim.AudioOutput;
 import xpy.sound_flock.Blibliki;
+import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Instruments.*;
 import xpy.sound_flock.Phrase;
 
@@ -19,6 +20,7 @@ public class PhraseTuning extends PApplet {
     Blibliki    blibliki;
     Long        startTime;
     boolean tuned = false;
+    Body body;
 
     public void setup () {
         // initialize the drawing window
@@ -42,13 +44,13 @@ public class PhraseTuning extends PApplet {
         phrase.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
         phrase.generatePhrase();
 
-        blibliki = new Blibliki(phrase, toneGenerator, out);
+        blibliki = new Blibliki(phrase, toneGenerator, body, out);
         blibliki.start();
-        blibliki.addLoopEvent(new Blibliki.LoopEvent(){
+        blibliki.addLoopEvent(new Blibliki.LoopEvent() {
             @Override
             public void fire (int loopNum) {
 //                if (loopNum % 2 == 0 && loopNum !=0) {
-                    blibliki.tunePhrase(new Integer []{0,1,2},new Integer []{1,2,3});
+                blibliki.tunePhrase(new Integer[]{0, 1, 2}, new Integer[]{1, 2, 3});
 //                }
 //                println("loopNum: "+loopNum);
 //                println("loopNum % 2: "+loopNum % 2);

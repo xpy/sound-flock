@@ -48,7 +48,7 @@ public class BliblikiMaterializing extends PApplet {
 
         body = new CircleBody(this);
 
-        blibliki = new Blibliki(phrase, toneGenerator, out);
+        blibliki = new Blibliki(phrase, toneGenerator,body, out);
         blibliki.addBody(body);
         blibliki.start();
         blibliki.addLoopEvent(new Blibliki.LoopEvent(){

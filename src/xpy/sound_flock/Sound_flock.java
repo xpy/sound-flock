@@ -3,6 +3,7 @@ package xpy.sound_flock;
 import processing.core.*;
 import ddf.minim.Minim;
 import ddf.minim.AudioOutput;
+import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Instruments.*;
 
 /**
@@ -36,6 +37,8 @@ public class Sound_flock extends PApplet {
     Blibliki    blibliki5;
     Long        startTime;
 
+    Body body;
+
     // Every instrument must implement the Instrument interface so
     // playNote() can call the instrument's methods.
 
@@ -68,7 +71,7 @@ public class Sound_flock extends PApplet {
         phrase1.generatePhrase();
 
 //        blibliki.createPhraseAroundPitch(87.31f);
-        blibliki = new Blibliki(phrase1, synthGenerator, out);
+        blibliki = new Blibliki(phrase1, synthGenerator,body, out);
         blibliki.start();
 
 
@@ -119,17 +122,17 @@ public class Sound_flock extends PApplet {
         phrase5.durationPattern = Phrase.DURATION_PATTERN_METER_DIVISIONS;
         phrase5.generatePhrase();
 
-        blibliki2 = new Blibliki(phrase2, sparkGenerator, out);
+        blibliki2 = new Blibliki(phrase2, sparkGenerator,body, out);
         blibliki2.start();
 
 
-        blibliki3 = new Blibliki(phrase3, kickGenerator, out);
+        blibliki3 = new Blibliki(phrase3, kickGenerator,body, out);
         blibliki3.start();
 
-        blibliki4 = new Blibliki(phrase4, snareGenerator, out);
+        blibliki4 = new Blibliki(phrase4, snareGenerator,body, out);
         blibliki4.start();
 
-        blibliki5 = new Blibliki(phrase5, toneGenerator, out);
+        blibliki5 = new Blibliki(phrase5, toneGenerator,body, out);
         blibliki5.start();
 
         startTime = System.currentTimeMillis();

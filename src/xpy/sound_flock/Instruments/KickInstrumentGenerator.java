@@ -46,6 +46,8 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
         ADSR  adsr;
         ADSR  adsrModulator;
         Line  l;
+        private boolean isComplete = false;
+
         public AudioOutput out;
         public float       frequency;
         public float       amplitude;
@@ -69,7 +71,6 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
             l.activate();
             adsrModulator.noteOn();
             adsr.noteOn();
-
             adsr.patch(out);
         }
 
@@ -79,6 +80,8 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
 
             adsrModulator.noteOff();
             adsr.noteOff();
+            isComplete = true;
+
         }
 
         @Override
@@ -90,6 +93,11 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
         public EnvelopeFollower getEnvFollower () {
             return null;
         }
+        @Override
+        public boolean isComplete () {
+            return isComplete;
+        }
+
     }
 
 

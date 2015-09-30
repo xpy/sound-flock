@@ -89,6 +89,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
         Oscil      moogModulator;
         Wavetable  moogModulatorWavetable;
         MoogFilter moogFilter;
+        private boolean isComplete = false;
 
 
         public SynthInstrument (float frequency, float amplitude, AudioOutput out) {
@@ -120,7 +121,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
             ml = new Multiplier(5 * initialFrequency);
 
             moogFilter = new MoogFilter(10 * baseFrequency, .7f, MoogFilter.Type.LP);
-            moogModulator = new Oscil(.5f, amplitude, moogModulatorWavetable);
+            moogModulator = new Oscil(8f, amplitude, moogModulatorWavetable);
             moogModulator.patch(ml).patch(moogFilter.frequency);
 //        moogFilter = new MoogFilter((r.nextInt(7) + 2) * initialFrequency, .7f, MoogFilter.Type.LP);
 
@@ -147,6 +148,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
             adsr.unpatchAfterRelease(out);
             // call the noteOff
             adsr.noteOff();
+            isComplete = true;
 
         }
 
@@ -158,6 +160,10 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
         @Override
         public EnvelopeFollower getEnvFollower () {
             return null;
+        }
+        @Override
+        public boolean isComplete () {
+            return isComplete;
         }
     }
 

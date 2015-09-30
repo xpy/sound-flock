@@ -1,7 +1,8 @@
 package xpy.sound_flock.Body;
 
-import ddf.minim.ugens.Instrument;
-import xpy.sound_flock.Instruments.InstrumentGenerator;
+import xpy.sound_flock.Phrase;
+
+import java.util.List;
 
 /**
  * Body
@@ -12,6 +13,11 @@ public interface Body {
 
     void update ();
 
-    void attachInstrument(InstrumentGenerator.Instrument instrument);
+    void attachMember (Member member);
 
+    void attachPhrase (Phrase phrase);
+
+    Phrase getPhrase ();
+
+    List<Member> getMembers ();
 }
