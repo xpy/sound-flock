@@ -30,6 +30,7 @@ public class CircleMember implements Member {
     public float x;
     public float y;
 
+    public boolean hasStarted = false;
     public boolean idleIsDrawn;
 
     public CircleMember (PApplet pa, Note note, InstrumentGenerator.Instrument instrument) {
@@ -47,28 +48,30 @@ public class CircleMember implements Member {
     }
 
     public void update () {
+
         int     prevFill   = pa.g.fillColor;
         boolean prevStroke = pa.g.stroke;
         pa.noStroke();
 
         idleIsDrawn = false;
         for (BaseInstrument instrument : instruments) {
+            if (hasStarted || instrument.isPlaying) {
+                hasStarted = true;
+                EnvelopeFollower envf = instrument.getEnvFollower();
 
-            EnvelopeFollower envf = instrument.getEnvFollower();
-
-            if (envf.getLastValues().length > 0) {
-                float enfValue = envf.getLastValues()[0] * 10;
+                if (envf.getLastValues().length > 0) {
+                    float enfValue = envf.getLastValues()[0] * 10;
 //                PApplet.println("offsetRadius*enfValue: " + (enfValue));
-                pa.fill(expandColor);
+                    pa.fill(expandColor);
 
-                pa.ellipse(x, y, radius + offsetRadius * enfValue, radius + offsetRadius * enfValue);
-                idleIsDrawn = true;
-            } else if(!idleIsDrawn) {
-                pa.fill(expandColor);
-                idleIsDrawn = true;
-                pa.ellipse(x, y, 5, 5);
+                    pa.ellipse(x, y, radius + offsetRadius * enfValue, radius + offsetRadius * enfValue);
+                    idleIsDrawn = true;
+                } else if (!idleIsDrawn) {
+                    pa.fill(expandColor);
+                    idleIsDrawn = true;
+                    pa.ellipse(x, y, 5, 5);
 
-            }
+                }
             /*
             for (int j = 0; j < envf.getLastValues().length; j++) {
 //                println("envf: "+envf.getLastValues()[j]);
@@ -79,7 +82,7 @@ public class CircleMember implements Member {
                 pa.ellipse(x, y, radius + offsetRadius * enfValue, radius + offsetRadius * enfValue);
 
             }*/
-
+            }
         }
 //        PApplet.println("instruments.size(): " + instruments.size());
 

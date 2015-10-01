@@ -19,15 +19,16 @@ public class Phrase extends PApplet {
     public int numOfNotes   = 3;
     public int repeatNotes  = 1;
 
-    public  float         baseNoteLength  = 0;
-    public  float         baseNotePitch   = 440f;
-    private float         pitchFeed       = baseNotePitch;
-    public  int           numOfPitchPeaks = 1;
-    public  int           pitchPeakIndex  = 0;
-    public  int           pitchIndex      = 0;
-    public  List<Integer> pitchPeakList   = new ArrayList<>();
+    public  float baseNoteLength  = 0;
+    public  float baseNotePitch   = 440f;
+    private float pitchFeed       = baseNotePitch;
+    public  int   numOfPitchPeaks = 1;
+    public  int   pitchPeakIndex  = 0;
+    public  int   pitchIndex      = 0;
 
-    public int pitchPattern    = -1;
+    public List<Integer> pitchPeakList = new ArrayList<>();
+
+    public int pitchPattern    = 0;
     public int durationPattern = 0;
 
     public long beatTime = (long) (60000f / 120f);
@@ -135,11 +136,7 @@ public class Phrase extends PApplet {
                 break;
         }
 
-/*
-        for (Note n : noteList)
-            println("Note: " + n.pitch);
-        println("============");
-*/
+
         notes = noteList;
     }
 
@@ -200,25 +197,14 @@ public class Phrase extends PApplet {
         for (int i = 1; i < numOfNotes; i++) {
             biggestNoteDuration = Math.min(2f, phraseMeters - currentDuration - ((numOfNotes - i) * .25f));
 
-            println("biggestNoteDuration: " + biggestNoteDuration);
-
             Note noteToAdd = Note.getRandomNote(biggestNoteDuration);
             currentDuration += noteToAdd.duration;
-
-            println("Added Note Duration: " + noteToAdd.duration);
-            println("currentDuration: " + currentDuration);
-            println("--End of Note Creation--");
 
             noteList.add(noteToAdd);
         }
         biggestNoteDuration = phraseMeters - currentDuration;
         Note noteToAdd = new Note(Note.getRandomPitch(), biggestNoteDuration);
         currentDuration += noteToAdd.duration;
-        println("---Adding Last Note");
-        println("biggestNoteDuration: " + biggestNoteDuration);
-        println("Added Note Duration: " + noteToAdd.duration);
-        println("currentDuration: " + currentDuration);
-        println("--End of Last Note Creation--");
         noteList.add(noteToAdd);
         return noteList;
     }
@@ -238,14 +224,9 @@ public class Phrase extends PApplet {
 
             biggestNoteDuration = Math.min(2f, phraseMeters - currentDuration - ((numOfNotes - i) * .25f));
 
-            println("biggestNoteDuration: " + biggestNoteDuration);
 
             Note noteToAdd = new Note(Note.getRandomPitchAroundPitch(pitch), Note.getRandomDuration(biggestNoteDuration));
             currentDuration += noteToAdd.duration;
-
-            println("Added Note Duration: " + noteToAdd.duration);
-            println("currentDuration: " + currentDuration);
-            println("--End of Note Creation--");
 
             noteList.add(noteToAdd);
         }
@@ -253,12 +234,6 @@ public class Phrase extends PApplet {
         biggestNoteDuration = phraseMeters - currentDuration;
         Note noteToAdd = new Note(Note.getRandomPitchAroundPitch(pitch), Note.getRandomDuration(biggestNoteDuration));
         currentDuration += noteToAdd.duration;
-
-        println("---Adding Last Note");
-        println("biggestNoteDuration: " + biggestNoteDuration);
-        println("Added Note Duration: " + noteToAdd.duration);
-        println("currentDuration: " + currentDuration);
-        println("--End of Last Note Creation--");
 
         noteList.add(noteToAdd);
         return noteList;
@@ -272,13 +247,13 @@ public class Phrase extends PApplet {
         return meterLength * phraseLength * beatTime;
     }
 
-    public void tune (Integer[] noteIndexes,Integer[] tuneAmounts) {
-        if(noteIndexes.length != tuneAmounts.length){
+    public void tune (Integer[] noteIndexes, Integer[] tuneAmounts) {
+        if (noteIndexes.length != tuneAmounts.length) {
             System.err.println("noteIndexes != tuneAmounts");
             return;
 
         }
-            for (int i = 0; i < noteIndexes.length; i++) {
+        for (int i = 0; i < noteIndexes.length; i++) {
             if (noteIndexes[i] > numOfNotes) {
                 System.err.println("noteIndex " + i + " (" + noteIndexes[i] + ") bigger than numOfNotes");
                 return;
@@ -293,14 +268,18 @@ public class Phrase extends PApplet {
 
     }
 
-    public void tune(int tuneAmount){
+    public void variate(){
+
+
+    }
+    public void tune (int tuneAmount) {
         for (Note note : notes) {
             note.tune(tuneAmount);
         }
 
     }
 
-    public void reset(){
+    public void reset () {
         notes.forEach(xpy.sound_flock.Note::reset);
     }
 
