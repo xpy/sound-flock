@@ -24,7 +24,7 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
 
 
     @Override
-    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new SparkInstrument(frequency, amplitude, out);
     }
 
@@ -63,6 +63,8 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
 
         public void noteOn (float dur) {
             patch(moogFilter, dur);
+            isPlaying = true;
+
         }
 
         // every instrumentGenerator must have a noteOff() method

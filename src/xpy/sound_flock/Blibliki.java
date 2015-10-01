@@ -4,6 +4,7 @@ import ddf.minim.AudioOutput;
 import processing.core.*;
 import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.Member;
+import xpy.sound_flock.Instruments.BaseInstrument;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         if (hasBody)
             for (Member member : body.getMembers()) {
 
-                InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(member.getNote().pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
+                BaseInstrument instrument = instrumentGenerator.createInstrument(member.getNote().pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
                 member.attachInstrument(instrument);
                 out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
                 i += member.getNote().duration;

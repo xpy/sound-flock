@@ -26,7 +26,7 @@ public interface InstrumentGenerator {
         return null;
     }
 
-    Instrument createInstrument (float frequency, float amplitude, AudioOutput out);
+    BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out);
 
     float getAmplitude ();
 

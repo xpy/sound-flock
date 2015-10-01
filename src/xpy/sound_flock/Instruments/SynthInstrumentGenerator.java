@@ -55,7 +55,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
         return new SynthInstrumentGenerator.Template();
     }
 
-    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new SynthInstrument(frequency, amplitude, out);
     }
 
@@ -139,6 +139,8 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
 //        adsr2.noteOn();
             // patch to the output
             patch(adsr, dur);
+            isPlaying = true;
+
         }
 
         @Override

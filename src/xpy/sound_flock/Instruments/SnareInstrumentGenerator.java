@@ -24,7 +24,7 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
 
 
     @Override
-    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new SnareInstrument(frequency, amplitude, out);
     }
 
@@ -72,6 +72,7 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
             l.activate();
             adsrModulator.noteOn();
             adsr.noteOn();
+            isPlaying = true;
 
             patch(adsr, dur);
         }

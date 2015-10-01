@@ -95,14 +95,14 @@ public class Sound_flock extends PApplet {
 
         Phrase phrase3 = new Phrase();
         phrase3.baseNoteLength = .5f;
-        phrase3.meterLength = 4;
+        phrase3.meterLength = 1;
 //        phrase2.repeatNotes = 2;
-        phrase3.numOfNotes = 4;
+        phrase3.numOfNotes = 1;
         phrase3.phraseLength = 1;
         phrase3.baseNotePitch = 100;
         phrase3.numOfPitchPeaks = 2;
 //        phrase3.pitchPattern = Phrase.PITCH_PATTERN_BELOW;
-        phrase3.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_METER;
+        phrase3.durationPattern = Phrase.DURATION_PATTERN_FIXED;
         phrase3.generatePhrase();
 
         Phrase phrase4 = new Phrase();
@@ -119,12 +119,12 @@ public class Sound_flock extends PApplet {
         Phrase phrase5 = new Phrase();
         phrase5.baseNoteLength = .5f;
         phrase5.meterLength = 4;
-        phrase5.numOfNotes = 6;
+        phrase5.numOfNotes = 8;
         phrase5.phraseLength = 1;
         phrase5.baseNotePitch = 220;
-        phrase5.numOfPitchPeaks = 1;
-        phrase5.pitchPattern = Phrase.PITCH_PATTERN_PEAKS;
-        phrase5.durationPattern = Phrase.DURATION_PATTERN_METER_DIVISIONS;
+        phrase5.numOfPitchPeaks =2;
+        phrase5.pitchPattern = Phrase.PITCH_PATTERN_AROUND;
+        phrase5.durationPattern = Phrase.DURATION_PATTERN_RANDOM;
         phrase5.generatePhrase();
 
         blibliki2 = new Blibliki(phrase2, sparkGenerator,body, out);

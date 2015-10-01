@@ -9,15 +9,19 @@ import ddf.minim.ugens.Sink;
  * BaseInstrument
  * Created by xpy on 30-Sep-15.
  */
-abstract class BaseInstrument implements InstrumentGenerator.Instrument {
+public abstract class BaseInstrument implements InstrumentGenerator.Instrument {
 
     public float frequency;
     public float amplitude;
 
     protected boolean isComplete                 = false;
+    public    boolean isPlaying                  = false;
     protected long    completesAt                = 0;
     protected float   releaseTime                = .5f;
-    protected int     envelopeFollowerBufferSize = 256;
+    protected int     envelopeFollowerBufferSize = 2048;
+
+    public UGen        lastUgen;
+
     public AudioOutput out;
     public Sink             sink             = new Sink();
     public EnvelopeFollower envelopeFollower = new EnvelopeFollower(0, .2f, 64);
@@ -39,16 +43,18 @@ abstract class BaseInstrument implements InstrumentGenerator.Instrument {
 
     public void setComplete () {
         isComplete = true;
+        isPlaying = false;
         completesAt = System.currentTimeMillis() + ((long) (releaseTime * 1000));
     }
 
     public void patch (UGen uGen, float duration) {
-        envelopeFollower = new EnvelopeFollower(0, duration, envelopeFollowerBufferSize);
+        envelopeFollower = new EnvelopeFollower(0, duration + releaseTime, envelopeFollowerBufferSize);
+        lastUgen= uGen;
         uGen.patch(envelopeFollower).patch(sink).patch(out);
         uGen.patch(out);
     }
 
-    public void unpatch(){
+    public void unpatch () {
         sink.unpatch(out);
         envelopeFollower.unpatch(sink);
 

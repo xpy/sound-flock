@@ -1,5 +1,6 @@
 package xpy.sound_flock.Body;
 
+import xpy.sound_flock.Instruments.BaseInstrument;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 import xpy.sound_flock.Note;
 
@@ -11,7 +12,7 @@ public interface Member {
 
     void update ();
 
-    void attachInstrument (InstrumentGenerator.Instrument instrument);
+    void attachInstrument (BaseInstrument instrument);
 
     void setX (float value);
 

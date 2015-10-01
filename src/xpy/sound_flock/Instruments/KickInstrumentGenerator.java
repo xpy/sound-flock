@@ -24,7 +24,7 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
 
 
     @Override
-    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new KickInstrument(frequency, amplitude, out);
     }
 
@@ -68,6 +68,7 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
             adsrModulator.noteOn();
             adsr.noteOn();
             patch(adsr, dur);
+            isPlaying = true;
         }
 
         // every instrumentGenerator must have a noteOff() method

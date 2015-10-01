@@ -1,7 +1,10 @@
 package xpy.sound_flock.Body;
 
+import ddf.minim.UGen;
+import ddf.minim.ugens.ADSR;
 import ddf.minim.ugens.EnvelopeFollower;
 import processing.core.PApplet;
+import xpy.sound_flock.Instruments.BaseInstrument;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 import xpy.sound_flock.Note;
 
@@ -18,7 +21,7 @@ public class CircleMember implements Member {
 
     PApplet pa;
     Note    note;
-    List<InstrumentGenerator.Instrument> instruments = new ArrayList<>();
+    List<BaseInstrument> instruments = new ArrayList<>();
 
     float radius;
     float offsetRadius;
@@ -26,6 +29,8 @@ public class CircleMember implements Member {
     int expandColor;
     public float x;
     public float y;
+
+    public boolean idleIsDrawn;
 
     public CircleMember (PApplet pa, Note note, InstrumentGenerator.Instrument instrument) {
         this.pa = pa;
@@ -46,32 +51,48 @@ public class CircleMember implements Member {
         boolean prevStroke = pa.g.stroke;
         pa.noStroke();
 
-        for (InstrumentGenerator.Instrument instrument : instruments) {
+        idleIsDrawn = false;
+        for (BaseInstrument instrument : instruments) {
 
             EnvelopeFollower envf = instrument.getEnvFollower();
+
+            if (envf.getLastValues().length > 0) {
+                float enfValue = envf.getLastValues()[0] * 10;
+//                PApplet.println("offsetRadius*enfValue: " + (enfValue));
+                pa.fill(expandColor);
+
+                pa.ellipse(x, y, radius + offsetRadius * enfValue, radius + offsetRadius * enfValue);
+                idleIsDrawn = true;
+            } else if(!idleIsDrawn) {
+                pa.fill(expandColor);
+                idleIsDrawn = true;
+                pa.ellipse(x, y, 5, 5);
+
+            }
+            /*
             for (int j = 0; j < envf.getLastValues().length; j++) {
 //                println("envf: "+envf.getLastValues()[j]);
-                float enfValue = envf.getLastValues()[j] * 50;
+                float enfValue = envf.getLastValues()[j] * 10;
 //                PApplet.println("offsetRadius*enfValue: " + (enfValue));
                 pa.fill(expandColor);
 
                 pa.ellipse(x, y, radius + offsetRadius * enfValue, radius + offsetRadius * enfValue);
 
-            }
+            }*/
 
         }
 //        PApplet.println("instruments.size(): " + instruments.size());
 
-        pa.fill(bodyColor);
-        pa.ellipse(x, y, radius, radius);
+//        pa.fill(bodyColor);
+//        pa.ellipse(x, y, radius, radius);
         pa.fill(prevFill);
         pa.g.stroke = prevStroke;
 
-        for (Iterator<InstrumentGenerator.Instrument> iterator = instruments.iterator(); iterator.hasNext(); ) {
+        for (Iterator<BaseInstrument> iterator = instruments.iterator(); iterator.hasNext(); ) {
             InstrumentGenerator.Instrument instrument = iterator.next();
 //            PApplet.println("instrument.isComplete(): " + instrument.isComplete());
 
-            if (instrument.isComplete()){
+            if (instrument.isComplete()) {
                 instrument.unpatch();
                 iterator.remove();
             }
@@ -81,7 +102,7 @@ public class CircleMember implements Member {
     }
 
     @Override
-    public void attachInstrument (InstrumentGenerator.Instrument instrument) {
+    public void attachInstrument (BaseInstrument instrument) {
         this.instruments.add(instrument);
     }
 

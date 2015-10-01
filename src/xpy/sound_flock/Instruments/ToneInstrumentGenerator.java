@@ -26,7 +26,7 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
     }
 
     @Override
-    public Instrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new ToneInstrument(frequency, amplitude, out);
     }
 
@@ -70,6 +70,8 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
         public void noteOn (float dur) {
             adsr.noteOn();
             patch(adsr, dur);
+            isPlaying = true;
+
         }
 
         // every instrumentGenerator must have a noteOff() method
