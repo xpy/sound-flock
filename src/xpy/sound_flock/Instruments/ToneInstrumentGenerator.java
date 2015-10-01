@@ -76,7 +76,6 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
         public void noteOff () {
             adsr.unpatchAfterRelease(out);
             adsr.noteOff();
-            unpatch();
             setComplete();
         }
 

@@ -17,5 +17,7 @@ public interface Member {
 
     void setY (float value);
 
+    void setColor (int color);
+
     Note getNote();
 }

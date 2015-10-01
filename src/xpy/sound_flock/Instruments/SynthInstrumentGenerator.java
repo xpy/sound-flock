@@ -147,7 +147,6 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
             // call the noteOff
             adsr.noteOff();
             setComplete();
-            unpatch();
 
         }
 

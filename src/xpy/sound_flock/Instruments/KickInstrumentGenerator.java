@@ -76,7 +76,6 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
             adsrModulator.noteOff();
             adsr.noteOff();
 
-            unpatch();
             setComplete();
         }
 

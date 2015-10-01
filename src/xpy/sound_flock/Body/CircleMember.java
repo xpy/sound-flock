@@ -22,8 +22,8 @@ public class CircleMember implements Member {
 
     float radius;
     float offsetRadius;
-    int   bodyColor;
-    int   expandColor;
+    public int bodyColor;
+    int expandColor;
     public float x;
     public float y;
 
@@ -51,7 +51,7 @@ public class CircleMember implements Member {
             EnvelopeFollower envf = instrument.getEnvFollower();
             for (int j = 0; j < envf.getLastValues().length; j++) {
 //                println("envf: "+envf.getLastValues()[j]);
-                float enfValue = envf.getLastValues()[j] * 10;
+                float enfValue = envf.getLastValues()[j] * 50;
 //                PApplet.println("offsetRadius*enfValue: " + (enfValue));
                 pa.fill(expandColor);
 
@@ -60,19 +60,21 @@ public class CircleMember implements Member {
             }
 
         }
-        PApplet.println("instruments.size(): " + instruments.size());
+//        PApplet.println("instruments.size(): " + instruments.size());
 
         pa.fill(bodyColor);
         pa.ellipse(x, y, radius, radius);
         pa.fill(prevFill);
         pa.g.stroke = prevStroke;
 
-       for (Iterator<InstrumentGenerator.Instrument> iterator = instruments.iterator(); iterator.hasNext(); ) {
+        for (Iterator<InstrumentGenerator.Instrument> iterator = instruments.iterator(); iterator.hasNext(); ) {
             InstrumentGenerator.Instrument instrument = iterator.next();
-           PApplet.println("instrument.isComplete(): " + instrument.isComplete());
+//            PApplet.println("instrument.isComplete(): " + instrument.isComplete());
 
-           if (instrument.isComplete())
+            if (instrument.isComplete()){
+                instrument.unpatch();
                 iterator.remove();
+            }
 
         }
 
@@ -91,6 +93,12 @@ public class CircleMember implements Member {
     @Override
     public void setY (float value) {
         this.y = value;
+    }
+
+    @Override
+    public void setColor (int color) {
+        this.bodyColor = color;
+        this.expandColor = color;
     }
 
     @Override

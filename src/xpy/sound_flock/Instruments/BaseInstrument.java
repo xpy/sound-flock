@@ -20,7 +20,7 @@ abstract class BaseInstrument implements InstrumentGenerator.Instrument {
     protected int     envelopeFollowerBufferSize = 256;
     public AudioOutput out;
     public Sink             sink             = new Sink();
-    public EnvelopeFollower envelopeFollower = new EnvelopeFollower(0, .2f, 256);
+    public EnvelopeFollower envelopeFollower = new EnvelopeFollower(0, .2f, 64);
 
     @Override
     public Sink getSink () {

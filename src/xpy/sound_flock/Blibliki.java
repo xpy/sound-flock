@@ -60,6 +60,8 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     public void addBody (Body bodyToAdd) {
 
         body = bodyToAdd;
+        body.attachPhrase(this.phrase);
+
         hasBody = true;
     }
 

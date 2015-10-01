@@ -83,7 +83,6 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
             adsrModulator.noteOff();
             adsr.noteOff();
             setComplete();
-            unpatch();
 
         }
 

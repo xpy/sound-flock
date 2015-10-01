@@ -6,6 +6,7 @@ import xpy.sound_flock.Phrase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * CircleBody
@@ -19,16 +20,24 @@ public class CircleBody extends PApplet implements Body {
     private InstrumentGenerator.Instrument instrument;
     private List<Member> members = new ArrayList<>();
 
+    public float x;
+    public float y;
+
     public CircleBody (PApplet pa) {
         this.pa = pa;
+        Random r = new Random();
+        this.x = r.nextFloat() * (this.pa.width - 100) + 50;
+        this.y = r.nextFloat() * (this.pa.height - 100) + 50;
+
+        println(x);
+        println(y);
+
     }
 
     public CircleBody (PApplet pa, Phrase phrase, InstrumentGenerator.Instrument instrument) {
         this.phrase = phrase;
         this.pa = pa;
         this.instrument = instrument;
-
-
     }
 
     public void update () {
@@ -46,13 +55,18 @@ public class CircleBody extends PApplet implements Body {
 
     @Override
     public void attachPhrase (Phrase phrase) {
+
         this.phrase = phrase;
+        Random r     = new Random();
+        int    color = pa.color(r.nextInt(256), r.nextInt(256), r.nextInt(256),100);
         for (int i = 0; i < this.phrase.notes.size(); i++) {
             attachMember(new CircleMember(pa, this.phrase.notes.get(i), this.instrument));
         }
 
         for (int i = 0; i < members.size(); i++) {
-            members.get(i).setX(50 + i * 50);
+            members.get(i).setX(this.x + r.nextFloat() * 100);
+            members.get(i).setY(this.y + r.nextFloat() * 100);
+            members.get(i).setColor(color);
         }
 
     }

@@ -68,7 +68,6 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
         // every instrumentGenerator must have a noteOff() method
         public void noteOff () {
             moogFilter.unpatch(out);
-            unpatch();
             setComplete();
         }
 
