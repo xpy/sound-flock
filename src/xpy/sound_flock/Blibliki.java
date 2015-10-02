@@ -4,6 +4,7 @@ import ddf.minim.AudioOutput;
 import processing.core.*;
 import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.Member;
+import xpy.sound_flock.Distortions.Distortion;
 import xpy.sound_flock.Instruments.BaseInstrument;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 
@@ -16,30 +17,27 @@ import java.util.List;
  */
 public class Blibliki extends PApplet/* implements BitListener*/ {
 
-    AudioOutput         out;
-    InstrumentGenerator instrumentGenerator;
+    private AudioOutput         out;
+    private InstrumentGenerator instrumentGenerator;
+    private Phrase              phrase;
+    private Body                body;
 
-    List<LoopEvent> loopEvents = new ArrayList<>();
+    private List<Distortion> distortions = new ArrayList<>();
 
-//    long duration;
+    private List<LoopEvent> loopEvents = new ArrayList<>();
 
-    long nextCheck;
     public int loops = 0;
-    long beatTime   = (long) (60000f / 120f);
-    int  offset     = 0;
-    int  offsetFlag = 1;
-    private Phrase phrase;
-    private Body   body;
+    private long nextCheck;
+    private long beatTime = (long) (60000f / 120f);
+
     private boolean hasBody = false;
 
     public Blibliki (Phrase phrase, InstrumentGenerator instrumentGenerator, Body body, AudioOutput out) {
 
-        this.phrase = phrase;
-        this.body = body;
+        this.addPhrase(phrase);
+        this.addBody(body);
         this.out = out;
         this.instrumentGenerator = instrumentGenerator;
-        if (hasBody)
-            body.attachPhrase(this.phrase);
     }
 
 /*
@@ -78,14 +76,14 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         if (hasBody)
             for (Member member : body.getMembers()) {
 
-                BaseInstrument instrument = instrumentGenerator.createInstrument(member.getNote().pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
+                BaseInstrument instrument = instrumentGenerator.createInstrument(member.getNote().pitch, instrumentGenerator.getAmplitude(), out);
                 member.attachInstrument(instrument);
                 out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
                 i += member.getNote().duration;
             }
         else
             for (Note note : phrase.notes) {
-                InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(note.pitchOffset(offset), instrumentGenerator.getAmplitude(), out);
+                InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(note.pitch, instrumentGenerator.getAmplitude(), out);
                 out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrument);
                 i += note.duration;
             }
@@ -113,25 +111,26 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.meterLength) + 100;
     }
 
-    public void tunePhrase (Integer[] noteIndexes, Integer[] tuneAmounts) {
-        phrase.tune(noteIndexes, tuneAmounts);
-    }
-
-    public void tunePhrase (Integer tuneAmount) {
-        phrase.tune(tuneAmount);
-    }
-
     public void resetPhrase () {
         phrase.reset();
+    }
+
+    public void addDistortion (Distortion distortion) {
+        distortions.add(distortion);
+    }
+
+    public void applyDistortion (int index) {
+        distortions.get(index).apply();
+    }
+
+    public void revertDistortion (int index) {
+        distortions.get(index).revert();
     }
 
     public void addLoopEvent (LoopEvent loopEvent) {
         loopEvents.add(loopEvent);
     }
 
-    /**
-     * Created by xpy on 29-Sep-15.
-     */
     public static class LoopEvent {
         public void fire (int loopNum) {
 

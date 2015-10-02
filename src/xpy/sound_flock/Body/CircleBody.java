@@ -17,7 +17,7 @@ public class CircleBody extends PApplet implements Body {
     PApplet pa;
 
     private Phrase                         phrase;
-    private InstrumentGenerator.Instrument instrument;
+
     private List<Member> members = new ArrayList<>();
 
     public float x;
@@ -34,11 +34,6 @@ public class CircleBody extends PApplet implements Body {
 
     }
 
-    public CircleBody (PApplet pa, Phrase phrase, InstrumentGenerator.Instrument instrument) {
-        this.phrase = phrase;
-        this.pa = pa;
-        this.instrument = instrument;
-    }
 
     public void update () {
 
@@ -60,7 +55,7 @@ public class CircleBody extends PApplet implements Body {
         Random r     = new Random();
         int    color = pa.color(r.nextInt(256), r.nextInt(256), r.nextInt(256),100);
         for (int i = 0; i < this.phrase.notes.size(); i++) {
-            attachMember(new CircleMember(pa, this.phrase.notes.get(i), this.instrument));
+            attachMember(new CircleMember(pa, this.phrase.notes.get(i)));
         }
 
         for (int i = 0; i < members.size(); i++) {

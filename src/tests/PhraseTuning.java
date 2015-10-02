@@ -6,6 +6,9 @@ import ddf.minim.Minim;
 import ddf.minim.AudioOutput;
 import xpy.sound_flock.Blibliki;
 import xpy.sound_flock.Body.Body;
+import xpy.sound_flock.Distortions.Distortion;
+import xpy.sound_flock.Distortions.FullToneDistortion;
+import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
 import xpy.sound_flock.Instruments.*;
 import xpy.sound_flock.Phrase;
 
@@ -21,6 +24,7 @@ public class PhraseTuning extends PApplet {
     Long        startTime;
     boolean tuned = false;
     Body body;
+    Phrase phrase = new Phrase();
 
     public void setup () {
         // initialize the drawing window
@@ -33,7 +37,6 @@ public class PhraseTuning extends PApplet {
 
         ToneInstrumentGenerator toneGenerator = new ToneInstrumentGenerator();
 
-        Phrase phrase = new Phrase();
         phrase.baseNoteLength = .5f;
         phrase.meterLength = 4;
         phrase.numOfNotes = 6;
@@ -44,9 +47,11 @@ public class PhraseTuning extends PApplet {
         phrase.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
         phrase.generatePhrase();
 
+
         blibliki = new Blibliki(phrase, toneGenerator, body, out);
+        blibliki.addDistortion(PhraseDistortionGenerator.createDistortion(PhraseDistortionGenerator.DISTORTION_TONE_PARTIAL, phrase));
         blibliki.start();
-        blibliki.addLoopEvent(new Blibliki.LoopEvent() {
+/*        blibliki.addLoopEvent(new Blibliki.LoopEvent() {
             @Override
             public void fire (int loopNum) {
 //                if (loopNum % 2 == 0 && loopNum !=0) {
@@ -60,7 +65,7 @@ public class PhraseTuning extends PApplet {
 //                }
 
             }
-        });
+        });*/
         startTime = System.currentTimeMillis();
 
 
@@ -83,6 +88,14 @@ public class PhraseTuning extends PApplet {
         blibliki.update();
 
 
+    }
+
+    public void keyPressed () {
+        if (key == 'q') {
+            blibliki.applyDistortion(0);
+        } else if (key == 'a') {
+            blibliki.revertDistortion(0);
+        }
     }
 
 }

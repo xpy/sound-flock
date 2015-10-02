@@ -69,7 +69,8 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
 
         public void noteOn (float dur) {
             adsr.noteOn();
-            patch(adsr, dur);
+//            patch(adsr, dur);
+            adsr.patch(out);
             isPlaying = true;
 
         }
@@ -79,6 +80,7 @@ public class ToneInstrumentGenerator implements InstrumentGenerator {
             adsr.unpatchAfterRelease(out);
             adsr.noteOff();
             setComplete();
+            unpatch();
         }
 
     }

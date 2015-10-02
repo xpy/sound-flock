@@ -1,6 +1,7 @@
 package xpy.sound_flock;
 
 import processing.core.PApplet;
+import xpy.sound_flock.Distortions.Distortion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,6 @@ public class Phrase extends PApplet {
     }
 
     public void generatePhrase () {
-
         List<Note> noteList = new ArrayList<>();
         float      noteLength;
         pitchFeed = baseNotePitch;
@@ -268,16 +268,13 @@ public class Phrase extends PApplet {
 
     }
 
-    public void variate(){
-
-
-    }
     public void tune (int tuneAmount) {
         for (Note note : notes) {
             note.tune(tuneAmount);
         }
 
     }
+
 
     public void reset () {
         notes.forEach(xpy.sound_flock.Note::reset);

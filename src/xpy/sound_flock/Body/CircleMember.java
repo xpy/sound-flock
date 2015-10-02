@@ -33,7 +33,7 @@ public class CircleMember implements Member {
     public boolean hasStarted = false;
     public boolean idleIsDrawn;
 
-    public CircleMember (PApplet pa, Note note, InstrumentGenerator.Instrument instrument) {
+    public CircleMember (PApplet pa, Note note) {
         this.pa = pa;
         this.note = note;
 
@@ -96,7 +96,6 @@ public class CircleMember implements Member {
 //            PApplet.println("instrument.isComplete(): " + instrument.isComplete());
 
             if (instrument.isComplete()) {
-                instrument.unpatch();
                 iterator.remove();
             }
 
