@@ -131,6 +131,10 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         loopEvents.add(loopEvent);
     }
 
+    public Distortion getDistortion (int index) {
+        return distortions.get(index);
+    }
+
     public static class LoopEvent {
         public void fire (int loopNum) {
 

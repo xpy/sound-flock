@@ -3,6 +3,7 @@ package xpy.sound_flock.Distortions;
 import xpy.sound_flock.Phrase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -19,13 +20,32 @@ public class PartialToneDistortion implements Distortion {
     private int    numOfDistortions;
     private Phrase phrase;
 
-    private static final int POSITION_RANDOM = 0;
-    private static final int POSITION_START  = 1;
-    private static final int POSITION_END    = 2;
+    private int position;
+    private int pattern;
 
-    private static final int PATTERN_RANDOM = 0;
-    private static final int PATTERN_UP     = 1;
-    private static final int PATTERN_DOWN   = 2;
+    public static final int POSITION_RANDOM = 0;
+    public static final int POSITION_START  = 1;
+    public static final int POSITION_END    = 2;
+
+    public static final int PATTERN_RANDOM = 0;
+    public static final int PATTERN_UP     = 1;
+    public static final int PATTERN_DOWN   = 2;
+
+    public final static HashMap<Integer, String> positionMap = new HashMap<Integer, String>();
+
+    static {
+        positionMap.put(0, "POSITION_RANDOM");
+        positionMap.put(1, "POSITION_START");
+        positionMap.put(2, "POSITION_END");
+    }
+
+    public final static HashMap<Integer, String> patternMap = new HashMap<Integer, String>();
+
+    static {
+        patternMap.put(0, "PATTERN_RANDOM");
+        patternMap.put(1, "PATTERN_UP");
+        patternMap.put(2, "PATTERN_DOWN");
+    }
 
     public PartialToneDistortion (Phrase phrase) {
 
@@ -47,6 +67,8 @@ public class PartialToneDistortion implements Distortion {
     public PartialToneDistortion (Phrase phrase, int position, int pattern, int num) {
 
         Random r = new Random();
+        this.position = position;
+        this.pattern = pattern;
         this.phrase = phrase;
         numOfDistortions = Math.min(this.phrase.numOfNotes, num);
         int start, end;
@@ -69,7 +91,7 @@ public class PartialToneDistortion implements Distortion {
                 for (int i = start; i < end; i++) noteIndexes.add(i);
                 break;
             case (POSITION_END):
-                start = numOfDistortions;
+                start =  this.phrase.numOfNotes - numOfDistortions;
                 end = this.phrase.numOfNotes;
                 for (int i = start; i < end; i++) noteIndexes.add(i);
                 break;
@@ -82,7 +104,7 @@ public class PartialToneDistortion implements Distortion {
                 break;
             case (PATTERN_UP):
                 for (int i = start; i < end; i++) {
-                    tuneAmounts.add((r.nextInt(5) + 1) * -1);
+                    tuneAmounts.add((r.nextInt(5) + 1) );
                 }
 
                 break;
@@ -94,6 +116,10 @@ public class PartialToneDistortion implements Distortion {
         }
     }
 
+    @Override
+    public String toString () {
+        return "PartialToneDistortion | numOfDistortions: "+numOfDistortions+" | pattern:" + patternMap.get(pattern) + " | position: " + positionMap.get(position);
+    }
 
     @Override
     public void apply () {

@@ -55,7 +55,7 @@ public class BliblikiMaterializing extends PApplet {
             @Override
             public void fire (int loopNum) {
 //                if (loopNum % 2 == 0 && loopNum !=0) {
-                    blibliki.tunePhrase(new Integer []{0,1,2},new Integer []{1,2,3});
+//                    blibliki.tunePhrase(new Integer []{0,1,2},new Integer []{1,2,3});
 //                }
 //                println("loopNum: "+loopNum);
 //                println("loopNum % 2: "+loopNum % 2);

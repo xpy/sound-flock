@@ -6,6 +6,7 @@ import ddf.minim.Minim;
 import ddf.minim.AudioOutput;
 import xpy.sound_flock.Blibliki;
 import xpy.sound_flock.Body.Body;
+import xpy.sound_flock.Body.CircleBody;
 import xpy.sound_flock.Distortions.Distortion;
 import xpy.sound_flock.Distortions.FullToneDistortion;
 import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
@@ -46,10 +47,11 @@ public class PhraseTuning extends PApplet {
         phrase.pitchPattern = Phrase.PITCH_PATTERN_PEAKS;
         phrase.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
         phrase.generatePhrase();
-
+        body = new CircleBody(this);
 
         blibliki = new Blibliki(phrase, toneGenerator, body, out);
-        blibliki.addDistortion(PhraseDistortionGenerator.createDistortion(PhraseDistortionGenerator.DISTORTION_TONE_PARTIAL, phrase));
+        blibliki.addDistortion(PhraseDistortionGenerator.createRandomPartialToneDistortion(phrase));
+        println(blibliki.getDistortion(0));
         blibliki.start();
 /*        blibliki.addLoopEvent(new Blibliki.LoopEvent() {
             @Override

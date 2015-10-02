@@ -97,6 +97,8 @@ public class CircleMember implements Member {
 
             if (instrument.isComplete()) {
                 iterator.remove();
+                instrument.unpatch();
+
             }
 
         }
