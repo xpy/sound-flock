@@ -9,7 +9,7 @@ import java.util.Random;
  * KickInstrumentGenerator
  * Created by xpy on 24-Sep-15.
  */
-public class SparkInstrumentGenerator implements InstrumentGenerator {
+public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
     public float amplitude = .3f;
@@ -22,16 +22,16 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
         return new Template();
     }
 
+    @Override
+    public SparkInstrumentGenerator.Template getTemplate () {
+        return template;
+    }
 
     @Override
     public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new SparkInstrument(frequency, amplitude, out);
     }
 
-    @Override
-    public float getAmplitude () {
-        return amplitude;
-    }
 
     @Override
     public float getMaxDuration () {
@@ -77,7 +77,7 @@ public class SparkInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public static class Template implements InstrumentGenerator.Template {
+    public static class Template extends BaseInstrumentGenerator.BaseTemplate {
 
         float maxDuration = .05f;
         float frequencyAmp;

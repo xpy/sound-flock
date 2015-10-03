@@ -36,7 +36,7 @@ public class PhraseTuning extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        ToneInstrumentGenerator toneGenerator = new ToneInstrumentGenerator();
+        SnareInstrumentGenerator toneGenerator = new SnareInstrumentGenerator();
 
         phrase.baseNoteLength = .5f;
         phrase.meterLength = 4;
@@ -50,24 +50,12 @@ public class PhraseTuning extends PApplet {
         body = new CircleBody(this);
 
         blibliki = new Blibliki(phrase, toneGenerator, body, out);
-        blibliki.addDistortion(PhraseDistortionGenerator.createRandomPartialToneDistortion(phrase));
+//        blibliki.addDistortion(PhraseDistortionGenerator.createRandomPartialToneDistortion(phrase));
+        blibliki.addDistortion(PhraseDistortionGenerator.createMoogDistortion(blibliki.instrumentGenerator));
         println(blibliki.getDistortion(0));
         blibliki.start();
-/*        blibliki.addLoopEvent(new Blibliki.LoopEvent() {
-            @Override
-            public void fire (int loopNum) {
-//                if (loopNum % 2 == 0 && loopNum !=0) {
-                blibliki.tunePhrase(new Integer[]{0, 1, 2}, new Integer[]{1, 2, 3});
-//                }
-//                println("loopNum: "+loopNum);
-//                println("loopNum % 2: "+loopNum % 2);
-//                if (loopNum % 4 == 0 && loopNum !=0) {
-//                    blibliki.resetPhrase();
-//                    blibliki.tunePhrase(-1);
-//                }
 
-            }
-        });*/
+
         startTime = System.currentTimeMillis();
 
 

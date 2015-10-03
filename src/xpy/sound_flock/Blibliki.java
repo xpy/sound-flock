@@ -6,6 +6,7 @@ import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.Member;
 import xpy.sound_flock.Distortions.Distortion;
 import xpy.sound_flock.Instruments.BaseInstrument;
+import xpy.sound_flock.Instruments.BaseInstrumentGenerator;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 
 import java.util.ArrayList;
@@ -17,10 +18,10 @@ import java.util.List;
  */
 public class Blibliki extends PApplet/* implements BitListener*/ {
 
-    private AudioOutput         out;
-    private InstrumentGenerator instrumentGenerator;
-    private Phrase              phrase;
-    private Body                body;
+    private AudioOutput             out;
+    public BaseInstrumentGenerator instrumentGenerator;
+    private Phrase                  phrase;
+    private Body                    body;
 
     private List<Distortion> distortions = new ArrayList<>();
 
@@ -32,7 +33,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
     private boolean hasBody = false;
 
-    public Blibliki (Phrase phrase, InstrumentGenerator instrumentGenerator, Body body, AudioOutput out) {
+    public Blibliki (Phrase phrase, BaseInstrumentGenerator instrumentGenerator, Body body, AudioOutput out) {
 
         this.addPhrase(phrase);
         this.addBody(body);

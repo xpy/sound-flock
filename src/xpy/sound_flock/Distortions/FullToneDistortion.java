@@ -23,7 +23,6 @@ public class FullToneDistortion implements Distortion {
 
     @Override
     public void apply () {
-        PApplet.println("tuneAmount: " + tuneAmount);
         phrase.tune(tuneAmount);
     }
 

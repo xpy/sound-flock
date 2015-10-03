@@ -9,7 +9,7 @@ import java.util.Random;
  * KickInstrumentGenerator
  * Created by xpy on 24-Sep-15.
  */
-public class KickInstrumentGenerator implements InstrumentGenerator {
+public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
     public float amplitude = .65f;
@@ -22,15 +22,14 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
         return new Template();
     }
 
+    @Override
+    public KickInstrumentGenerator.Template getTemplate () {
+        return template;
+    }
 
     @Override
     public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new KickInstrument(frequency, amplitude, out);
-    }
-
-    @Override
-    public float getAmplitude () {
-        return amplitude;
     }
 
     @Override
@@ -41,11 +40,10 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
 
     public class KickInstrument extends BaseInstrument {
 
-        Oscil osc;
-        Oscil modulator;
-        ADSR  adsr;
-        ADSR  adsrModulator;
-        Line  l;
+        Oscil    osc;
+        ADSR     adsr;
+        ADSR     adsrModulator;
+        Constant c;
 
         public KickInstrument (float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
@@ -54,24 +52,23 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
             this.out = out;
 
             Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{1}, new float[]{0});
-            l = new Line(1000, 2 * frequency * template.frequencyAmp);
+
+            c = new Constant(2 * frequency * template.frequencyAmp);
 
             osc = new Oscil(frequency * template.frequencyAmp, amplitude, wave);
             adsr = new ADSR(amplitude, 0.001f, 0.05f, amplitude, releaseTime);
             adsrModulator = new ADSR(1f, 0.001f, 0.05f, .2f, 0.3f);
-            l.patch(adsrModulator).patch(osc.frequency);
+            c.patch(adsrModulator).patch(osc.frequency);
             osc.patch(adsr);
         }
 
         public void noteOn (float dur) {
-            l.activate();
             adsrModulator.noteOn();
             adsr.noteOn();
             patch(adsr, dur);
             isPlaying = true;
         }
 
-        // every instrumentGenerator must have a noteOff() method
         public void noteOff () {
             adsr.unpatchAfterRelease(out);
             adsrModulator.noteOff();
@@ -83,7 +80,7 @@ public class KickInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public static class Template implements InstrumentGenerator.Template {
+    public static class Template extends BaseInstrumentGenerator.BaseTemplate {
 
         float maxDuration = .5f;
         float frequencyAmp;

@@ -15,12 +15,21 @@ public interface InstrumentGenerator {
         EnvelopeFollower getEnvFollower ();
 
         boolean isComplete ();
+
         void unpatch ();
 
     }
 
+    public Template getTemplate ();
+
     interface Template {
+
+        public void increaseMoogFactor (float value);
+
+        public void decreaseMoogFactor (float value);
+
     }
+
 
     static Template createTemplate () {
         return null;
@@ -28,10 +37,9 @@ public interface InstrumentGenerator {
 
     BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out);
 
-    float getAmplitude ();
+//    float getAmplitude ();
 
     float getMaxDuration ();
-
 
 
 }

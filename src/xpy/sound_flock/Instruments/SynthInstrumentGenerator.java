@@ -16,7 +16,7 @@ import static processing.core.PApplet.println;
  */
 
 
-public class SynthInstrumentGenerator implements InstrumentGenerator {
+public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
     public float amplitude = .45f;
@@ -55,13 +55,13 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
         return new SynthInstrumentGenerator.Template();
     }
 
-    public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
-        return new SynthInstrument(frequency, amplitude, out);
+    @Override
+    public SynthInstrumentGenerator.Template getTemplate () {
+        return template;
     }
 
-    @Override
-    public float getAmplitude () {
-        return amplitude;
+    public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+        return new SynthInstrument(frequency, amplitude, out);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
             ml = new Multiplier(5 * initialFrequency);
 
             moogFilter = new MoogFilter(10 * baseFrequency, .7f, MoogFilter.Type.LP);
-            moogModulator = new Oscil(8f, amplitude, moogModulatorWavetable);
+            moogModulator = new Oscil(.5f, amplitude, moogModulatorWavetable);
             moogModulator.patch(ml).patch(moogFilter.frequency);
 //        moogFilter = new MoogFilter((r.nextInt(7) + 2) * initialFrequency, .7f, MoogFilter.Type.LP);
 
@@ -134,10 +134,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
 
         @Override
         public void noteOn (float dur) {
-//        l.activate();
             adsr.noteOn();
-//        adsr2.noteOn();
-            // patch to the output
             patch(adsr, dur);
             isPlaying = true;
 
@@ -155,7 +152,7 @@ public class SynthInstrumentGenerator implements InstrumentGenerator {
 
     }
 
-    public static class Template implements InstrumentGenerator.Template {
+    public static class Template extends BaseInstrumentGenerator.BaseTemplate {
 
         List<Float>   oscillatorFrequencyFactor = new ArrayList<>();
         List<Integer> oscillatorWave            = new ArrayList<>();

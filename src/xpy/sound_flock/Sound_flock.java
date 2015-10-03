@@ -53,6 +53,7 @@ public class Sound_flock extends PApplet {
         minim = new Minim(this);
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
+        body = new CircleBody(this);
 
         SynthInstrumentGenerator synthGenerator = new SynthInstrumentGenerator();
         KickInstrumentGenerator  kickGenerator  = new KickInstrumentGenerator();

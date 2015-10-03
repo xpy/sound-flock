@@ -9,7 +9,7 @@ import java.util.Random;
  * KickInstrumentGenerator
  * Created by xpy on 24-Sep-15.
  */
-public class SnareInstrumentGenerator implements InstrumentGenerator {
+public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
     public float amplitude = .65f;
@@ -22,15 +22,14 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
         return new Template();
     }
 
+    @Override
+    public SnareInstrumentGenerator.Template getTemplate () {
+        return template;
+    }
 
     @Override
     public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
         return new SnareInstrument(frequency, amplitude, out);
-    }
-
-    @Override
-    public float getAmplitude () {
-        return amplitude;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
         Oscil      modulator;
         ADSR       adsr;
         ADSR       adsrModulator;
-        Line       l;
+        Constant   c;
         MoogFilter moogFilter;
 
         public SnareInstrument (float frequency, float amplitude, AudioOutput out) {
@@ -54,22 +53,20 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
             this.releaseTime = .2f;
             this.out = out;
 
-            l = new Line(frequency * template.frequencyAmp, frequency);
-
-//            Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{amplitude}, new float[]{1});
+            c = new Constant(frequency);
             osc = new Oscil(frequency * template.frequencyAmp, amplitude, template.wavetable);
-//            Oscil osc2 = new Oscil(frequency,2*amplitude,wave);
             adsr = new ADSR(amplitude * 2, 0.0001f, 0.05f, 0, releaseTime);
             adsrModulator = new ADSR(.1f, 0.1f, 0.5f, 1f, 0.1f);
             moogFilter = new MoogFilter(frequency * 5, .1f, MoogFilter.Type.BP);
-            l.patch(adsrModulator).patch(osc.frequency);
-//            osc2.patch(osc).patch(adsr);
-//            (osc).patch(adsr);
+            c.patch(adsrModulator).patch(osc.frequency);
             (osc).patch(moogFilter).patch(adsr);
         }
 
         public void noteOn (float dur) {
+            Line l = new Line(dur + releaseTime, 440 * template.moogFactor, 440 * template.targetMoogFactor);
             l.activate();
+            l.patch(moogFilter.frequency);
+
             adsrModulator.noteOn();
             adsr.noteOn();
             isPlaying = true;
@@ -90,7 +87,7 @@ public class SnareInstrumentGenerator implements InstrumentGenerator {
     }
 
 
-    public static class Template implements InstrumentGenerator.Template {
+    public static class Template extends BaseInstrumentGenerator.BaseTemplate {
 
         float maxDuration = .2f;
         float     frequencyAmp;

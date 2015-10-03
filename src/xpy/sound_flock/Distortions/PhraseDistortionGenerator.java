@@ -1,5 +1,7 @@
 package xpy.sound_flock.Distortions;
 
+import xpy.sound_flock.Instruments.BaseInstrumentGenerator;
+import xpy.sound_flock.Instruments.InstrumentGenerator;
 import xpy.sound_flock.Phrase;
 
 import java.util.Random;
@@ -44,8 +46,11 @@ public class PhraseDistortionGenerator {
 
     public static Distortion createRandomPartialToneDistortion (Phrase phrase) {
         Random r = new Random();
-        return new PartialToneDistortion(phrase, r.nextInt(3), r.nextInt(3), r.nextInt(phrase.numOfNotes-1)+1);
+        return new PartialToneDistortion(phrase, r.nextInt(3), r.nextInt(3), r.nextInt(phrase.numOfNotes - 1) + 1);
     }
 
+    public static Distortion createMoogDistortion (BaseInstrumentGenerator instrumentGenerator) {
+        return new MoogFactorDistortion(instrumentGenerator);
+    }
 
 }
