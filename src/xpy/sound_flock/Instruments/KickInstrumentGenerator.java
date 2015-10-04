@@ -48,10 +48,9 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
             this.releaseTime = .3f;
             this.out = out;
 
-            Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{1}, new float[]{0});
+            Constant c   = new Constant(2 * frequency);
+            Oscil    osc = new Oscil(frequency, amplitude, Waves.SINE);
 
-            Constant c   = new Constant(2 * frequency );
-            Oscil    osc = new Oscil(frequency , amplitude, wave);
             adsrModulator = new ADSR(1f, 0.001f, 0.05f, .2f, 0.3f);
             c.patch(adsrModulator).patch(osc.frequency);
             preFinalUgen = osc;
@@ -73,7 +72,7 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
     public static class Template extends BaseInstrumentGenerator.BaseTemplate {
 
-        float maxDuration = .5f;
+        float maxDuration = .1f;
         float frequencyAmp;
 
         public Template () {

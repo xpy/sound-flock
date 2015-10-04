@@ -53,12 +53,12 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
             this.out = out;
             this.frequency = frequency;
-            this.amplitude = amplitude;
+            this.amplitude = amplitude * .5f;
 
             finalADSR = template.getFinalADSR(this.amplitude);
 
-            osc = new Oscil(frequency, amplitude, Waves.SQUARE);
-            setMoog(new MoogFilter(template.getTargetMoog(), .5f, MoogFilter.Type.LP));
+            osc = new Oscil(frequency, this.amplitude, Waves.TRIANGLE);
+            setMoog(new MoogFilter(template.getTargetMoog(), .5f, MoogFilter.Type.BP));
 
             preFinalUgen = osc;
 
@@ -70,13 +70,15 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
     public static class Template extends BaseInstrumentGenerator.BaseTemplate {
 
         float maxDuration;
-        float modulatorFactor;
 
         public Template () {
             Random r = new Random();
             moogFrequency = 440;
-            this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
-            this.modulatorFactor = (r.nextInt(10) + 1) * .05f;
+            fAdsrAttack = .01f;
+            fAdsrDelay = .1f;
+            fAdsrRelease = .1f;
+
+            this.maxDuration = .5f;//Math.max(r.nextFloat() / 2, .01f);
             this.moogFactor = r.nextFloat() + .5f;
             this.targetMoogFactor = moogFactor;
         }

@@ -17,14 +17,11 @@ public class MoogFactorDistortion implements Distortion {
 
     public MoogFactorDistortion (BaseInstrumentGenerator instrumentGenerator) {
         this.instrumentGenerator = instrumentGenerator;
-        Random r = new Random();
         tuneAmount = 1.125f;
     }
 
     @Override
     public void apply () {
-        PApplet.println(instrumentGenerator);
-        PApplet.println(instrumentGenerator.getTemplate());
         instrumentGenerator.getTemplate().increaseMoogFactor(tuneAmount);
     }
 

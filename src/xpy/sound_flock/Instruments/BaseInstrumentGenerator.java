@@ -34,7 +34,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
         public void increaseMoogFactor (float value) {
             targetMoogFactor *= value;
-            PApplet.println(440 * targetMoogFactor);
+            PApplet.println(getTargetMoog());
         }
 
         @Override
@@ -44,16 +44,16 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
         @Override
         public float getTargetMoog () {
-            return Math.max(moogFrequency * targetMoogFactor, 2000);
+            return Math.min(moogFrequency * targetMoogFactor, 20000);
         }
 
         public void decreaseMoogFactor (float value) {
             targetMoogFactor /= value;
-            PApplet.println(100 * targetMoogFactor);
+            PApplet.println(getTargetMoog());
         }
 
         public ADSR getFinalADSR (float amplitude) {
-            return new ADSR(amplitude, fAdsrAttack, fAdsrDelay, amplitude, fAdsrRelease);
+            return new ADSR(amplitude*1.5f, fAdsrAttack, fAdsrDelay, amplitude, fAdsrRelease);
         }
 
         @Override

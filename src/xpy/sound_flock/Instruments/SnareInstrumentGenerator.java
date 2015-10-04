@@ -41,10 +41,8 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
     public class SnareInstrument extends BaseInstrument {
 
         Oscil      osc;
-        Oscil      modulator;
         ADSR       adsrModulator;
         Constant   c;
-        MoogFilter moogFilter;
 
         public SnareInstrument (float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
