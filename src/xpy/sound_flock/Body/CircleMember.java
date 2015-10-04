@@ -1,10 +1,8 @@
 package xpy.sound_flock.Body;
 
-import ddf.minim.UGen;
-import ddf.minim.ugens.ADSR;
 import ddf.minim.ugens.EnvelopeFollower;
 import processing.core.PApplet;
-import xpy.sound_flock.Instruments.BaseInstrument;
+import xpy.sound_flock.Instruments.BaseInstrumentGenerator;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 import xpy.sound_flock.Note;
 
@@ -21,7 +19,7 @@ public class CircleMember implements Member {
 
     PApplet pa;
     Note    note;
-    List<BaseInstrument> instruments = new ArrayList<>();
+    List<BaseInstrumentGenerator.BaseInstrument> instruments = new ArrayList<>();
 
     float radius;
     float offsetRadius;
@@ -54,7 +52,7 @@ public class CircleMember implements Member {
         pa.noStroke();
 
         idleIsDrawn = false;
-        for (BaseInstrument instrument : instruments) {
+        for (BaseInstrumentGenerator.BaseInstrument instrument : instruments) {
             if (hasStarted || instrument.isPlaying) {
                 hasStarted = true;
                 EnvelopeFollower envf = instrument.getEnvFollower();
@@ -91,7 +89,7 @@ public class CircleMember implements Member {
         pa.fill(prevFill);
         pa.g.stroke = prevStroke;
 
-        for (Iterator<BaseInstrument> iterator = instruments.iterator(); iterator.hasNext(); ) {
+        for (Iterator<BaseInstrumentGenerator.BaseInstrument> iterator = instruments.iterator(); iterator.hasNext(); ) {
             InstrumentGenerator.Instrument instrument = iterator.next();
 //            PApplet.println("instrument.isComplete(): " + instrument.isComplete());
 
@@ -106,7 +104,7 @@ public class CircleMember implements Member {
     }
 
     @Override
-    public void attachInstrument (BaseInstrument instrument) {
+    public void attachInstrument (BaseInstrumentGenerator.BaseInstrument instrument) {
         this.instruments.add(instrument);
     }
 

@@ -35,7 +35,7 @@ public interface InstrumentGenerator {
         return null;
     }
 
-    BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out);
+    BaseInstrumentGenerator.BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out);
 
 //    float getAmplitude ();
 
