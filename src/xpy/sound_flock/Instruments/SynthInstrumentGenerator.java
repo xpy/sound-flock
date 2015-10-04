@@ -32,23 +32,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
         this.template = template;
     }
 
-    public Wavetable getWaveTable (int k) {
-        switch (k) {
-            default:
-                return Waves.SINE;
-            case 1:
-                return Waves.SAW;
-            case 2:
-                return Waves.SQUARE;
-            case 3:
-                return Waves.TRIANGLE;
-            case 4:
-                return Waves.PHASOR;
-            case 5:
-                return Waves.QUARTERPULSE;
-        }
 
-    }
 
     public SynthInstrumentGenerator.Template createTemplate () {
 

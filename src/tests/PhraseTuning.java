@@ -39,11 +39,11 @@ public class PhraseTuning extends PApplet {
         ToneInstrumentGenerator toneGenerator = new ToneInstrumentGenerator();
 
         phrase.baseNoteLength = .5f;
-        phrase.meterLength = 4;
-        phrase.numOfNotes = 6;
+        phrase.meterLength = 1;
+        phrase.numOfNotes = 12;
         phrase.phraseLength = 1;
         phrase.baseNotePitch = 220;
-        phrase.numOfPitchPeaks = 1;
+        phrase.numOfPitchPeaks = 4;
         phrase.pitchPattern = Phrase.PITCH_PATTERN_PEAKS;
         phrase.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
         phrase.generatePhrase();

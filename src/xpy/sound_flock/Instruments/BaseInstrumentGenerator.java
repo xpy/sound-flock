@@ -15,7 +15,23 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
     // protected InstrumentGenerator.Template template;
 
+    public static Wavetable getWaveTable (int k) {
+        switch (k) {
+            default:
+                return Waves.SINE;
+            case 1:
+                return Waves.SAW;
+            case 2:
+                return Waves.SQUARE;
+            case 3:
+                return Waves.TRIANGLE;
+            case 4:
+                return Waves.PHASOR;
+            case 5:
+                return Waves.QUARTERPULSE;
+        }
 
+    }
     public float getAmplitude () {
         return amplitude;
     }
