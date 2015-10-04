@@ -62,9 +62,9 @@ public class CircleMember implements Member {
                 if (envf.getLastValues().length > 0) {
                     float enfValue = envf.getLastValues()[0] * 10;
                     float prev = maxasdfasdfValue;
-                    maxasdfasdfValue = Math.max(envf.getLastValues()[0], maxasdfasdfValue);
-                    if (maxasdfasdfValue != prev)
-                        PApplet.println("envf: " + (maxasdfasdfValue));
+//                    maxasdfasdfValue = Math.max(envf.getLastValues()[0], maxasdfasdfValue);
+//                    if (maxasdfasdfValue != prev)
+//                        PApplet.println("envf: " + (maxasdfasdfValue));
                     pa.fill(expandColor);
 
                     pa.ellipse(x, y, radius + offsetRadius * enfValue, radius + offsetRadius * enfValue);

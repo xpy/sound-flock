@@ -73,12 +73,13 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         }
 //            offset += offsetFlag;
 //            offsetFlag *= -1;
+        int j = 0;
         if (hasBody)
             for (Member member : body.getMembers()) {
 
                 BaseInstrumentGenerator.BaseInstrument instrument = instrumentGenerator.createInstrument(member.getNote().pitch, instrumentGenerator.getAmplitude(), out);
                 member.attachInstrument(instrument);
-                out.playNoteAtBeat(phrase.getPhraseMeters(), i, Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
+                out.playNoteAtBeat(phrase.getPhraseMeters(), i, phrase.legatos.get(j++)?member.getNote().duration:Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
                 i += member.getNote().duration;
             }
         else
@@ -121,6 +122,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
     public void applyDistortion (int index) {
         distortions.get(index).apply();
+
     }
 
     public void revertDistortion (int index) {

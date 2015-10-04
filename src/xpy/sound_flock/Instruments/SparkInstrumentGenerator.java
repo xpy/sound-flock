@@ -32,6 +32,10 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
         return new SparkInstrument(frequency, amplitude, out);
     }
 
+    @Override
+    public float getAmplitude () {
+        return amplitude;
+    }
 
     @Override
     public float getMaxDuration () {
@@ -67,6 +71,7 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
         Wavetable wavetable;
 
         public Template () {
+
 
             fAdsrAttack = .001f;
             fAdsrDelay = .0f;

@@ -25,6 +25,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
     public SynthInstrumentGenerator () {
 
         this.template = createTemplate();
+        println(this.template);
     }
 
     SynthInstrumentGenerator (Template template) {
@@ -32,7 +33,10 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
         this.template = template;
     }
 
-
+    @Override
+    public float getAmplitude () {
+        return amplitude;
+    }
 
     public SynthInstrumentGenerator.Template createTemplate () {
 
@@ -50,7 +54,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
     @Override
     public float getMaxDuration () {
-        return 10f;
+        return 20f;
     }
 
 
@@ -86,14 +90,14 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             moogModulatorWavetable.offset(.7f);
             moogModulatorWavetable.normalize();
 
-            for (int i = 0; i < template.numOfOScillators; i++) {
+            for (int i = 0; i < template.numOfOscillators; i++) {
                 Oscil osc = new Oscil(initialFrequency * template.oscillatorFrequencyFactor.get(i), amplitude, getWaveTable(template.oscillatorWave.get(i)));
                 oscillators.add(osc);
             }
 
             this.modulator = new Oscil(initialFrequency, amplitude, getWaveTable(template.modulatorWaveTable));
 
-            for (int i = 0; i < template.numOfOScillators; i++) {
+            for (int i = 0; i < template.numOfOscillators; i++) {
                 this.modulator.patch(oscillators.get(i)).patch(s);
             }
 
@@ -101,7 +105,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             ml = new Multiplier(template.getTargetMoog());
 
             setMoog(new MoogFilter(template.getTargetMoog(), .7f, MoogFilter.Type.LP));
-            moogModulator = new Oscil(.5f, amplitude, moogModulatorWavetable);
+            moogModulator = new Oscil(template.moogModulatorFrequency, 1, moogModulatorWavetable);
             moogModulator.patch(ml).patch(moogFilter.frequency);
 //        moogFilter = new MoogFilter((r.nextInt(7) + 2) * initialFrequency, .7f, MoogFilter.Type.LP);
 
@@ -120,9 +124,10 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
         List<Float>   oscillatorFrequencyFactor = new ArrayList<>();
         List<Integer> oscillatorWave            = new ArrayList<>();
 
-        int modulatorWaveTable;
+        int   modulatorWaveTable;
+        float moogModulatorFrequency;
 
-        int numOfOScillators;
+        int numOfOscillators;
 
         Template () {
 
@@ -132,20 +137,28 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             moogFrequency = 400;
 
             Random r = new Random();
-
-            this.numOfOScillators = r.nextInt(3) + 1;
-//        this.baseFrequency = frequency;
-//        this.initialFrequency = baseFrequency;
-//        this.amplitude = amplitude;
+            moogModulatorFrequency = (r.nextInt(64) + 1) / 4f;
+            this.numOfOscillators = r.nextInt(4) + 1;
 
             this.modulatorWaveTable = r.nextInt(4);
 
-            for (int i = 1; i <= this.numOfOScillators; i++) {
-                oscillatorFrequencyFactor.add((r.nextInt(i + 1) + i) * .25f);
-                oscillatorWave.add(r.nextInt(4));
+            for (int i = 0; i < this.numOfOscillators; i++) {
+                oscillatorFrequencyFactor.add(1 - i * .25f);
+                oscillatorWave.add(r.nextInt(6));
             }
 
 
+        }
+
+        @Override
+        public String toString () {
+            return "Template{" +
+                   "oscillatorFrequencyFactor=" + oscillatorFrequencyFactor +
+                   ", oscillatorWave=" + oscillatorWave +
+                   ", modulatorWaveTable=" + modulatorWaveTable +
+                   ", moogModulatorFrequency=" + moogModulatorFrequency +
+                   ", numOfOscillators=" + numOfOscillators +
+                   '}';
         }
     }
 

@@ -28,6 +28,7 @@ public class Phrase extends PApplet {
     public  int   pitchIndex      = 0;
 
     public List<Integer> pitchPeakList = new ArrayList<>();
+    public List<Boolean> legatos       = new ArrayList<>();
 
     public int pitchPattern    = 0;
     public int durationPattern = 0;
@@ -129,14 +130,16 @@ public class Phrase extends PApplet {
                             noteList.add(noteToAdd);
                         }
                         biggestNoteDuration = phraseMeters - currentDuration;
-                        Note noteToAdd = new Note(Note.getRandomPitch(), biggestNoteDuration);
+                        Note noteToAdd = new Note(baseNotePitch, biggestNoteDuration);
                         noteList.add(0, noteToAdd);
                         break;
                 }
                 break;
         }
-
-
+        Random r = new Random();
+        for (int i = 0; i < noteList.size(); i++) {
+            legatos.add(r.nextBoolean());
+        }
         notes = noteList;
     }
 
@@ -150,7 +153,7 @@ public class Phrase extends PApplet {
             case PITCH_PATTERN_DESC:
                 return Note.getRandomPitchBelow(pitch);
             case PITCH_PATTERN_RANDOM:
-                return Note.getPitchOfIndex((new Random()).nextInt(20));
+                return Note.getPitchOfIndex((new Random()).nextInt(96) - 64);
             default:
                 return pitch;
         }
@@ -280,4 +283,23 @@ public class Phrase extends PApplet {
         notes.forEach(xpy.sound_flock.Note::reset);
     }
 
+    @Override
+    public String toString () {
+        return "Phrase{" +
+               ", phraseLength=" + phraseLength +
+               ", meterLength=" + meterLength +
+               ", numOfNotes=" + numOfNotes +
+               ", repeatNotes=" + repeatNotes +
+               ", baseNoteLength=" + baseNoteLength +
+               ", baseNotePitch=" + baseNotePitch +
+//               ", pitchFeed=" + pitchFeed +
+               ", numOfPitchPeaks=" + numOfPitchPeaks +
+//               ", pitchPeakIndex=" + pitchPeakIndex +
+//               ", pitchIndex=" + pitchIndex +
+//               ", pitchPeakList=" + pitchPeakList +
+               ", pitchPattern=" + pitchPattern +
+               ", durationPattern=" + durationPattern +
+//               ", beatTime=" + beatTime +
+               '}';
+    }
 }
