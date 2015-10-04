@@ -2,8 +2,7 @@ package xpy.sound_flock.Instruments;
 
 import ddf.minim.AudioOutput;
 import ddf.minim.UGen;
-import ddf.minim.ugens.EnvelopeFollower;
-import ddf.minim.ugens.Sink;
+import ddf.minim.ugens.*;
 import processing.core.PApplet;
 
 /**
@@ -14,7 +13,8 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
     public float amplitude = .65f;
 
-    public UGen finalUgen;
+    // protected InstrumentGenerator.Template template;
+
 
     public float getAmplitude () {
         return amplitude;
@@ -22,12 +22,29 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
     public abstract static class BaseTemplate implements Template {
 
-        protected float moogFactor;
+        protected float moogFactor       = 1;
         protected float targetMoogFactor = 1;
+        public    float moogFrequency    = 440;
+
+        boolean hasMoog = false;
+
+        public float fAdsrAttack  = .01f;
+        public float fAdsrDelay   = .05f;
+        public float fAdsrRelease = .5f;
 
         public void increaseMoogFactor (float value) {
             targetMoogFactor *= value;
             PApplet.println(440 * targetMoogFactor);
+        }
+
+        @Override
+        public float getMoogFactor () {
+            return moogFactor;
+        }
+
+        @Override
+        public float getTargetMoog () {
+            return Math.max(moogFrequency * targetMoogFactor, 2000);
         }
 
         public void decreaseMoogFactor (float value) {
@@ -35,13 +52,44 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
             PApplet.println(100 * targetMoogFactor);
         }
 
+        public ADSR getFinalADSR (float amplitude) {
+            return new ADSR(amplitude, fAdsrAttack, fAdsrDelay, amplitude, fAdsrRelease);
+        }
+
+        @Override
+        public float fAdsrRelease () {
+            return fAdsrRelease;
+        }
+
+        @Override
+        public boolean hasMoog () {
+            return hasMoog;
+        }
+
+        @Override
+        public void setHasMoog (boolean moog) {
+            this.hasMoog = true;
+        }
+
+        @Override
+        public float getMoogFrequency () {
+            return moogFrequency;
+        }
+
+        @Override
+        public void reverseADSR () {
+            float tmp = fAdsrAttack;
+            fAdsrAttack = fAdsrRelease;
+            fAdsrRelease = tmp;
+
+        }
     }
 
     /**
      * BaseInstrument
      * Created by xpy on 30-Sep-15.
      */
-    public abstract static class BaseInstrument implements Instrument {
+    public abstract class BaseInstrument implements Instrument {
 
         public float frequency;
         public float amplitude;
@@ -49,14 +97,15 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         protected boolean isComplete                 = false;
         public    boolean isPlaying                  = false;
         protected long    completesAt                = 0;
-        protected float   releaseTime                = .5f;
         protected int     envelopeFollowerBufferSize = 2048;
-
-        public UGen lastUgen;
+        public    float   releaseTime                = .5f;
 
         public AudioOutput out;
         public Sink             sink             = new Sink();
         public EnvelopeFollower envelopeFollower = new EnvelopeFollower(0, .2f, 64);
+        public MoogFilter moogFilter;
+        public ADSR       finalADSR;
+        public UGen       preFinalUgen;
 
         @Override
         public Sink getSink () {
@@ -69,27 +118,64 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         }
 
         @Override
+        public void setMoog (MoogFilter moog) {
+            this.moogFilter = moog;
+            getTemplate().setHasMoog(true);
+        }
+
+        public ADSR getFinalAdsr () {
+            return finalADSR;
+        }
+
+        @Override
         public boolean isComplete () {
             return isComplete && System.currentTimeMillis() > completesAt;
         }
 
+        @Override
+        public void noteOn (float dur) {
+            patch(preFinalUgen, dur);
+        }
+
+        @Override
+        public void noteOff () {
+            finalADSR.unpatchAfterRelease(out);
+            finalADSR.noteOff();
+            setComplete();
+
+        }
+
+
         public void setComplete () {
             isComplete = true;
             isPlaying = false;
-            completesAt = System.currentTimeMillis() + ((long) (releaseTime * 1000));
+            completesAt = System.currentTimeMillis() + ((long) (getTemplate().fAdsrRelease() * 1000));
         }
 
         public void patch (UGen uGen, float duration) {
-            envelopeFollower = new EnvelopeFollower(0, duration + releaseTime, envelopeFollowerBufferSize);
-            lastUgen = uGen;
-            uGen.patch(envelopeFollower).patch(sink).patch(out);
-            uGen.patch(out);
+            envelopeFollower = new EnvelopeFollower(0, duration + getTemplate().fAdsrRelease(), envelopeFollowerBufferSize);
+            UGen lastUgen = uGen;
+            if (getTemplate().hasMoog()) {
+                uGen.patch(moogFilter);
+                lastUgen = moogFilter;
+//                Line l = new Line(duration + getTemplate().fAdsrRelease(), getTemplate().getMoogFrequency() * getTemplate().getMoogFactor(), getTemplate().getMoogFrequency() * getTemplate().getTargetMoogFactor());
+//                l.activate();
+//                l.patch(moogFilter.frequency);
+//                template.moogFactor = template.targetMoogFactor;
+            }
+            finalADSR = getTemplate().getFinalADSR(this.amplitude);
+
+            lastUgen.patch(finalADSR);
+            finalADSR.patch(envelopeFollower).patch(sink).patch(out);
+            finalADSR.patch(out);
+            finalADSR.noteOn();
+            isPlaying = true;
+
         }
 
         public void unpatch () {
             sink.unpatch(out);
             envelopeFollower.unpatch(sink);
-
         }
     }
 }

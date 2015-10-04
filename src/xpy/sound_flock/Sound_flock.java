@@ -105,7 +105,7 @@ public class Sound_flock extends PApplet {
         phrase3.phraseLength = 1;
         phrase3.baseNotePitch = 100;
         phrase3.numOfPitchPeaks = 2;
-//        phrase3.pitchPattern = Phrase.PITCH_PATTERN_BELOW;
+        phrase3.pitchPattern = Phrase.PITCH_PATTERN_BELOW;
         phrase3.durationPattern = Phrase.DURATION_PATTERN_FIXED;
         phrase3.generatePhrase();
 

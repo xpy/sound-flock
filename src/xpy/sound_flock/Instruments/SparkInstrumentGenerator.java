@@ -42,35 +42,17 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
     public class SparkInstrument extends BaseInstrument {
 
         Oscil osc;
-        ADSR  adsr;
-        Line  l;
-        Random r = new Random();
 
-        MoogFilter moogFilter;
 
         public SparkInstrument (float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
             this.amplitude = amplitude;
             this.out = out;
 
-//            Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{1}, new float[]{0});
-
-            moogFilter = new MoogFilter(template.wooo, .2f, MoogFilter.Type.BP);
-
+            setMoog(new MoogFilter(template.getTargetMoog(), .2f, MoogFilter.Type.BP));
             osc = new Oscil(frequency, amplitude, template.wavetable);
-            osc.patch(moogFilter);
-        }
 
-        public void noteOn (float dur) {
-            patch(moogFilter, dur);
-            isPlaying = true;
-
-        }
-
-        // every instrumentGenerator must have a noteOff() method
-        public void noteOff () {
-            moogFilter.unpatch(out);
-            setComplete();
+            preFinalUgen = osc;
         }
 
 
@@ -81,10 +63,16 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
         float maxDuration = .05f;
         float frequencyAmp;
-        float wooo = 2000;
+
         Wavetable wavetable;
 
         public Template () {
+
+            fAdsrAttack = .001f;
+            fAdsrDelay = .0f;
+            fAdsrRelease = .001f;
+            moogFrequency = 2000;
+
             frequencyAmp = 1;//(r.nextInt(4)+4)*.125f;
             wavetable = Waves.randomNoise();
             wavetable.warp(1f, .1f);

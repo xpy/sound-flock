@@ -18,16 +18,33 @@ public interface InstrumentGenerator {
 
         void unpatch ();
 
+        void setMoog (MoogFilter moog);
+
     }
 
     public Template getTemplate ();
 
     interface Template {
 
-        public void increaseMoogFactor (float value);
+        void increaseMoogFactor (float value);
 
-        public void decreaseMoogFactor (float value);
+        void decreaseMoogFactor (float value);
 
+        float fAdsrRelease ();
+
+        boolean hasMoog ();
+
+        void setHasMoog (boolean moog);
+
+        float getMoogFrequency ();
+
+        float getMoogFactor ();
+
+        float getTargetMoog ();
+
+        void reverseADSR();
+
+        ADSR getFinalADSR (float amplitude);
     }
 
 

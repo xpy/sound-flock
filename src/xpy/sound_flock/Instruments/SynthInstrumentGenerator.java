@@ -82,11 +82,9 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
         float baseFrequency;
         float initialFrequency;
 
-        ADSR       adsr;
-        Oscil      modulator;
-        Oscil      moogModulator;
-        Wavetable  moogModulatorWavetable;
-        MoogFilter moogFilter;
+        Oscil     modulator;
+        Oscil     moogModulator;
+        Wavetable moogModulatorWavetable;
 
 
         public SynthInstrument (float frequency, float amplitude, AudioOutput out) {
@@ -116,37 +114,18 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             }
 
 //        ml = new Multiplier((r.nextInt(7) + 2) * initialFrequency);
-            ml = new Multiplier(5 * initialFrequency);
+            ml = new Multiplier(template.getTargetMoog());
 
-            moogFilter = new MoogFilter(10 * baseFrequency, .7f, MoogFilter.Type.LP);
+            setMoog(new MoogFilter(template.getTargetMoog(), .7f, MoogFilter.Type.LP));
             moogModulator = new Oscil(.5f, amplitude, moogModulatorWavetable);
             moogModulator.patch(ml).patch(moogFilter.frequency);
 //        moogFilter = new MoogFilter((r.nextInt(7) + 2) * initialFrequency, .7f, MoogFilter.Type.LP);
 
-            adsr = new ADSR(amplitude, 0.3f, .3f, amplitude, releaseTime);
-            s.patch(moogFilter).patch(adsr);
-
+            preFinalUgen = s;
         }
 
         public void setInitialFrequency (float frequency) {
             this.initialFrequency = frequency;
-        }
-
-        @Override
-        public void noteOn (float dur) {
-            adsr.noteOn();
-            patch(adsr, dur);
-            isPlaying = true;
-
-        }
-
-        @Override
-        public void noteOff () {
-            adsr.unpatchAfterRelease(out);
-            // call the noteOff
-            adsr.noteOff();
-            setComplete();
-
         }
 
 
@@ -162,6 +141,12 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
         int numOfOScillators;
 
         Template () {
+
+            fAdsrAttack = 0.3f;
+            fAdsrDelay = .3f;
+            fAdsrRelease = .5f;
+            moogFrequency = 400;
+
             Random r = new Random();
 
             this.numOfOScillators = r.nextInt(3) + 1;

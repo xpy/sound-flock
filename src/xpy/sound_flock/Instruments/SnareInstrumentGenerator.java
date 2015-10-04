@@ -42,7 +42,6 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
 
         Oscil      osc;
         Oscil      modulator;
-        ADSR       adsr;
         ADSR       adsrModulator;
         Constant   c;
         MoogFilter moogFilter;
@@ -54,34 +53,23 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
             this.out = out;
 
             c = new Constant(frequency);
-            osc = new Oscil(frequency * template.frequencyAmp, amplitude, template.wavetable);
-            adsr = new ADSR(amplitude * 2, 0.0001f, 0.05f, 0, releaseTime);
+            osc = new Oscil(frequency * template.frequencyAmp, this.amplitude, template.wavetable);
             adsrModulator = new ADSR(.1f, 0.1f, 0.5f, 1f, 0.1f);
-            moogFilter = new MoogFilter(frequency * 5, .1f, MoogFilter.Type.BP);
+            setMoog(new MoogFilter(template.getTargetMoog(), .1f, MoogFilter.Type.BP));
+
             c.patch(adsrModulator).patch(osc.frequency);
-            (osc).patch(moogFilter).patch(adsr);
+            preFinalUgen = osc;
         }
 
         public void noteOn (float dur) {
-            Line l = new Line(dur + releaseTime, 440 * template.moogFactor, 440 * template.targetMoogFactor);
-            l.activate();
-            l.patch(moogFilter.frequency);
-
             adsrModulator.noteOn();
-            adsr.noteOn();
-            isPlaying = true;
-
-            patch(adsr, dur);
+            super.noteOn(dur);
         }
 
         // every instrumentGenerator must have a noteOff() method
         public void noteOff () {
-            adsr.unpatchAfterRelease(out);
-
             adsrModulator.noteOff();
-            adsr.noteOff();
-            setComplete();
-
+            super.noteOff();
         }
 
     }
@@ -95,6 +83,12 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
 
         public Template () {
             Random r = new Random();
+
+            fAdsrAttack = .0001f;
+            fAdsrDelay = .05f;
+            fAdsrRelease = .1f;
+
+            moogFrequency = 300;
             frequencyAmp = (r.nextInt(8) + 1) * .125f;
             wavetable = Waves.randomNoise();
             wavetable.warp(.5f, .2f);

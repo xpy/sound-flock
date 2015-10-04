@@ -2,7 +2,9 @@ package xpy.sound_flock.Instruments;
 
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
+import processing.core.PApplet;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import static processing.core.PApplet.println;
@@ -14,7 +16,8 @@ import static processing.core.PApplet.println;
  */
 public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
-    private Template template;
+    //    protected Template template;
+    protected Template template;
 
 
     public ToneInstrumentGenerator () {
@@ -45,10 +48,6 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
     class ToneInstrument extends BaseInstrument {
 
         Oscil osc;
-        ADSR  adsr;
-
-        MoogFilter moogFilter;
-
 
         ToneInstrument (float frequency, float amplitude, AudioOutput out) {
 
@@ -56,32 +55,15 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
             this.frequency = frequency;
             this.amplitude = amplitude;
 
-//            modulator = new Oscil(frequency * template.modulatorFactor, amplitude, wave);
+            finalADSR = template.getFinalADSR(this.amplitude);
+
             osc = new Oscil(frequency, amplitude, Waves.SQUARE);
-            adsr = new ADSR(amplitude, 0.01f, 0.05f, amplitude, releaseTime);
-            moogFilter = new MoogFilter(440 * template.moogFactor, .5f, MoogFilter.Type.LP);
+            setMoog(new MoogFilter(template.getTargetMoog(), .5f, MoogFilter.Type.LP));
 
-            // patch everything together up to the final output
-//            modulator.patch(sineOsc).patch(moogFilter).patch(adsr);
-            (osc).patch(moogFilter).patch(adsr);
+            preFinalUgen = osc;
+
         }
 
-        public void noteOn (float dur) {
-            Line l = new Line(dur + releaseTime, 440 * template.moogFactor, 440 * template.targetMoogFactor);
-            l.activate();
-            l.patch(moogFilter.frequency);
-            adsr.noteOn();
-            patch(adsr, dur);
-//            adsr.patch(out);
-            isPlaying = true;
-            template.moogFactor = template.targetMoogFactor;
-        }
-
-        public void noteOff () {
-            adsr.unpatchAfterRelease(out);
-            adsr.noteOff();
-            setComplete();
-        }
 
     }
 
@@ -92,7 +74,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
         public Template () {
             Random r = new Random();
-
+            moogFrequency = 440;
             this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
             this.modulatorFactor = (r.nextInt(10) + 1) * .05f;
             this.moogFactor = r.nextFloat() + .5f;

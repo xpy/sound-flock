@@ -12,7 +12,6 @@ import java.util.Random;
 public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
-    public float amplitude = .65f;
 
     public KickInstrumentGenerator () {
         template = createTemplate();
@@ -40,10 +39,8 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
     public class KickInstrument extends BaseInstrument {
 
-        Oscil    osc;
-        ADSR     adsr;
-        ADSR     adsrModulator;
-        Constant c;
+
+        ADSR adsrModulator;
 
         public KickInstrument (float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
@@ -53,28 +50,22 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
             Wavetable wave = WavetableGenerator.gen9(4096, new float[]{1}, new float[]{1}, new float[]{0});
 
-            c = new Constant(2 * frequency * template.frequencyAmp);
-
-            osc = new Oscil(frequency * template.frequencyAmp, amplitude, wave);
-            adsr = new ADSR(amplitude, 0.001f, 0.05f, amplitude, releaseTime);
+            Constant c   = new Constant(2 * frequency );
+            Oscil    osc = new Oscil(frequency , amplitude, wave);
             adsrModulator = new ADSR(1f, 0.001f, 0.05f, .2f, 0.3f);
             c.patch(adsrModulator).patch(osc.frequency);
-            osc.patch(adsr);
+            preFinalUgen = osc;
         }
 
         public void noteOn (float dur) {
             adsrModulator.noteOn();
-            adsr.noteOn();
-            patch(adsr, dur);
-            isPlaying = true;
+            super.noteOn(dur);
+
         }
 
         public void noteOff () {
-            adsr.unpatchAfterRelease(out);
             adsrModulator.noteOff();
-            adsr.noteOff();
-
-            setComplete();
+            super.noteOff();
         }
 
     }
@@ -87,6 +78,10 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
         public Template () {
             Random r = new Random();
+            fAdsrAttack = .001f;
+            fAdsrDelay = .05f;
+            fAdsrRelease = .3f;
+
             frequencyAmp = (r.nextInt(4) + 4) * .125f;
 //            this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
         }

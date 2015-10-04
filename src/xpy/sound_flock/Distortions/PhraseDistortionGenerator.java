@@ -53,4 +53,8 @@ public class PhraseDistortionGenerator {
         return new MoogFactorDistortion(instrumentGenerator);
     }
 
+    public static Distortion createADSRReverseDistortion (BaseInstrumentGenerator instrumentGenerator) {
+        return new ADSRReverseDistortion(instrumentGenerator);
+    }
+
 }

@@ -36,7 +36,7 @@ public class PhraseTuning extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        SnareInstrumentGenerator toneGenerator = new SnareInstrumentGenerator();
+        SynthInstrumentGenerator toneGenerator = new SynthInstrumentGenerator();
 
         phrase.baseNoteLength = .5f;
         phrase.meterLength = 4;
@@ -51,7 +51,7 @@ public class PhraseTuning extends PApplet {
 
         blibliki = new Blibliki(phrase, toneGenerator, body, out);
 //        blibliki.addDistortion(PhraseDistortionGenerator.createRandomPartialToneDistortion(phrase));
-        blibliki.addDistortion(PhraseDistortionGenerator.createMoogDistortion(blibliki.instrumentGenerator));
+        blibliki.addDistortion(PhraseDistortionGenerator.createADSRReverseDistortion(blibliki.instrumentGenerator));
         println(blibliki.getDistortion(0));
         blibliki.start();
 
