@@ -7,6 +7,8 @@ import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.CircleBody;
 import xpy.sound_flock.Instruments.*;
 
+import java.util.Random;
+
 /**
  * Sound Flock
  * Created by xpy on 05-Sep-15.
@@ -66,18 +68,19 @@ public class Sound_flock extends PApplet {
         CircleBody cb3 = new CircleBody(this);
         CircleBody cb4 = new CircleBody(this);
         CircleBody cb5 = new CircleBody(this);
+        Random     r   = new Random();
 
         Phrase phrase1 = new Phrase();
         phrase1.meterLength = 4;
-        phrase1.numOfNotes = 2;
+        phrase1.numOfNotes = r.nextInt(4) + 1;
         phrase1.phraseLength = 2;
-        phrase1.pitchPattern = Phrase.PITCH_PATTERN_DESC;
+        phrase1.pitchPattern = Phrase.PITCH_PATTERN_AROUND;
         phrase1.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
         phrase1.baseNotePitch = 220f;
         phrase1.generatePhrase();
 
 //        blibliki1.createPhraseAroundPitch(87.31f);
-        blibliki1 = new Blibliki(phrase1, synthGenerator,body, out);
+        blibliki1 = new Blibliki(phrase1, synthGenerator, body, out);
         blibliki1.start();
 
 
@@ -85,7 +88,7 @@ public class Sound_flock extends PApplet {
         phrase2.baseNoteLength = .5f;
         phrase2.meterLength = 4;
 //        phrase2.repeatNotes = 2;
-        phrase2.numOfNotes = 6;
+        phrase2.numOfNotes = r.nextInt(4) + 4;
         phrase2.phraseLength = 1;
         phrase2.baseNotePitch = 40;
         phrase2.numOfPitchPeaks = 2;
@@ -96,9 +99,9 @@ public class Sound_flock extends PApplet {
 
         Phrase phrase3 = new Phrase();
         phrase3.baseNoteLength = .5f;
-        phrase3.meterLength = 1;
+        phrase3.meterLength = 4;
 //        phrase2.repeatNotes = 2;
-        phrase3.numOfNotes = 1;
+        phrase3.numOfNotes = r.nextInt(4) + 1;
         phrase3.phraseLength = 1;
         phrase3.baseNotePitch = 100;
         phrase3.numOfPitchPeaks = 2;
@@ -109,36 +112,36 @@ public class Sound_flock extends PApplet {
         Phrase phrase4 = new Phrase();
         phrase4.baseNoteLength = .5f;
         phrase4.meterLength = 4;
-        phrase4.numOfNotes = 6;
+        phrase4.numOfNotes = r.nextInt(4) + 1;
         phrase4.phraseLength = 2;
         phrase4.baseNotePitch = 80;
         phrase4.numOfPitchPeaks = 2;
-        phrase4.pitchPattern = Phrase.PITCH_PATTERN_BELOW;
+        phrase4.pitchPattern = Phrase.PITCH_PATTERN_AROUND;
         phrase4.durationPattern = Phrase.DURATION_PATTERN_METER_DIVISIONS;
         phrase4.generatePhrase();
 
         Phrase phrase5 = new Phrase();
         phrase5.baseNoteLength = .5f;
         phrase5.meterLength = 4;
-        phrase5.numOfNotes = 8;
+        phrase5.numOfNotes = r.nextInt(4) + 4;
         phrase5.phraseLength = 1;
         phrase5.baseNotePitch = 220;
-        phrase5.numOfPitchPeaks =2;
+        phrase5.numOfPitchPeaks = 2;
         phrase5.pitchPattern = Phrase.PITCH_PATTERN_AROUND;
         phrase5.durationPattern = Phrase.DURATION_PATTERN_RANDOM;
         phrase5.generatePhrase();
 
-        blibliki2 = new Blibliki(phrase2, sparkGenerator,body, out);
+        blibliki2 = new Blibliki(phrase2, sparkGenerator, body, out);
         blibliki2.start();
 
 
-        blibliki3 = new Blibliki(phrase3, kickGenerator,body, out);
+        blibliki3 = new Blibliki(phrase3, kickGenerator, body, out);
         blibliki3.start();
 
-        blibliki4 = new Blibliki(phrase4, snareGenerator,body, out);
+        blibliki4 = new Blibliki(phrase4, snareGenerator, body, out);
         blibliki4.start();
 
-        blibliki5 = new Blibliki(phrase5, toneGenerator,body, out);
+        blibliki5 = new Blibliki(phrase5, toneGenerator, body, out);
         blibliki5.start();
 
         startTime = System.currentTimeMillis();
