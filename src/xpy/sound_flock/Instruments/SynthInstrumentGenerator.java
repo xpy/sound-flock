@@ -72,7 +72,6 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
         Oscil     modulator;
         Oscil     moogModulator;
-        Wavetable moogModulatorWavetable;
 
 
         public SynthInstrument (float frequency, float amplitude, AudioOutput out) {
@@ -84,11 +83,6 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             this.amplitude = amplitude;
             releaseTime = 0.3f;
 
-            moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{0});
-            moogModulatorWavetable.offset(1f);
-            moogModulatorWavetable.normalize();
-            moogModulatorWavetable.offset(.7f);
-            moogModulatorWavetable.normalize();
 
             for (int i = 0; i < template.numOfOscillators; i++) {
                 Oscil osc = new Oscil(initialFrequency * template.oscillatorFrequencyFactor.get(i), amplitude, getWaveTable(template.oscillatorWave.get(i)));
@@ -105,7 +99,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             ml = new Multiplier(template.getTargetMoog());
 
             setMoog(new MoogFilter(template.getTargetMoog(), .7f, MoogFilter.Type.LP));
-            moogModulator = new Oscil(template.moogModulatorFrequency, 1, moogModulatorWavetable);
+            moogModulator = new Oscil(template.moogModulatorFrequency, 1, template.moogModulatorWavetable);
             moogModulator.patch(ml).patch(moogFilter.frequency);
 //        moogFilter = new MoogFilter((r.nextInt(7) + 2) * initialFrequency, .7f, MoogFilter.Type.LP);
 
@@ -128,6 +122,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
         float moogModulatorFrequency;
 
         int numOfOscillators;
+        Wavetable moogModulatorWavetable;
 
         Template () {
 
@@ -146,6 +141,11 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
                 oscillatorFrequencyFactor.add(1 - i * .25f);
                 oscillatorWave.add(r.nextInt(6));
             }
+            moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{0});
+            moogModulatorWavetable.offset(1f);
+            moogModulatorWavetable.normalize();
+            moogModulatorWavetable.offset(.7f);
+            moogModulatorWavetable.normalize();
 
 
         }

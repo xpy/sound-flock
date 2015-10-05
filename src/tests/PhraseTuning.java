@@ -52,7 +52,7 @@ public class PhraseTuning extends PApplet {
         blibliki = new Blibliki(phrase, toneGenerator, body, out);
 //        blibliki.addDistortion(PhraseDistortionGenerator.createRandomPartialToneDistortion(phrase));
         blibliki.addDistortion(PhraseDistortionGenerator.createDistortion(0, phrase));
-        println(blibliki.getDistortion(0));
+//        println(blibliki.getDistortion(0));
         blibliki.start();
 
 

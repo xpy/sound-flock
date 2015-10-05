@@ -88,8 +88,8 @@ public class CircleMember implements Member {
             InstrumentGenerator.Instrument instrument = iterator.next();
 
             if (instrument.isComplete()) {
-                iterator.remove();
                 instrument.unpatch();
+                iterator.remove();
 
             }
 

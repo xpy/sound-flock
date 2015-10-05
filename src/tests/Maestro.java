@@ -34,34 +34,8 @@ public class Maestro extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        maestro = new xpy.sound_flock.Maestro(out);
+        maestro = new xpy.sound_flock.Maestro(this,out);
 
-        ToneInstrumentGenerator toneGenerator = new ToneInstrumentGenerator();
-
-        Phrase phrase = new Phrase();
-        phrase.baseNoteLength = .5f;
-        phrase.meterLength = 4;
-        phrase.numOfNotes = 18;
-        phrase.phraseLength = 3;
-        phrase.baseNotePitch = 220;
-        phrase.numOfPitchPeaks = 1;
-        phrase.repeatNotes = 1;
-        phrase.pitchPattern = Phrase.PITCH_PATTERN_ABOVE;
-        phrase.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
-        phrase.generatePhrase();
-
-        body = new CircleBody(this);
-
-        blibliki = new Blibliki(phrase, toneGenerator, body, out);
-        blibliki.addDistortion(PhraseDistortionGenerator.createMoogDistortion(blibliki.instrumentGenerator));
-        blibliki.start();
-        blibliki.addLoopEvent(new Blibliki.LoopEvent() {
-            @Override
-            public void fire (int loopNum) {
-
-            }
-        });
-        maestro.addBlibliki(blibliki);
         maestro.start();
 
     }

@@ -40,6 +40,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
     }
 
 
+
     @Override
     public float getMaxDuration () {
         return template.maxDuration;
@@ -60,7 +61,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
             osc = new Oscil(frequency, this.amplitude, getWaveTable(template.waveIndex));
             Random r = new Random();
-            (new Oscil(.5f, 1, getWaveTable(template.modulatorWaveIndex))).patch(osc);
+            (new Oscil(.5f, this.amplitude, getWaveTable(template.modulatorWaveIndex))).patch(osc);
             setMoog(new MoogFilter(template.getTargetMoog(), .5f, MoogFilter.Type.BP));
 
             preFinalUgen = osc;
@@ -86,8 +87,8 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
             waveIndex = r.nextInt(6);
             modulatorWaveIndex = r.nextInt(6);
 
-            println("waveIndex: "+waveIndex);
-            println("modulatorWaveIndex: "+modulatorWaveIndex);
+            println("waveIndex: " + waveIndex);
+            println("modulatorWaveIndex: " + modulatorWaveIndex);
             this.maxDuration = .5f;//Math.max(r.nextFloat() / 2, .01f);
             this.moogFactor = r.nextFloat() + .5f;
             this.targetMoogFactor = moogFactor;

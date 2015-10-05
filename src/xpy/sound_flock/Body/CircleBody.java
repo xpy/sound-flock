@@ -29,8 +29,8 @@ public class CircleBody extends PApplet implements Body {
         this.x = r.nextFloat() * (this.pa.width - 100) + 50;
         this.y = r.nextFloat() * (this.pa.height - 100) + 50;
 
-        println(x);
-        println(y);
+//        println(x);
+//        println(y);
 
     }
 

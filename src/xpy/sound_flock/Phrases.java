@@ -10,6 +10,7 @@ import java.util.Random;
  */
 public class Phrases {
 
+    public static boolean debug = false;
 
     public static Phrase tonePhrase (int meterLength) {
 
@@ -36,7 +37,8 @@ public class Phrases {
         else
             phrase.durationPattern = divisionPatterns[r.nextInt(divisionPatterns.length)];
 
-        PApplet.println(phrase);
+        if (debug)
+            PApplet.println(phrase);
         phrase.generatePhrase();
         return phrase;
     }
@@ -45,7 +47,7 @@ public class Phrases {
 
         Integer pitchPatterns[]    = new Integer[]{1, 4, 5, 6, 7};
         Integer divisionPatterns[] = new Integer[]{0};
-        Integer durationPatterns[] = new Integer[]{0,1,2, 4};
+        Integer durationPatterns[] = new Integer[]{0, 1, 2, 4};
         Random  r                  = new Random();
         Phrase  phrase             = new Phrase();
 
@@ -66,7 +68,8 @@ public class Phrases {
         else
             phrase.durationPattern = divisionPatterns[r.nextInt(divisionPatterns.length)];
 
-        PApplet.println(phrase);
+        if (debug)
+            PApplet.println(phrase);
         phrase.generatePhrase();
         return phrase;
     }
@@ -98,7 +101,8 @@ public class Phrases {
         else
             phrase.durationPattern = divisionPatterns[r.nextInt(divisionPatterns.length)];
 
-        PApplet.println(phrase);
+        if (debug)
+            PApplet.println(phrase);
         phrase.generatePhrase();
         return phrase;
     }
@@ -128,7 +132,8 @@ public class Phrases {
         else
             phrase.durationPattern = divisionPatterns[r.nextInt(divisionPatterns.length)];
 
-        PApplet.println(phrase);
+        if (debug)
+            PApplet.println(phrase);
         phrase.generatePhrase();
         return phrase;
 

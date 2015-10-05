@@ -119,6 +119,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
                 out.playNoteAtBeat(meterLength, i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrument);
                 i += note.duration;
             }
+        loops++;
 //        out.resumeNotes();
     }
 

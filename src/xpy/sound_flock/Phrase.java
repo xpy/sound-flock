@@ -67,9 +67,12 @@ public class Phrase extends PApplet {
         if (pitchPattern == PITCH_PATTERN_PEAKS || pitchPattern == PITCH_PATTERN_INVERTED_PEAKS) {
             pitchIndex = 0;
             pitchPeakIndex = (int) Math.floor(numOfNotes / (Math.max(numOfPitchPeaks, 1)) + 1);
+
+/*
             println("numOfPitchPeaks: " + numOfPitchPeaks);
             println("numOfNotes: " + numOfNotes);
             println("pitchPeakIndex: " + pitchPeakIndex);
+*/
 
             int pitchPeakDir = 0;
             for (int i = 0; i < numOfNotes; i++) {
