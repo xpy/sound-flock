@@ -40,12 +40,12 @@ public class Piano extends PApplet {
         Phrase phrase = new Phrase();
         phrase.baseNoteLength = .5f;
         phrase.meterLength = 3;
-        phrase.numOfNotes = 3;
+        phrase.numOfNotes = 6;
         phrase.phraseLength = 2;
         phrase.baseNotePitch = 220;
         phrase.numOfPitchPeaks = 1;
         phrase.repeatNotes = 2;
-        phrase.pitchPattern = Phrase.PITCH_PATTERN_ASC;
+        phrase.pitchPattern = Phrase.PITCH_PATTERN_INVERTED_PEAKS;
         phrase.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_METER;
         phrase.generatePhrase();
 
@@ -53,7 +53,6 @@ public class Piano extends PApplet {
 
         blibliki = new Blibliki(phrase, toneGenerator, body, out);
         blibliki.addDistortion(PhraseDistortionGenerator.createRandomDistortion(PhraseDistortionGenerator.DISTORTION_TONE_FULL,phrase));
-        blibliki.addBody(body);
         blibliki.start();
         blibliki.addLoopEvent(new Blibliki.LoopEvent() {
             @Override

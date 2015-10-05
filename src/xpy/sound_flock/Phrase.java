@@ -35,13 +35,14 @@ public class Phrase extends PApplet {
 
     public long beatTime = (long) (60000f / 120f);
 
-    public static final int PITCH_PATTERN_RANDOM = 0;
-    public static final int PITCH_PATTERN_AROUND = 1;
-    public static final int PITCH_PATTERN_ASC    = 2;
-    public static final int PITCH_PATTERN_DESC   = 3;
-    public static final int PITCH_PATTERN_PEAKS  = 4;
-    public static final int PITCH_PATTERN_ABOVE  = 5;
-    public static final int PITCH_PATTERN_BELOW  = 6;
+    public static final int PITCH_PATTERN_RANDOM         = 0;
+    public static final int PITCH_PATTERN_AROUND         = 1;
+    public static final int PITCH_PATTERN_ASC            = 2;
+    public static final int PITCH_PATTERN_DESC           = 3;
+    public static final int PITCH_PATTERN_PEAKS          = 4;
+    public static final int PITCH_PATTERN_ABOVE          = 5;
+    public static final int PITCH_PATTERN_BELOW          = 6;
+    public static final int PITCH_PATTERN_INVERTED_PEAKS = 7;
 
     public static final int DURATION_PATTERN_RANDOM          = 0;
     public static final int DURATION_PATTERN_FIXED           = 1;
@@ -57,7 +58,7 @@ public class Phrase extends PApplet {
         List<Note> noteList = new ArrayList<>();
         float      noteLength;
         pitchFeed = baseNotePitch;
-        if (pitchPattern == PITCH_PATTERN_PEAKS) {
+        if (pitchPattern == PITCH_PATTERN_PEAKS || pitchPattern == PITCH_PATTERN_INVERTED_PEAKS) {
             pitchIndex = 0;
             pitchPeakIndex = (int) Math.floor(numOfNotes / (numOfPitchPeaks + 1));
             println("numOfPitchPeaks: " + numOfPitchPeaks);
@@ -67,7 +68,10 @@ public class Phrase extends PApplet {
             int pitchPeakDir = 0;
             for (int i = 0; i < numOfNotes; i++) {
                 if (i % pitchPeakIndex == 0) {
-                    pitchPeakDir = pitchPeakDir == PITCH_PATTERN_ASC ? PITCH_PATTERN_DESC : PITCH_PATTERN_ASC;
+                    if (pitchPattern == PITCH_PATTERN_PEAKS)
+                        pitchPeakDir = pitchPeakDir == PITCH_PATTERN_ASC ? PITCH_PATTERN_DESC : PITCH_PATTERN_ASC;
+                    else
+                        pitchPeakDir = pitchPeakDir == PITCH_PATTERN_DESC ? PITCH_PATTERN_ASC : PITCH_PATTERN_DESC;
                 }
                 pitchPeakList.add(pitchPeakDir);
             }
@@ -165,7 +169,7 @@ public class Phrase extends PApplet {
             pitchFeed = getPitchByPattern(PITCH_PATTERN_ASC, baseNotePitch);
         } else if (pitchPattern == PITCH_PATTERN_BELOW) {
             pitchFeed = getPitchByPattern(PITCH_PATTERN_DESC, baseNotePitch);
-        } else if (pitchPattern == PITCH_PATTERN_PEAKS) {
+        } else if (pitchPattern == PITCH_PATTERN_PEAKS || pitchPattern == PITCH_PATTERN_INVERTED_PEAKS) {
             pitchFeed = getPitchByPattern(pitchPeakList.get(++pitchIndex), pitch);
         } else {
             pitchFeed = getPitchByPattern(pitchPattern, pitch);
