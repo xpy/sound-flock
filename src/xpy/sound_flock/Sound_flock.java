@@ -134,7 +134,7 @@ public class Sound_flock extends PApplet {
         blibliki1 = new Blibliki(Phrases.synthPhrase(4), synthGenerator, body, out);
         blibliki1.start();
 
-        blibliki2 = new Blibliki(Phrases.tonePhrase(4), sparkGenerator, body, out);
+        blibliki2 = new Blibliki(Phrases.tinyPhrase(4), sparkGenerator, body, out);
         blibliki2.start();
 
 

@@ -14,6 +14,7 @@ public class PhraseDistortionGenerator {
 
     public static final int DISTORTION_TONE_FULL    = 0;
     public static final int DISTORTION_TONE_PARTIAL = 1;
+    public static final int DISTORTION_MOOG = 2;
 
 
     public static void full_tone_distortion () {
@@ -38,6 +39,7 @@ public class PhraseDistortionGenerator {
                 return new FullToneDistortion(phrase);
             case (DISTORTION_TONE_PARTIAL):
                 return new PartialToneDistortion(phrase);
+
             default:
                 return new FullToneDistortion(phrase);
         }

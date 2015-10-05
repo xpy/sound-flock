@@ -44,7 +44,7 @@ public class Piano extends PApplet {
         phrase.phraseLength = 2;
         phrase.baseNotePitch = 220;
         phrase.numOfPitchPeaks = 1;
-        phrase.repeatNotes = 2;
+        phrase.repeatNotes = 1;
         phrase.pitchPattern = Phrase.PITCH_PATTERN_INVERTED_PEAKS;
         phrase.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_METER;
         phrase.generatePhrase();
@@ -52,7 +52,7 @@ public class Piano extends PApplet {
         body = new CircleBody(this);
 
         blibliki = new Blibliki(phrase, toneGenerator, body, out);
-        blibliki.addDistortion(PhraseDistortionGenerator.createRandomDistortion(PhraseDistortionGenerator.DISTORTION_TONE_FULL,phrase));
+        blibliki.addDistortion(PhraseDistortionGenerator.createMoogDistortion(blibliki.instrumentGenerator));
         blibliki.start();
         blibliki.addLoopEvent(new Blibliki.LoopEvent() {
             @Override

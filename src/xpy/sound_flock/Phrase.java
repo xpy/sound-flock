@@ -32,6 +32,7 @@ public class Phrase extends PApplet {
 
     public int pitchPattern    = 0;
     public int durationPattern = 0;
+    public int positionPattern = 0;
 
     public long beatTime = (long) (60000f / 120f);
 
@@ -50,6 +51,11 @@ public class Phrase extends PApplet {
     public static final int DURATION_PATTERN_UNIFORM_PHRASE  = 3;
     public static final int DURATION_PATTERN_METER_DIVISIONS = 4;
 
+
+    public static final int POSITION_START = 0;
+    public static final int POSITION_END   = 1;
+
+
     public Phrase () {
 
     }
@@ -60,7 +66,7 @@ public class Phrase extends PApplet {
         pitchFeed = baseNotePitch;
         if (pitchPattern == PITCH_PATTERN_PEAKS || pitchPattern == PITCH_PATTERN_INVERTED_PEAKS) {
             pitchIndex = 0;
-            pitchPeakIndex = (int) Math.floor(numOfNotes / (numOfPitchPeaks + 1));
+            pitchPeakIndex = (int) Math.floor(numOfNotes / (Math.max(numOfPitchPeaks, 1)) + 1);
             println("numOfPitchPeaks: " + numOfPitchPeaks);
             println("numOfNotes: " + numOfNotes);
             println("pitchPeakIndex: " + pitchPeakIndex);
@@ -117,10 +123,10 @@ public class Phrase extends PApplet {
             case DURATION_PATTERN_RANDOM:
                 switch (pitchPattern) {
                     case PITCH_PATTERN_RANDOM:
-                        noteList = getRandomPhrase(phraseLength, meterLength, numOfNotes);
+                        noteList = getRandomPhrase(phraseLength, meterLength, numOfNotes, positionPattern);
                         break;
                     case PITCH_PATTERN_AROUND:
-                        noteList = getRandomPhraseAroundPitch(pitchFeed, phraseLength, meterLength, numOfNotes);
+                        noteList = getRandomPhraseAroundPitch(pitchFeed, phraseLength, meterLength, numOfNotes, positionPattern);
                         break;
                     default:
                         int phraseMeters = phraseLength * meterLength;
@@ -139,6 +145,16 @@ public class Phrase extends PApplet {
                         break;
                 }
                 break;
+        }
+
+        if (positionPattern == POSITION_END) {
+            float noteLengthSum = 0;
+            for (Note aNoteList : noteList) {
+                noteLengthSum += aNoteList.duration;
+            }
+            if (noteLengthSum < getPhraseMeters()) {
+                noteList.add(0, new Note(0, getPhraseMeters() - noteLengthSum));
+            }
         }
         Random r = new Random();
         for (int i = 0; i < noteList.size(); i++) {
@@ -190,7 +206,7 @@ public class Phrase extends PApplet {
 
     }
 
-    public static List<Note> getRandomPhrase (int phraseLength, int meterLength, int numOfNotes) {
+    public static List<Note> getRandomPhrase (int phraseLength, int meterLength, int numOfNotes, int positionPattern) {
 
         List<Note> noteList = new ArrayList<>();
 
@@ -210,13 +226,28 @@ public class Phrase extends PApplet {
             noteList.add(noteToAdd);
         }
         biggestNoteDuration = phraseMeters - currentDuration;
-        Note noteToAdd = new Note(Note.getRandomPitch(), biggestNoteDuration);
+        Note noteToAdd;
+        if (positionPattern == POSITION_START)
+            noteToAdd = new Note(Note.getRandomPitch(), biggestNoteDuration);
+        else {
+            noteToAdd = Note.getRandomNote(biggestNoteDuration);
+            float noteLengthSum = 0;
+            for (Note aNoteList : noteList) {
+                noteLengthSum += aNoteList.duration;
+            }
+            if (noteLengthSum < phraseMeters) {
+                noteList.add(0, new Note(0, phraseMeters - noteLengthSum));
+            }
+
+        }
         currentDuration += noteToAdd.duration;
         noteList.add(noteToAdd);
+
+
         return noteList;
     }
 
-    public static List<Note> getRandomPhraseAroundPitch (float pitch, int phraseLength, int meterLength, int numOfNotes) {
+    public static List<Note> getRandomPhraseAroundPitch (float pitch, int phraseLength, int meterLength, int numOfNotes, int positionPattern) {
 
         List<Note> noteList = new ArrayList<>();
 
@@ -239,10 +270,21 @@ public class Phrase extends PApplet {
         }
 
         biggestNoteDuration = phraseMeters - currentDuration;
+
         Note noteToAdd = new Note(Note.getRandomPitchAroundPitch(pitch), Note.getRandomDuration(biggestNoteDuration));
         currentDuration += noteToAdd.duration;
 
         noteList.add(noteToAdd);
+        if(positionPattern == POSITION_END){
+            float noteLengthSum = 0;
+            for (Note aNoteList : noteList) {
+                noteLengthSum += aNoteList.duration;
+            }
+            if (noteLengthSum < phraseMeters) {
+                noteList.add(0, new Note(0, phraseMeters - noteLengthSum));
+            }
+
+        }
         return noteList;
     }
 

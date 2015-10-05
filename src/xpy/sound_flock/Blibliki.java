@@ -18,7 +18,7 @@ import java.util.List;
 public class Blibliki extends PApplet/* implements BitListener*/ {
 
     private AudioOutput             out;
-    public BaseInstrumentGenerator instrumentGenerator;
+    public  BaseInstrumentGenerator instrumentGenerator;
     private Phrase                  phrase;
     private Body                    body;
 
@@ -79,7 +79,8 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
                 BaseInstrumentGenerator.BaseInstrument instrument = instrumentGenerator.createInstrument(member.getNote().pitch, instrumentGenerator.getAmplitude(), out);
                 member.attachInstrument(instrument);
-                out.playNoteAtBeat(phrase.getPhraseMeters(), i, phrase.legatos.get(j++)?member.getNote().duration:Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
+                if (member.getNote().pitch > 0)
+                    out.playNoteAtBeat(phrase.getPhraseMeters(), i, phrase.legatos.get(j++) ? member.getNote().duration : Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
                 i += member.getNote().duration;
             }
         else

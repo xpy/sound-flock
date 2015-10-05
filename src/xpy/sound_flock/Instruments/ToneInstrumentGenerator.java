@@ -1,6 +1,7 @@
 package xpy.sound_flock.Instruments;
 
 import ddf.minim.AudioOutput;
+import ddf.minim.UGen;
 import ddf.minim.ugens.*;
 import processing.core.PApplet;
 
@@ -58,7 +59,8 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
             finalADSR = template.getFinalADSR(this.amplitude);
 
             osc = new Oscil(frequency, this.amplitude, getWaveTable(template.waveIndex));
-
+            Random r = new Random();
+            (new Oscil(.5f, 1, getWaveTable(template.modulatorWaveIndex))).patch(osc);
             setMoog(new MoogFilter(template.getTargetMoog(), .5f, MoogFilter.Type.BP));
 
             preFinalUgen = osc;
@@ -72,15 +74,20 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
         float maxDuration;
         int   waveIndex;
+        int   modulatorWaveIndex;
 
         public Template () {
             Random r = new Random();
-            moogFrequency = 440;
+            moogFrequency = 880;
+
             fAdsrAttack = .01f;
             fAdsrDelay = .1f;
             fAdsrRelease = .1f;
+            waveIndex = r.nextInt(6);
+            modulatorWaveIndex = r.nextInt(6);
 
-            waveIndex = r.nextInt(4);
+            println("waveIndex: "+waveIndex);
+            println("modulatorWaveIndex: "+modulatorWaveIndex);
             this.maxDuration = .5f;//Math.max(r.nextFloat() / 2, .01f);
             this.moogFactor = r.nextFloat() + .5f;
             this.targetMoogFactor = moogFactor;
