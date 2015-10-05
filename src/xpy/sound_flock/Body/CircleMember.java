@@ -31,7 +31,7 @@ public class CircleMember implements Member {
     public boolean hasStarted = false;
     public boolean idleIsDrawn;
 
-    public float maxasdfasdfValue =0;
+    public float maxasdfasdfValue = 0;
 
     public CircleMember (PApplet pa, Note note) {
         this.pa = pa;
@@ -69,34 +69,23 @@ public class CircleMember implements Member {
 
                     pa.ellipse(x, y, radius + offsetRadius * enfValue, radius + offsetRadius * enfValue);
                     idleIsDrawn = true;
-                } else if (!idleIsDrawn) {
-                    pa.fill(expandColor);
-                    idleIsDrawn = true;
-                    pa.ellipse(x, y, 5, 5);
-
                 }
-            /*
-            for (int j = 0; j < envf.getLastValues().length; j++) {
-//                println("envf: "+envf.getLastValues()[j]);
-                float enfValue = envf.getLastValues()[j] * 10;
-//                PApplet.println("offsetRadius*enfValue: " + (enfValue));
-                pa.fill(expandColor);
 
-                pa.ellipse(x, y, radius + offsetRadius * enfValue, radius + offsetRadius * enfValue);
-
-            }*/
             }
         }
-//        PApplet.println("instruments.size(): " + instruments.size());
 
-//        pa.fill(bodyColor);
-//        pa.ellipse(x, y, radius, radius);
+        if (!idleIsDrawn) {
+            pa.fill(expandColor);
+            idleIsDrawn = true;
+            pa.ellipse(x, y, 5, 5);
+
+        }
+
         pa.fill(prevFill);
         pa.g.stroke = prevStroke;
 
         for (Iterator<BaseInstrumentGenerator.BaseInstrument> iterator = instruments.iterator(); iterator.hasNext(); ) {
             InstrumentGenerator.Instrument instrument = iterator.next();
-//            PApplet.println("instrument.isComplete(): " + instrument.isComplete());
 
             if (instrument.isComplete()) {
                 iterator.remove();

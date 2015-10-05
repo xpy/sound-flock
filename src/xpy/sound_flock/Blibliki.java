@@ -30,7 +30,9 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     private long nextCheck;
     private long beatTime = (long) (60000f / 120f);
 
-    private boolean hasBody = false;
+    private boolean hasBody   = false;
+    public  boolean isPlaying = false;
+    public int startingLoop = 0;
 
     public Blibliki (Phrase phrase, BaseInstrumentGenerator instrumentGenerator, Body body, AudioOutput out) {
 
@@ -92,11 +94,38 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         out.resumeNotes();
     }
 
+    public void setNotes (int meterLength) {
+//        out.pauseNotes();
+        float i = 0;
+
+        for (LoopEvent loopEvent : loopEvents) {
+            loopEvent.fire(loops);
+        }
+//            offset += offsetFlag;
+//            offsetFlag *= -1;
+        int j = 0;
+        if (hasBody)
+            for (Member member : body.getMembers()) {
+
+                BaseInstrumentGenerator.BaseInstrument instrument = instrumentGenerator.createInstrument(member.getNote().pitch, instrumentGenerator.getAmplitude(), out);
+                member.attachInstrument(instrument);
+                if (member.getNote().pitch > 0)
+                    out.playNoteAtBeat(meterLength, i, phrase.legatos.get(j++) ? member.getNote().duration : Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
+                i += member.getNote().duration;
+            }
+        else
+            for (Note note : phrase.notes) {
+                InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(note.pitch, instrumentGenerator.getAmplitude(), out);
+                out.playNoteAtBeat(meterLength, i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrument);
+                i += note.duration;
+            }
+//        out.resumeNotes();
+    }
 
     public void update () {
 
         if (System.currentTimeMillis() - nextCheck >= 0 && loops < 100) {
-            println("loops:" + loops);
+//            println("loops:" + loops);
             setNotes();
             loops++;
             nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters()) + 100;
@@ -143,4 +172,22 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
         }
     }
+
+    public int getPhraseMeters () {
+        return phrase.getPhraseMeters();
+    }
+
+    public Phrase getPhrase(){
+        return phrase;
+    }
+
+    public boolean hasBody () {
+        return hasBody;
+    }
+
+    public Body getBody(){
+        return body;
+    }
+
+
 }
