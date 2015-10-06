@@ -23,8 +23,8 @@ public class Phrases {
 
         phrase.meterLength = meterLength;
         phrase.phraseLength = r.nextInt(2) + 1;
-        phrase.numOfNotes = meterLength * phrase.phraseLength + r.nextInt(phrase.phraseLength * 4 + 1);
-        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(57) - 32);
+        phrase.numOfNotes = meterLength * phrase.phraseLength + r.nextInt(phrase.phraseLength * meterLength / 2 + 1);
+        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(32) - 32);
 
         phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;
 
@@ -89,7 +89,7 @@ public class Phrases {
         int pitchIndex = r.nextInt(57) - 32;
         PApplet.println("pitchIndex: " + pitchIndex);
         phrase.baseNotePitch = Note.getPitchOfIndex(pitchIndex);
-
+        phrase.legato = false;
         phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;
 
         phrase.pitchPattern = pitchPatterns[r.nextInt(pitchPatterns.length)];
@@ -109,7 +109,7 @@ public class Phrases {
 
     public static Phrase kickPhrase (int meterLength) {
 
-        Integer pitchPatterns[]    = new Integer[]{1, 2, 3, 5, 6, 7};
+        Integer pitchPatterns[]    = new Integer[]{1, 5, 6, 7};
         Integer divisionPatterns[] = new Integer[]{2, 4};
         Integer durationPatterns[] = new Integer[]{1, 4};
         Random  r                  = new Random();
@@ -119,7 +119,8 @@ public class Phrases {
         phrase.meterLength = meterLength == 4 ? (int) Math.pow(2, r.nextInt(3)) : meterLength;
         phrase.phraseLength = 1;
         phrase.numOfNotes = (int) Math.pow(2, r.nextInt(3));
-        phrase.baseNotePitch = Note.getPitchOfIndex(((r.nextInt(32) + 1) * -1) - 16);
+        phrase.baseNotePitch = Note.getPitchOfIndex(((r.nextInt(12) + 1) * -1) - 12);
+        phrase.legato = false;
 
         phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;
 
@@ -137,5 +138,37 @@ public class Phrases {
         phrase.generatePhrase();
         return phrase;
 
+    }
+
+
+    public static Phrase widePhrase (int meterLength) {
+
+        Integer pitchPatterns[]    = new Integer[]{1, 4, 5, 6, 7};
+        Integer divisionPatterns[] = new Integer[]{0, 2, 3, 4};
+        Integer durationPatterns[] = new Integer[]{0, 4};
+        Random  r                  = new Random();
+        Phrase  phrase             = new Phrase();
+
+
+        phrase.meterLength = meterLength;
+        phrase.phraseLength = r.nextInt(2) + 1;
+        phrase.numOfNotes = Math.max(2, r.nextInt(meterLength * phrase.phraseLength) + 1);
+        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(45) - 32);
+
+        phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;
+
+        phrase.pitchPattern = pitchPatterns[r.nextInt(pitchPatterns.length)];
+        if (phrase.pitchPattern == Phrase.PITCH_PATTERN_PEAKS || phrase.pitchPattern == Phrase.PITCH_PATTERN_INVERTED_PEAKS)
+            phrase.numOfPitchPeaks = r.nextInt(3) + 1;
+
+        if (phrase.numOfNotes % 2 == 0)
+            phrase.durationPattern = durationPatterns[r.nextInt(durationPatterns.length)];
+        else
+            phrase.durationPattern = divisionPatterns[r.nextInt(divisionPatterns.length)];
+
+        if (debug)
+            PApplet.println(phrase);
+        phrase.generatePhrase();
+        return phrase;
     }
 }

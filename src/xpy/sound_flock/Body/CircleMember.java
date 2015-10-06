@@ -74,7 +74,7 @@ public class CircleMember implements Member {
             }
         }
 
-        if (!idleIsDrawn) {
+        if (hasStarted && !idleIsDrawn) {
             pa.fill(expandColor);
             idleIsDrawn = true;
             pa.ellipse(x, y, 5, 5);

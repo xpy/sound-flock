@@ -4,7 +4,6 @@ import ddf.minim.AudioOutput;
 import ddf.minim.UGen;
 import ddf.minim.ugens.*;
 import processing.core.PApplet;
-import tests.Maestro;
 
 /**
  * BaseInstrumentGenerator
@@ -12,7 +11,7 @@ import tests.Maestro;
  */
 public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
-    public float amplitude = .65f;
+    public float amplitude = .85f;
 
     // protected InstrumentGenerator.Template template;
 
@@ -42,6 +41,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         protected float moogFactor       = 1;
         protected float targetMoogFactor = 1;
         public    float moogFrequency    = 440;
+        protected float   modulatorFrequencyAmp;
 
         boolean hasMoog = false;
 
@@ -74,6 +74,21 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         }
 
         @Override
+        public void increaseModulatorFactor (int value) {
+            int modPower = (int) (Math.log(modulatorFrequencyAmp) / Math.log(2));
+            modPower = Math.min(modPower + value,8);
+            modulatorFrequencyAmp = (float)Math.pow(2f,modPower );
+            PApplet.println(modulatorFrequencyAmp);
+        }
+
+        @Override
+        public void decreaseModulatorFactor (int value) {
+            int modPower = (int) (Math.log(modulatorFrequencyAmp) / Math.log(2));
+            modulatorFrequencyAmp = (float)Math.pow(2f,modPower - value);
+
+        }
+
+        @Override
         public float fAdsrRelease () {
             return fAdsrRelease;
         }
@@ -99,6 +114,20 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
             fAdsrAttack = fAdsrRelease;
             fAdsrRelease = tmp;
 
+        }
+
+
+        @Override
+        public String toString () {
+            return "BaseTemplate{" +
+                   "moogFactor=" + moogFactor +
+                   ", targetMoogFactor=" + targetMoogFactor +
+                   ", moogFrequency=" + moogFrequency +
+                   ", hasMoog=" + hasMoog +
+                   ", fAdsrAttack=" + fAdsrAttack +
+                   ", fAdsrDelay=" + fAdsrDelay +
+                   ", fAdsrRelease=" + fAdsrRelease +
+                   '}';
         }
     }
 

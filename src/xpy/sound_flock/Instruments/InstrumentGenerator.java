@@ -30,6 +30,10 @@ public interface InstrumentGenerator {
 
         void decreaseMoogFactor (float value);
 
+        void increaseModulatorFactor (int value);
+
+        void decreaseModulatorFactor (int value);
+
         float fAdsrRelease ();
 
         boolean hasMoog ();

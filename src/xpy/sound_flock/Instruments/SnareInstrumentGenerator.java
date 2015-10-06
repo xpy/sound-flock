@@ -12,7 +12,7 @@ import java.util.Random;
 public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
-    public float amplitude = .65f;
+    public float amplitude = .75f;
 
     public SnareInstrumentGenerator () {
         template = createTemplate();
@@ -37,6 +37,10 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
         return template.maxDuration;
     }
 
+    @Override
+    public float getAmplitude () {
+        return amplitude;
+    }
 
     public class SnareInstrument extends BaseInstrument {
 

@@ -19,7 +19,7 @@ import static processing.core.PApplet.println;
 public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
-    public float amplitude = .45f;
+    public float amplitude = .65f;
 
 
     public SynthInstrumentGenerator () {

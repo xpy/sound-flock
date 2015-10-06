@@ -30,9 +30,10 @@ public class Phrase extends PApplet {
     public List<Integer> pitchPeakList = new ArrayList<>();
     public List<Boolean> legatos       = new ArrayList<>();
 
-    public int pitchPattern    = 0;
-    public int durationPattern = 0;
-    public int positionPattern = 0;
+    public int     pitchPattern    = 0;
+    public int     durationPattern = 0;
+    public int     positionPattern = 0;
+    public boolean legato          = true;
 
     public long beatTime = (long) (60000f / 120f);
 
@@ -161,7 +162,10 @@ public class Phrase extends PApplet {
         }
         Random r = new Random();
         for (int i = 0; i < noteList.size(); i++) {
-            legatos.add(r.nextBoolean());
+            if (legato)
+                legatos.add(r.nextBoolean());
+            else
+                legatos.add(false);
         }
         notes = noteList;
     }
@@ -278,7 +282,7 @@ public class Phrase extends PApplet {
         currentDuration += noteToAdd.duration;
 
         noteList.add(noteToAdd);
-        if(positionPattern == POSITION_END){
+        if (positionPattern == POSITION_END) {
             float noteLengthSum = 0;
             for (Note aNoteList : noteList) {
                 noteLengthSum += aNoteList.duration;

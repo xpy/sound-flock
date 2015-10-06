@@ -12,7 +12,7 @@ import java.util.Random;
 public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
-    public float amplitude = .3f;
+    public float amplitude = .5f;
 
     public SparkInstrumentGenerator () {
         template = createTemplate();

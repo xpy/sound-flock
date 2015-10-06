@@ -22,7 +22,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     private Phrase                  phrase;
     private Body                    body;
 
-    private List<Distortion> distortions = new ArrayList<>();
+    public List<Distortion> distortions = new ArrayList<>();
 
     private List<LoopEvent> loopEvents = new ArrayList<>();
 

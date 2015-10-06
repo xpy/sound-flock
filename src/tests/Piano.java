@@ -7,6 +7,7 @@ import processing.core.PApplet;
 import xpy.sound_flock.Blibliki;
 import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.CircleBody;
+import xpy.sound_flock.Distortions.ModulatorFactorDistortion;
 import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
 import xpy.sound_flock.Instruments.SnareInstrumentGenerator;
 import xpy.sound_flock.Instruments.ToneInstrumentGenerator;
@@ -37,22 +38,25 @@ public class Piano extends PApplet {
 
         ToneInstrumentGenerator toneGenerator = new ToneInstrumentGenerator();
 
+        println(toneGenerator.getTemplate());
+
         Phrase phrase = new Phrase();
         phrase.baseNoteLength = .5f;
         phrase.meterLength = 3;
         phrase.numOfNotes = 6;
         phrase.phraseLength = 2;
-        phrase.baseNotePitch = 220;
+        phrase.baseNotePitch = 1760;
         phrase.numOfPitchPeaks = 1;
         phrase.repeatNotes = 1;
-        phrase.pitchPattern = Phrase.PITCH_PATTERN_INVERTED_PEAKS;
+        phrase.pitchPattern = Phrase.PITCH_PATTERN_ASC;
         phrase.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_METER;
         phrase.generatePhrase();
 
+        println(phrase);
         body = new CircleBody(this);
 
         blibliki = new Blibliki(phrase, toneGenerator, body, out);
-        blibliki.addDistortion(PhraseDistortionGenerator.createMoogDistortion(blibliki.instrumentGenerator));
+        blibliki.addDistortion(new ModulatorFactorDistortion(blibliki.instrumentGenerator));
         blibliki.start();
         blibliki.addLoopEvent(new Blibliki.LoopEvent() {
             @Override

@@ -8,6 +8,7 @@ import processing.core.PApplet;
 import java.util.HashMap;
 import java.util.Random;
 
+import static processing.core.PApplet.pow;
 import static processing.core.PApplet.println;
 
 
@@ -18,6 +19,7 @@ import static processing.core.PApplet.println;
 public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
     //    protected Template template;
+
     protected Template template;
 
 
@@ -40,7 +42,6 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
     }
 
 
-
     @Override
     public float getMaxDuration () {
         return template.maxDuration;
@@ -55,14 +56,28 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
             this.out = out;
             this.frequency = frequency;
-            this.amplitude = amplitude * .5f;
+            this.amplitude = amplitude;
+            if (template.modulatorFrequencyAmp > 32)
+                this.amplitude = amplitude * .5f;
 
             finalADSR = template.getFinalADSR(this.amplitude);
+            Wavetable moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{0});
+            moogModulatorWavetable.offset(1f);
+            moogModulatorWavetable.normalize();
+            moogModulatorWavetable.offset(.7f);
+            moogModulatorWavetable.normalize();
 
-            osc = new Oscil(frequency, this.amplitude, getWaveTable(template.waveIndex));
-            Random r = new Random();
-            (new Oscil(.5f, this.amplitude, getWaveTable(template.modulatorWaveIndex))).patch(osc);
-            setMoog(new MoogFilter(template.getTargetMoog(), .5f, MoogFilter.Type.BP));
+            osc = new Oscil(frequency, this.amplitude/2, getWaveTable(0));
+            Oscil osc2 = new Oscil(Math.min(880, frequency * template.modulatorFrequencyAmp), this.amplitude/2, getWaveTable(template.modulatorWaveIndex));
+            Multiplier ml = new Multiplier(frequency);
+            Multiplier ml2 = new Multiplier(Math.min(880, frequency * template.modulatorFrequencyAmp));
+
+            (new Oscil(template.frequencyModulatorFrequency, 1, moogModulatorWavetable)).patch(ml).patch(osc.frequency);
+            (new Oscil(template.frequencyModulatorFrequency, 1, moogModulatorWavetable)).patch(ml2).patch(osc2.frequency);
+
+            osc2.patch(osc);
+            if (template.modulatorWaveIndex != 0 && template.modulatorWaveIndex != 3)
+                setMoog(new MoogFilter(template.moogFrequency, .0f, MoogFilter.Type.LP));
 
             preFinalUgen = osc;
 
@@ -76,6 +91,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
         float maxDuration;
         int   waveIndex;
         int   modulatorWaveIndex;
+        float frequencyModulatorFrequency;
 
         public Template () {
             Random r = new Random();
@@ -86,12 +102,28 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
             fAdsrRelease = .1f;
             waveIndex = r.nextInt(6);
             modulatorWaveIndex = r.nextInt(6);
+            frequencyModulatorFrequency = (float) Math.pow(2, r.nextInt(9) - 2);
+            modulatorFrequencyAmp = (float) Math.pow(2, r.nextInt(4) - 2);
+            if (waveIndex == modulatorWaveIndex && (modulatorWaveIndex == 2 || modulatorWaveIndex == 5)) {
+                if (modulatorFrequencyAmp == 1)
+                    modulatorFrequencyAmp = (float) Math.pow(2, r.nextInt(4) + 2);
 
-            println("waveIndex: " + waveIndex);
-            println("modulatorWaveIndex: " + modulatorWaveIndex);
-            this.maxDuration = .5f;//Math.max(r.nextFloat() / 2, .01f);
-            this.moogFactor = r.nextFloat() + .5f;
-            this.targetMoogFactor = moogFactor;
+            }
+            this.maxDuration = .3f;//Math.max(r.nextFloat() / 2, .01f);
+//            this.moogFactor = r.nextFloat() + .5f;
+//            this.targetMoogFactor = moogFactor;
+        }
+
+        @Override
+        public String toString () {
+            return "Template{" +
+                   "maxDuration=" + maxDuration +
+                   ", waveIndex=" + waveIndex +
+                   ", modulatorWaveIndex=" + modulatorWaveIndex +
+                   ", modulatorFrequencyAmp=" + modulatorFrequencyAmp +
+                   ", frequencyModulatorFrequency=" + frequencyModulatorFrequency +
+
+                   "} " + super.toString();
         }
     }
 
