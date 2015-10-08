@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class Phrases {
 
-    public static boolean debug = false;
+    public static boolean debug = true;
 
     public static Phrase tonePhrase (int meterLength) {
 
@@ -21,10 +21,11 @@ public class Phrases {
         Phrase  phrase             = new Phrase();
 
 
+        phrase.legato = false;
         phrase.meterLength = meterLength;
         phrase.phraseLength = r.nextInt(2) + 1;
         phrase.numOfNotes = meterLength * phrase.phraseLength + r.nextInt(phrase.phraseLength * meterLength / 2 + 1);
-        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(32) - 32);
+        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(40) - 20);
 
         phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;
 
@@ -55,7 +56,7 @@ public class Phrases {
         phrase.meterLength = meterLength;
         phrase.phraseLength = (int) Math.pow(2, r.nextInt(3));
         phrase.numOfNotes = r.nextInt(6) + 3;
-        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(57) - 32);
+        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(40) - 20);
 
         phrase.baseNoteLength = .125f;
         phrase.positionPattern = Phrase.POSITION_END;
@@ -84,9 +85,9 @@ public class Phrases {
 
 
         phrase.meterLength = meterLength;
-        phrase.phraseLength = r.nextInt(3) + 1;
-        phrase.numOfNotes = (int) Math.pow(2, r.nextInt(2));
-        int pitchIndex = r.nextInt(57) - 32;
+        phrase.phraseLength = 1;//r.nextInt(2) + 1;
+        phrase.numOfNotes = 1;//(int) Math.pow(2, r.nextInt(2));
+        int pitchIndex = r.nextInt(40) - 20;
         PApplet.println("pitchIndex: " + pitchIndex);
         phrase.baseNotePitch = Note.getPitchOfIndex(pitchIndex);
         phrase.legato = false;
@@ -111,14 +112,15 @@ public class Phrases {
 
         Integer pitchPatterns[]    = new Integer[]{1, 5, 6, 7};
         Integer divisionPatterns[] = new Integer[]{2, 4};
-        Integer durationPatterns[] = new Integer[]{1, 4};
+        Integer durationPatterns[] = new Integer[]{1,2};
         Random  r                  = new Random();
         Phrase  phrase             = new Phrase();
 
 
-        phrase.meterLength = meterLength == 4 ? (int) Math.pow(2, r.nextInt(3)) : meterLength;
+        phrase.meterLength = meterLength ;
         phrase.phraseLength = 1;
-        phrase.numOfNotes = (int) Math.pow(2, r.nextInt(3));
+        phrase.repeatNotes = r.nextInt(2)+1;
+        phrase.numOfNotes = 2;
         phrase.baseNotePitch = Note.getPitchOfIndex(((r.nextInt(12) + 1) * -1) - 12);
         phrase.legato = false;
 
@@ -150,10 +152,11 @@ public class Phrases {
         Phrase  phrase             = new Phrase();
 
 
+        phrase.legato = false;
         phrase.meterLength = meterLength;
         phrase.phraseLength = r.nextInt(2) + 1;
         phrase.numOfNotes = Math.max(2, r.nextInt(meterLength * phrase.phraseLength) + 1);
-        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(45) - 32);
+        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(40) - 20);
 
         phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;
 

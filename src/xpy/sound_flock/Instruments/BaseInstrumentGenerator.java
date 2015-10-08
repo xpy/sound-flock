@@ -1,5 +1,6 @@
 package xpy.sound_flock.Instruments;
 
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import ddf.minim.AudioOutput;
 import ddf.minim.UGen;
 import ddf.minim.ugens.*;
@@ -15,7 +16,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
     // protected InstrumentGenerator.Template template;
 
-    public static Wavetable getWaveTable (int k) {
+    public static Wavetable getWaveTable(int k) {
         switch (k) {
             default:
                 return Waves.SINE;
@@ -32,7 +33,8 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         }
 
     }
-    public float getAmplitude () {
+
+    public float getAmplitude() {
         return amplitude;
     }
 
@@ -41,7 +43,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         protected float moogFactor       = 1;
         protected float targetMoogFactor = 1;
         public    float moogFrequency    = 440;
-        protected float   modulatorFrequencyAmp;
+        protected float modulatorFrequencyAmp;
 
         boolean hasMoog = false;
 
@@ -49,76 +51,94 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         public float fAdsrDelay   = .05f;
         public float fAdsrRelease = .5f;
 
-        public void increaseMoogFactor (float value) {
+        float fullAmpTime    = 0;
+        float currentLineAmp = 0;
+
+        public void increaseMoogFactor(float value) {
             targetMoogFactor *= value;
             PApplet.println(getTargetMoog());
         }
 
         @Override
-        public float getMoogFactor () {
+        public float getMoogFactor() {
             return moogFactor;
         }
 
         @Override
-        public float getTargetMoog () {
+        public float getTargetMoog() {
             return Math.min(moogFrequency * targetMoogFactor, 20000);
         }
 
-        public void decreaseMoogFactor (float value) {
+        public void decreaseMoogFactor(float value) {
             targetMoogFactor /= value;
             PApplet.println(getTargetMoog());
         }
 
-        public ADSR getFinalADSR (float amplitude) {
-            return new ADSR(amplitude*1.5f, fAdsrAttack, fAdsrDelay, amplitude, fAdsrRelease);
+        public void setFullAmpDelay(float duration) {
+            fullAmpTime = duration;
+        }
+
+        public ADSR getFinalADSR(float amplitude) {
+            return new ADSR(amplitude * 1.5f, fAdsrAttack, fAdsrDelay, amplitude, fAdsrRelease);
         }
 
         @Override
-        public void increaseModulatorFactor (int value) {
+        public void increaseModulatorFactor(int value) {
             int modPower = (int) (Math.log(modulatorFrequencyAmp) / Math.log(2));
-            modPower = Math.min(modPower + value,8);
-            modulatorFrequencyAmp = (float)Math.pow(2f,modPower );
+            modPower = Math.min(modPower + value, 8);
+            modulatorFrequencyAmp = (float) Math.pow(2f, modPower);
             PApplet.println(modulatorFrequencyAmp);
         }
 
         @Override
-        public void decreaseModulatorFactor (int value) {
+        public void decreaseModulatorFactor(int value) {
             int modPower = (int) (Math.log(modulatorFrequencyAmp) / Math.log(2));
-            modulatorFrequencyAmp = (float)Math.pow(2f,modPower - value);
+            modulatorFrequencyAmp = (float) Math.pow(2f, modPower - value);
 
         }
 
         @Override
-        public float fAdsrRelease () {
+        public float fAdsrRelease() {
             return fAdsrRelease;
         }
 
         @Override
-        public boolean hasMoog () {
+        public boolean hasMoog() {
             return hasMoog;
         }
 
         @Override
-        public void setHasMoog (boolean moog) {
+        public void setHasMoog(boolean moog) {
             this.hasMoog = true;
         }
 
         @Override
-        public float getMoogFrequency () {
+        public float getMoogFrequency() {
             return moogFrequency;
         }
 
         @Override
-        public void reverseADSR () {
+        public void reverseADSR() {
             float tmp = fAdsrAttack;
             fAdsrAttack = fAdsrRelease;
             fAdsrRelease = tmp;
 
         }
 
+        @Override
+        public void activateAmpLine(float dur, Multiplier ml) {
+            if (currentLineAmp < 1 && fullAmpTime > 0) {
+                Line ampLine = new Line();
+
+                ampLine.activate(dur, currentLineAmp, currentLineAmp + dur / fullAmpTime);
+                ampLine.patch(ml.amplitude);
+                currentLineAmp = currentLineAmp + dur / fullAmpTime;
+            }
+
+        }
 
         @Override
-        public String toString () {
+        public String toString() {
             return "BaseTemplate{" +
                    "moogFactor=" + moogFactor +
                    ", targetMoogFactor=" + targetMoogFactor +
@@ -144,62 +164,64 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         public    boolean isPlaying                  = false;
         protected long    completesAt                = 0;
         protected int     envelopeFollowerBufferSize = 2048;
-        public    float   releaseTime                = .5f;
 
         public AudioOutput out;
         public Sink             sink             = xpy.sound_flock.Maestro.sink;
         public EnvelopeFollower envelopeFollower = new EnvelopeFollower(0, .2f, 64);
+        public Multiplier       finalMultiplier  = new Multiplier(1);
         public MoogFilter moogFilter;
         public ADSR       finalADSR;
         public UGen       preFinalUgen;
 
         @Override
-        public Sink getSink () {
+        public Sink getSink() {
             return sink;
         }
 
         @Override
-        public EnvelopeFollower getEnvFollower () {
+        public EnvelopeFollower getEnvFollower() {
             return envelopeFollower;
         }
 
         @Override
-        public void setMoog (MoogFilter moog) {
+        public void setMoog(MoogFilter moog) {
             this.moogFilter = moog;
             getTemplate().setHasMoog(true);
         }
 
-        public ADSR getFinalAdsr () {
+        public ADSR getFinalAdsr() {
             return finalADSR;
         }
 
         @Override
-        public boolean isComplete () {
+        public boolean isComplete() {
             return isComplete && System.currentTimeMillis() > completesAt;
         }
 
         @Override
-        public void noteOn (float dur) {
+        public void noteOn(float dur) {
             patch(preFinalUgen, dur);
         }
 
         @Override
-        public void noteOff () {
+        public void noteOff() {
             finalADSR.unpatchAfterRelease(out);
             finalADSR.unpatchAfterRelease(envelopeFollower);
             finalADSR.noteOff();
             setComplete();
 
+
         }
 
 
-        public void setComplete () {
+        public void setComplete() {
             isComplete = true;
             isPlaying = false;
             completesAt = System.currentTimeMillis() + ((long) (getTemplate().fAdsrRelease() * 1000));
         }
 
-        public void patch (UGen uGen, float duration) {
+        public void patch(UGen uGen, float duration) {
+
             envelopeFollower = new EnvelopeFollower(0, duration + getTemplate().fAdsrRelease(), envelopeFollowerBufferSize);
             UGen lastUgen = uGen;
             if (getTemplate().hasMoog()) {
@@ -210,9 +232,10 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 //                l.patch(moogFilter.frequency);
 //                template.moogFactor = template.targetMoogFactor;
             }
+            getTemplate().activateAmpLine(duration+getTemplate().fAdsrRelease(), finalMultiplier);
             finalADSR = getTemplate().getFinalADSR(this.amplitude);
 
-            lastUgen.patch(finalADSR);
+            lastUgen.patch(finalMultiplier).patch(finalADSR);
             finalADSR.patch(envelopeFollower).patch(sink);
             finalADSR.patch(out);
             finalADSR.noteOn();
@@ -220,7 +243,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
         }
 
-        public void unpatch () {
+        public void unpatch() {
 //            sink.unpatch(out);
             envelopeFollower.unpatch(sink);
         }

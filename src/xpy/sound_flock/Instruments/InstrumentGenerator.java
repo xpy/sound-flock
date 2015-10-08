@@ -10,57 +10,59 @@ import ddf.minim.ugens.*;
 public interface InstrumentGenerator {
 
     interface Instrument extends ddf.minim.ugens.Instrument {
-        Sink getSink ();
+        Sink getSink();
 
-        EnvelopeFollower getEnvFollower ();
+        EnvelopeFollower getEnvFollower();
 
-        boolean isComplete ();
+        boolean isComplete();
 
-        void unpatch ();
+        void unpatch();
 
-        void setMoog (MoogFilter moog);
+        void setMoog(MoogFilter moog);
 
     }
 
-    public Template getTemplate ();
+    public Template getTemplate();
 
     interface Template {
 
-        void increaseMoogFactor (float value);
+        void increaseMoogFactor(float value);
 
-        void decreaseMoogFactor (float value);
+        void decreaseMoogFactor(float value);
 
-        void increaseModulatorFactor (int value);
+        void increaseModulatorFactor(int value);
 
-        void decreaseModulatorFactor (int value);
+        void decreaseModulatorFactor(int value);
 
-        float fAdsrRelease ();
+        float fAdsrRelease();
 
-        boolean hasMoog ();
+        boolean hasMoog();
 
-        void setHasMoog (boolean moog);
+        void setHasMoog(boolean moog);
 
-        float getMoogFrequency ();
+        float getMoogFrequency();
 
-        float getMoogFactor ();
+        float getMoogFactor();
 
-        float getTargetMoog ();
+        float getTargetMoog();
 
         void reverseADSR();
 
-        ADSR getFinalADSR (float amplitude);
+        ADSR getFinalADSR(float amplitude);
+
+        void activateAmpLine(float dur, Multiplier ml);
     }
 
 
-    static Template createTemplate () {
+    static Template createTemplate() {
         return null;
     }
 
-    BaseInstrumentGenerator.BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out);
+    BaseInstrumentGenerator.BaseInstrument createInstrument(float frequency, float amplitude, AudioOutput out);
 
 //    float getAmplitude ();
 
-    float getMaxDuration ();
+    float getMaxDuration();
 
 
 }

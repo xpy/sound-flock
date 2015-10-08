@@ -2,6 +2,7 @@ package xpy.sound_flock.Instruments;
 
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
+import processing.core.PApplet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,39 +23,39 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
     public float amplitude = .65f;
 
 
-    public SynthInstrumentGenerator () {
+    public SynthInstrumentGenerator() {
 
         this.template = createTemplate();
         println(this.template);
     }
 
-    SynthInstrumentGenerator (Template template) {
+    SynthInstrumentGenerator(Template template) {
 
         this.template = template;
     }
 
     @Override
-    public float getAmplitude () {
+    public float getAmplitude() {
         return amplitude;
     }
 
-    public SynthInstrumentGenerator.Template createTemplate () {
+    public SynthInstrumentGenerator.Template createTemplate() {
 
         return new SynthInstrumentGenerator.Template();
     }
 
     @Override
-    public SynthInstrumentGenerator.Template getTemplate () {
+    public SynthInstrumentGenerator.Template getTemplate() {
         return template;
     }
 
-    public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public BaseInstrument createInstrument(float frequency, float amplitude, AudioOutput out) {
         return new SynthInstrument(frequency, amplitude, out);
     }
 
     @Override
-    public float getMaxDuration () {
-        return 20f;
+    public float getMaxDuration() {
+        return 120f;
     }
 
 
@@ -70,29 +71,29 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
         float baseFrequency;
         float initialFrequency;
 
-        Oscil     modulator;
-        Oscil     moogModulator;
+        Oscil modulator;
+        Oscil moogModulator;
 
 
-        public SynthInstrument (float frequency, float amplitude, AudioOutput out) {
+        public SynthInstrument(float frequency, float amplitude, AudioOutput out) {
 
 
             this.out = out;
             this.baseFrequency = frequency;
             this.initialFrequency = baseFrequency;
             this.amplitude = amplitude;
-            releaseTime = 0.3f;
-
 
             for (int i = 0; i < template.numOfOscillators; i++) {
-                Oscil osc = new Oscil(initialFrequency * template.oscillatorFrequencyFactor.get(i), amplitude, getWaveTable(template.oscillatorWave.get(i)));
+                Oscil osc = new Oscil(initialFrequency * template.oscillatorFrequencyFactor.get(i), amplitude / (template.numOfOscillators + 1), getWaveTable(template.oscillatorWave.get(i)));
                 oscillators.add(osc);
             }
 
-            this.modulator = new Oscil(initialFrequency, amplitude, getWaveTable(template.modulatorWaveTable));
-
+            this.modulator = new Oscil(initialFrequency, amplitude / (template.numOfOscillators + 1), getWaveTable(template.modulatorWaveTable));
+//            ampLine.patch(modulator.amplitude);
             for (int i = 0; i < template.numOfOscillators; i++) {
                 this.modulator.patch(oscillators.get(i)).patch(s);
+//                ampLine.patch(oscillators.get(i).amplitude);
+
             }
 
 //        ml = new Multiplier((r.nextInt(7) + 2) * initialFrequency);
@@ -106,7 +107,12 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             preFinalUgen = s;
         }
 
-        public void setInitialFrequency (float frequency) {
+        @Override
+        public void noteOn(float dur) {
+            super.noteOn(dur);
+        }
+
+        public void setInitialFrequency(float frequency) {
             this.initialFrequency = frequency;
         }
 
@@ -121,20 +127,20 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
         int   modulatorWaveTable;
         float moogModulatorFrequency;
 
-        int numOfOscillators;
+        int       numOfOscillators;
         Wavetable moogModulatorWavetable;
 
-        Template () {
+        Template() {
 
             fAdsrAttack = 0.3f;
             fAdsrDelay = .3f;
-            fAdsrRelease = .5f;
+            fAdsrRelease = 0.3f;
             moogFrequency = 400;
+            setFullAmpDelay(15);
 
             Random r = new Random();
-            moogModulatorFrequency = (r.nextInt(64) + 1) / 4f;
+            moogModulatorFrequency = 1f;//(r.nextInt(32) + 1) / 4f;
             this.numOfOscillators = r.nextInt(4) + 1;
-
             this.modulatorWaveTable = r.nextInt(4);
 
             for (int i = 0; i < this.numOfOscillators; i++) {
@@ -151,7 +157,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
         }
 
         @Override
-        public String toString () {
+        public String toString() {
             return "Template{" +
                    "oscillatorFrequencyFactor=" + oscillatorFrequencyFactor +
                    ", oscillatorWave=" + oscillatorWave +

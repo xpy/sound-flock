@@ -44,8 +44,7 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
         public KickInstrument (float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
-            this.amplitude = amplitude;
-            this.releaseTime = .3f;
+            this.amplitude = .6f;
             this.out = out;
 
             Constant c   = new Constant(2 * frequency);

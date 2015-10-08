@@ -61,23 +61,22 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
                 this.amplitude = amplitude * .5f;
 
             finalADSR = template.getFinalADSR(this.amplitude);
-            Wavetable moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{0});
+            Wavetable moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{1});
             moogModulatorWavetable.offset(1f);
             moogModulatorWavetable.normalize();
             moogModulatorWavetable.offset(.7f);
             moogModulatorWavetable.normalize();
 
             osc = new Oscil(frequency, this.amplitude/2, getWaveTable(0));
-            Oscil osc2 = new Oscil(Math.min(880, frequency * template.modulatorFrequencyAmp), this.amplitude/2, getWaveTable(template.modulatorWaveIndex));
+            Oscil osc2 = new Oscil( frequency * template.modulatorFrequencyAmp, this.amplitude/2, getWaveTable(template.modulatorWaveIndex));
             Multiplier ml = new Multiplier(frequency);
-            Multiplier ml2 = new Multiplier(Math.min(880, frequency * template.modulatorFrequencyAmp));
+            Multiplier ml2 = new Multiplier(frequency * template.modulatorFrequencyAmp);
 
-            (new Oscil(template.frequencyModulatorFrequency, 1, moogModulatorWavetable)).patch(ml).patch(osc.frequency);
-            (new Oscil(template.frequencyModulatorFrequency, 1, moogModulatorWavetable)).patch(ml2).patch(osc2.frequency);
+//            (new Oscil(template.frequencyModulatorFrequency, 1, moogModulatorWavetable)).patch(ml).patch(osc.frequency);
+//            (new Oscil(template.frequencyModulatorFrequency, 1, moogModulatorWavetable)).patch(ml2).patch(osc2.frequency);
 
             osc2.patch(osc);
-            if (template.modulatorWaveIndex != 0 && template.modulatorWaveIndex != 3)
-                setMoog(new MoogFilter(template.moogFrequency, .0f, MoogFilter.Type.LP));
+                setMoog(new MoogFilter(template.moogFrequency *template.targetMoogFactor, .7f, MoogFilter.Type.LP));
 
             preFinalUgen = osc;
 
@@ -95,20 +94,22 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
         public Template () {
             Random r = new Random();
-            moogFrequency = 880;
+            moogFrequency = 1046;
 
             fAdsrAttack = .01f;
             fAdsrDelay = .1f;
             fAdsrRelease = .1f;
-            waveIndex = r.nextInt(6);
-            modulatorWaveIndex = r.nextInt(6);
-            frequencyModulatorFrequency = (float) Math.pow(2, r.nextInt(9) - 2);
-            modulatorFrequencyAmp = (float) Math.pow(2, r.nextInt(4) - 2);
+            waveIndex = 0;//r.nextInt(6);
+            modulatorWaveIndex =  r.nextInt(6);
+            frequencyModulatorFrequency = (float) Math.pow(2, r.nextInt(9)+8);
+            modulatorFrequencyAmp =(float) Math.pow(2, r.nextInt(4) - 2);
+/*
             if (waveIndex == modulatorWaveIndex && (modulatorWaveIndex == 2 || modulatorWaveIndex == 5)) {
                 if (modulatorFrequencyAmp == 1)
                     modulatorFrequencyAmp = (float) Math.pow(2, r.nextInt(4) + 2);
 
             }
+*/
             this.maxDuration = .3f;//Math.max(r.nextFloat() / 2, .01f);
 //            this.moogFactor = r.nextFloat() + .5f;
 //            this.targetMoogFactor = moogFactor;

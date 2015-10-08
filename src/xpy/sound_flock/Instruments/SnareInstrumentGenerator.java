@@ -51,7 +51,7 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
         public SnareInstrument (float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
             this.amplitude = amplitude;
-            this.releaseTime = .2f;
+
             this.out = out;
 
             c = new Constant(frequency);

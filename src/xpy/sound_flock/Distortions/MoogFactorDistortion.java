@@ -17,7 +17,7 @@ public class MoogFactorDistortion implements Distortion {
 
     public MoogFactorDistortion (BaseInstrumentGenerator instrumentGenerator) {
         this.instrumentGenerator = instrumentGenerator;
-        tuneAmount = 1.125f;
+        tuneAmount = 1.5f;
     }
 
     @Override
