@@ -1,7 +1,6 @@
 package tests;
 
-import ddf.minim.AudioOutput;
-import ddf.minim.Minim;
+import ddf.minim.*;
 import processing.core.PApplet;
 import xpy.sound_flock.Blibliki;
 import xpy.sound_flock.Body.Body;
@@ -16,15 +15,15 @@ import xpy.sound_flock.Phrase;
  */
 public class Maestro extends PApplet {
 
-    Minim       minim;
-    AudioOutput out;
-    Blibliki    blibliki;
-    Body        body;
-
+    Minim                   minim;
+    AudioOutput             out;
+    Blibliki                blibliki;
+    Body                    body;
+    AudioRecorder           recorder;
     xpy.sound_flock.Maestro maestro;
     boolean tuned = false;
 
-    public void setup () {
+    public void setup() {
         // initialize the drawing window
         size(512, 200);
 
@@ -32,15 +31,15 @@ public class Maestro extends PApplet {
         minim = new Minim(this);
 //        minim.debugOn();
         out = minim.getLineOut(Minim.MONO, 2048);
+        recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_" + System.currentTimeMillis() + ".wav");
+
+        maestro = new xpy.sound_flock.Maestro(this, out);
         out.setTempo(120);
-
-        maestro = new xpy.sound_flock.Maestro(this,out);
-
+        recorder.beginRecord();
         maestro.start();
-
     }
 
-    public void draw () {
+    public void draw() {
         // erase the window to black
         background(0);
         // draw using a white stroke
@@ -56,11 +55,15 @@ public class Maestro extends PApplet {
         }
 */
         maestro.update();
+        if (maestro.loops >= 54 && recorder.isRecording()) {
+            recorder.endRecord();
+            recorder.save();
+        }
 
 
     }
 
-    public void keyPressed () {
+    public void keyPressed() {
         if (key == 'q') {
             blibliki.applyDistortion(0);
         } else if (key == 'a') {

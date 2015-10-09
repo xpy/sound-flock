@@ -14,31 +14,31 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
     Template template;
     public float amplitude = .5f;
 
-    public SparkInstrumentGenerator () {
+    public SparkInstrumentGenerator() {
         template = createTemplate();
     }
 
-    public Template createTemplate () {
+    public Template createTemplate() {
         return new Template();
     }
 
     @Override
-    public SparkInstrumentGenerator.Template getTemplate () {
+    public SparkInstrumentGenerator.Template getTemplate() {
         return template;
     }
 
     @Override
-    public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public BaseInstrument createInstrument(float frequency, float amplitude, AudioOutput out) {
         return new SparkInstrument(frequency, amplitude, out);
     }
 
     @Override
-    public float getAmplitude () {
+    public float getAmplitude() {
         return amplitude;
     }
 
     @Override
-    public float getMaxDuration () {
+    public float getMaxDuration() {
         return template.maxDuration;
     }
 
@@ -48,7 +48,7 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
         Oscil osc;
 
 
-        public SparkInstrument (float frequency, float amplitude, AudioOutput out) {
+        public SparkInstrument(float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
             this.amplitude = amplitude;
             this.out = out;
@@ -70,9 +70,9 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
         Wavetable wavetable;
 
-        public Template () {
+        public Template() {
 
-
+            setFullAmpDelay((new Random()).nextInt(5)+1);
             fAdsrAttack = .001f;
             fAdsrDelay = .0f;
             fAdsrRelease = .001f;

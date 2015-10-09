@@ -13,26 +13,26 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
 
-    public KickInstrumentGenerator () {
+    public KickInstrumentGenerator() {
         template = createTemplate();
     }
 
-    public Template createTemplate () {
+    public Template createTemplate() {
         return new Template();
     }
 
     @Override
-    public KickInstrumentGenerator.Template getTemplate () {
+    public KickInstrumentGenerator.Template getTemplate() {
         return template;
     }
 
     @Override
-    public BaseInstrument createInstrument (float frequency, float amplitude, AudioOutput out) {
+    public BaseInstrument createInstrument(float frequency, float amplitude, AudioOutput out) {
         return new KickInstrument(frequency, amplitude, out);
     }
 
     @Override
-    public float getMaxDuration () {
+    public float getMaxDuration() {
         return template.maxDuration;
     }
 
@@ -42,26 +42,27 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
         ADSR adsrModulator;
 
-        public KickInstrument (float frequency, float amplitude, AudioOutput out) {
+        public KickInstrument(float frequency, float amplitude, AudioOutput out) {
             this.frequency = frequency;
-            this.amplitude = .6f;
+            this.amplitude = .4f;
             this.out = out;
-
-            Constant c   = new Constant(2 * frequency);
-            Oscil    osc = new Oscil(frequency, amplitude, Waves.SINE);
+            Wavetable w   = new Wavetable(Waves.SINE);
+            w.addNoise(.0025f);
+            Constant  c   = new Constant(1.5f * frequency);
+            Oscil     osc = new Oscil(frequency, amplitude, w);
 
             adsrModulator = new ADSR(1f, 0.001f, 0.05f, .2f, 0.3f);
             c.patch(adsrModulator).patch(osc.frequency);
             preFinalUgen = osc;
         }
 
-        public void noteOn (float dur) {
+        public void noteOn(float dur) {
             adsrModulator.noteOn();
             super.noteOn(dur);
 
         }
 
-        public void noteOff () {
+        public void noteOff() {
             adsrModulator.noteOff();
             super.noteOff();
         }
@@ -74,7 +75,7 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
         float maxDuration = .1f;
         float frequencyAmp;
 
-        public Template () {
+        public Template() {
             Random r = new Random();
             fAdsrAttack = .001f;
             fAdsrDelay = .05f;

@@ -12,7 +12,7 @@ public class Phrases {
 
     public static boolean debug = true;
 
-    public static Phrase tonePhrase (int meterLength) {
+    public static Phrase tonePhrase(int meterLength) {
 
         Integer pitchPatterns[]    = new Integer[]{1, 4, 5, 6, 7};
         Integer divisionPatterns[] = new Integer[]{0};
@@ -21,11 +21,14 @@ public class Phrases {
         Phrase  phrase             = new Phrase();
 
 
-        phrase.legato = false;
+        phrase.legato = true;
         phrase.meterLength = meterLength;
         phrase.phraseLength = r.nextInt(2) + 1;
-        phrase.numOfNotes = meterLength * phrase.phraseLength + r.nextInt(phrase.phraseLength * meterLength / 2 + 1);
-        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(40) - 20);
+        phrase.numOfNotes = Math.max(r.nextInt(meterLength) + 2, r.nextInt(phrase.phraseLength * meterLength));
+        // For 1 phrase ???
+//        phrase.numOfNotes = 2 * meterLength * phrase.phraseLength + r.nextInt(phrase.phraseLength * meterLength);
+
+        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(48)-24);
 
         phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;
 
@@ -44,7 +47,7 @@ public class Phrases {
         return phrase;
     }
 
-    public static Phrase tinyPhrase (int meterLength) {
+    public static Phrase tinyPhrase(int meterLength) {
 
         Integer pitchPatterns[]    = new Integer[]{1, 4, 5, 6, 7};
         Integer divisionPatterns[] = new Integer[]{0};
@@ -75,7 +78,7 @@ public class Phrases {
         return phrase;
     }
 
-    public static Phrase synthPhrase (int meterLength) {
+    public static Phrase synthPhrase(int meterLength) {
 
         Integer pitchPatterns[]    = new Integer[]{1, 5, 6, 7};
         Integer divisionPatterns[] = new Integer[]{1};
@@ -108,18 +111,18 @@ public class Phrases {
         return phrase;
     }
 
-    public static Phrase kickPhrase (int meterLength) {
+    public static Phrase kickPhrase(int meterLength) {
 
         Integer pitchPatterns[]    = new Integer[]{1, 5, 6, 7};
         Integer divisionPatterns[] = new Integer[]{2, 4};
-        Integer durationPatterns[] = new Integer[]{1,2};
+        Integer durationPatterns[] = new Integer[]{1, 2};
         Random  r                  = new Random();
         Phrase  phrase             = new Phrase();
 
 
-        phrase.meterLength = meterLength ;
+        phrase.meterLength = meterLength;
         phrase.phraseLength = 1;
-        phrase.repeatNotes = r.nextInt(2)+1;
+        phrase.repeatNotes = r.nextInt(2) + 1;
         phrase.numOfNotes = 2;
         phrase.baseNotePitch = Note.getPitchOfIndex(((r.nextInt(12) + 1) * -1) - 12);
         phrase.legato = false;
@@ -143,7 +146,7 @@ public class Phrases {
     }
 
 
-    public static Phrase widePhrase (int meterLength) {
+    public static Phrase widePhrase(int meterLength) {
 
         Integer pitchPatterns[]    = new Integer[]{1, 4, 5, 6, 7};
         Integer divisionPatterns[] = new Integer[]{0, 2, 3, 4};
@@ -155,8 +158,8 @@ public class Phrases {
         phrase.legato = false;
         phrase.meterLength = meterLength;
         phrase.phraseLength = r.nextInt(2) + 1;
-        phrase.numOfNotes = Math.max(2, r.nextInt(meterLength * phrase.phraseLength) + 1);
-        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(40) - 20);
+        phrase.numOfNotes = Math.max(2, r.nextInt(meterLength * phrase.phraseLength)/2 + 1);
+        phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(48) - 24);
 
         phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;
 

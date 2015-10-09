@@ -9,6 +9,7 @@ import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.CircleBody;
 import xpy.sound_flock.Distortions.ModulatorFactorDistortion;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
+import xpy.sound_flock.Instruments.SnareInstrumentGenerator;
 import xpy.sound_flock.Instruments.ToneInstrumentGenerator;
 import xpy.sound_flock.Note;
 import xpy.sound_flock.Phrase;
@@ -36,13 +37,13 @@ public class InstrumentCheck extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        ToneInstrumentGenerator toneGenerator = new ToneInstrumentGenerator();
+        SnareInstrumentGenerator generator = new SnareInstrumentGenerator();
 
         for (int i = -20; i < 20; i++) {
             float freq = Note.getPitchOfIndex(i);
-            InstrumentGenerator.Instrument inst =toneGenerator.createInstrument(freq,1,out);
+            InstrumentGenerator.Instrument inst =generator.createInstrument(freq,1,out);
             println(freq);
-            out.playNote(i,.5f,inst);
+            out.playNote(i,.125f,inst);
 
         }
     }

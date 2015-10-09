@@ -57,11 +57,11 @@ public class Phrase extends PApplet {
     public static final int POSITION_END   = 1;
 
 
-    public Phrase () {
+    public Phrase() {
 
     }
 
-    public void generatePhrase () {
+    public void generatePhrase() {
         List<Note> noteList = new ArrayList<>();
         float      noteLength;
         pitchFeed = baseNotePitch;
@@ -117,10 +117,10 @@ public class Phrase extends PApplet {
                 break;
             case DURATION_PATTERN_METER_DIVISIONS:
                 Random r = new Random();
-                noteList.add(new Note(pitchFeed, (float) (meterLength / Math.pow(2.0, (double) r.nextInt(3) + 1))));
+                noteList.add(new Note(pitchFeed, Note.getRandomDuration(meterLength)));
 
                 for (int i = 1; i < numOfNotes; i++) {
-                    noteList.add(new Note(getPitchByPattern(pitchFeed), (float) (meterLength / Math.pow(2.0, (double) r.nextInt(3) + 1))));
+                    noteList.add(new Note(getPitchByPattern(pitchFeed), Note.getRandomDuration(meterLength)));
                 }
 
                 break;
@@ -145,7 +145,7 @@ public class Phrase extends PApplet {
                         }
                         biggestNoteDuration = phraseMeters - currentDuration;
                         Note noteToAdd = new Note(baseNotePitch, biggestNoteDuration);
-                        noteList.add(0, noteToAdd);
+                        noteList.add(noteToAdd);
                         break;
                 }
                 break;
@@ -162,15 +162,15 @@ public class Phrase extends PApplet {
         }
         Random r = new Random();
         for (int i = 0; i < noteList.size(); i++) {
-            if (legato)
-                legatos.add(r.nextBoolean());
-            else
+            if (legato && noteList.get(i).duration < 2f) {
+                legatos.add(r.nextInt(10) > 6);
+            } else
                 legatos.add(false);
         }
         notes = noteList;
     }
 
-    public static float getPitchByPattern (int pattern, float pitch) {
+    public static float getPitchByPattern(int pattern, float pitch) {
 
         switch (pattern) {
             case PITCH_PATTERN_AROUND:
@@ -186,7 +186,7 @@ public class Phrase extends PApplet {
         }
     }
 
-    public float getPitchByPattern (float pitch) {
+    public float getPitchByPattern(float pitch) {
 
         if (pitchPattern == PITCH_PATTERN_ABOVE) {
             pitchFeed = getPitchByPattern(PITCH_PATTERN_ASC, baseNotePitch);
@@ -201,7 +201,7 @@ public class Phrase extends PApplet {
         return pitchFeed;
     }
 
-    public void randomizePhrase () {
+    public void randomizePhrase() {
         Random r = new Random();
 
         this.phraseLength = r.nextInt(3) + 1;
@@ -213,7 +213,7 @@ public class Phrase extends PApplet {
 
     }
 
-    public static List<Note> getRandomPhrase (int phraseLength, int meterLength, int numOfNotes, int positionPattern) {
+    public static List<Note> getRandomPhrase(int phraseLength, int meterLength, int numOfNotes, int positionPattern) {
 
         List<Note> noteList = new ArrayList<>();
 
@@ -254,7 +254,7 @@ public class Phrase extends PApplet {
         return noteList;
     }
 
-    public static List<Note> getRandomPhraseAroundPitch (float pitch, int phraseLength, int meterLength, int numOfNotes, int positionPattern) {
+    public static List<Note> getRandomPhraseAroundPitch(float pitch, int phraseLength, int meterLength, int numOfNotes, int positionPattern) {
 
         List<Note> noteList = new ArrayList<>();
 
@@ -295,15 +295,15 @@ public class Phrase extends PApplet {
         return noteList;
     }
 
-    public int getPhraseMeters () {
+    public int getPhraseMeters() {
         return meterLength * phraseLength;
     }
 
-    public long getDuration () {
+    public long getDuration() {
         return meterLength * phraseLength * beatTime;
     }
 
-    public void tune (Integer[] noteIndexes, Integer[] tuneAmounts) {
+    public void tune(Integer[] noteIndexes, Integer[] tuneAmounts) {
         if (noteIndexes.length != tuneAmounts.length) {
             System.err.println("noteIndexes != tuneAmounts");
             return;
@@ -324,7 +324,7 @@ public class Phrase extends PApplet {
 
     }
 
-    public void tune (int tuneAmount) {
+    public void tune(int tuneAmount) {
         for (Note note : notes) {
             note.tune(tuneAmount);
         }
@@ -332,12 +332,12 @@ public class Phrase extends PApplet {
     }
 
 
-    public void reset () {
+    public void reset() {
         notes.forEach(xpy.sound_flock.Note::reset);
     }
 
     @Override
-    public String toString () {
+    public String toString() {
         return "Phrase{" +
                ", phraseLength=" + phraseLength +
                ", meterLength=" + meterLength +

@@ -30,11 +30,11 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     private long nextCheck;
     private long beatTime = (long) (60000f / 120f);
 
-    private boolean hasBody   = false;
-    public  boolean isPlaying = false;
-    public int startingLoop = 0;
+    private boolean hasBody      = false;
+    public  boolean isPlaying    = false;
+    public  int     startingLoop = 0;
 
-    public Blibliki (Phrase phrase, BaseInstrumentGenerator instrumentGenerator, Body body, AudioOutput out) {
+    public Blibliki(Phrase phrase, BaseInstrumentGenerator instrumentGenerator, Body body, AudioOutput out) {
 
         this.addPhrase(phrase);
         this.addBody(body);
@@ -53,12 +53,12 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     }
 */
 
-    public void addPhrase (Phrase phraseToAdd) {
+    public void addPhrase(Phrase phraseToAdd) {
 
         phrase = phraseToAdd;
     }
 
-    public void addBody (Body bodyToAdd) {
+    public void addBody(Body bodyToAdd) {
 
         body = bodyToAdd;
         body.attachPhrase(this.phrase);
@@ -66,7 +66,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         hasBody = true;
     }
 
-    public void setNotes () {
+    public void setNotes() {
         out.pauseNotes();
         float i = 0;
 
@@ -94,7 +94,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         out.resumeNotes();
     }
 
-    public void setNotes (int meterLength) {
+    public void setNotes(int meterLength) {
 //        out.pauseNotes();
         float i = 0;
 
@@ -123,7 +123,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 //        out.resumeNotes();
     }
 
-    public void update () {
+    public void update() {
 
         if (System.currentTimeMillis() - nextCheck >= 0 && loops < 100) {
 //            println("loops:" + loops);
@@ -135,58 +135,66 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
             body.update();
     }
 
-    public float millisToBeats (long millis) {
+    public float millisToBeats(long millis) {
         return ((float) millis / (float) beatTime);
     }
 
-    public void start () {
+    public void start() {
         nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.meterLength) + 100;
     }
 
-    public void resetPhrase () {
+    public void resetPhrase() {
         phrase.reset();
     }
 
-    public void addDistortion (Distortion distortion) {
+    public void addDistortion(Distortion distortion) {
         distortions.add(distortion);
     }
 
-    public void applyDistortion (int index) {
+    public void applyDistortion(int index) {
         distortions.get(index).apply();
 
     }
 
-    public void revertDistortion (int index) {
+    public void applyDistortion(int index, int times) {
+        for (int i = 0; i < times; i++) {
+            distortions.get(index).apply();
+
+        }
+
+    }
+
+    public void revertDistortion(int index) {
         distortions.get(index).revert();
     }
 
-    public void addLoopEvent (LoopEvent loopEvent) {
+    public void addLoopEvent(LoopEvent loopEvent) {
         loopEvents.add(loopEvent);
     }
 
-    public Distortion getDistortion (int index) {
+    public Distortion getDistortion(int index) {
         return distortions.get(index);
     }
 
     public static class LoopEvent {
-        public void fire (int loopNum) {
+        public void fire(int loopNum) {
 
         }
     }
 
-    public int getPhraseMeters () {
+    public int getPhraseMeters() {
         return phrase.getPhraseMeters();
     }
 
-    public Phrase getPhrase(){
+    public Phrase getPhrase() {
         return phrase;
     }
 
-    public boolean hasBody () {
+    public boolean hasBody() {
         return hasBody;
     }
 
-    public Body getBody(){
+    public Body getBody() {
         return body;
     }
 

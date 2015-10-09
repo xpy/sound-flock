@@ -139,7 +139,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             setFullAmpDelay(15);
 
             Random r = new Random();
-            moogModulatorFrequency = 1f;//(r.nextInt(32) + 1) / 4f;
+            moogModulatorFrequency = (float) Math.pow(2,r.nextInt(8)-2);
             this.numOfOscillators = r.nextInt(4) + 1;
             this.modulatorWaveTable = r.nextInt(4);
 
