@@ -26,6 +26,7 @@ public class Note extends PApplet {
     public int indexPosition;
     public int defaultIndexPosition;
 
+    public static float key = 440f;
     public String pitchName;
 
     public static float  twelfthRootOfTwo      = (float) Math.pow(2f, 1f / 12f);
@@ -203,11 +204,11 @@ public class Note extends PApplet {
      * @return Index of Pitch
      */
     public static float getPitchOfIndex(int index) {
-        return 440f * (float) Math.pow(twelfthRootOfTwo, index);
+        return key * (float) Math.pow(twelfthRootOfTwo, index);
     }
 
     public static int getIndexOfPitch(float pitch) {
-        return (int) Math.round(Math.log(pitch / 440) / LogOfTwelfthRootOfTwo);
+        return (int) Math.round(Math.log(pitch / key) / LogOfTwelfthRootOfTwo);
     }
 
 

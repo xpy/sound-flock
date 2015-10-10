@@ -77,7 +77,7 @@ public class Maestro {
 
                         // LOOPS
                         aBliblikia.startingLoop = loops;
-                        if (r.nextInt(10) > 3 && numOfLast != bliblikia.size())
+                        if (r.nextInt(10) > 2 && numOfLast != bliblikia.size())
                             aBliblikia.setNotes(meterLength);
 
                         // DISTORTIONS
