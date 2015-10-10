@@ -26,7 +26,8 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
     public SynthInstrumentGenerator() {
 
         this.template = createTemplate();
-        println(this.template);
+        maxDuration = 120f;
+        minDuration = .25f;
     }
 
     SynthInstrumentGenerator(Template template) {
@@ -55,7 +56,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
     @Override
     public float getMaxDuration() {
-        return 120f;
+        return maxDuration;
     }
 
 
@@ -139,7 +140,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             setFullAmpDelay(15);
 
             Random r = new Random();
-            moogModulatorFrequency = (float) Math.pow(2,r.nextInt(8)-2);
+            moogModulatorFrequency = (float) Math.pow(2, r.nextInt(8) - 2);
             this.numOfOscillators = r.nextInt(4) + 1;
             this.modulatorWaveTable = r.nextInt(4);
 

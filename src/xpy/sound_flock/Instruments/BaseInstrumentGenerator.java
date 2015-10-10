@@ -13,7 +13,11 @@ import xpy.sound_flock.Note;
  */
 public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
-    public float amplitude = .85f;
+    public    float amplitude   = .85f;
+    public    float minDuration = .25f;
+    public    float maxDuration = 2;
+    protected float maxPitch    = Note.getPitchOfIndex(-24);
+    protected float minPitch    = Note.getPitchOfIndex(24);
 
     // protected InstrumentGenerator.Template template;
 
@@ -39,6 +43,12 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         return amplitude;
     }
 
+    @Override
+    public float normalizeDuration(float duration) {
+
+        return Math.max(Math.min(duration, maxDuration), minDuration);
+    }
+
     public abstract static class BaseTemplate implements Template {
 
         protected float moogFactor       = 1;
@@ -57,7 +67,6 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
         public void increaseMoogFactor(float value) {
             targetMoogFactor *= value;
-            PApplet.println(getTargetMoog());
         }
 
         @Override
@@ -72,7 +81,6 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
         public void decreaseMoogFactor(float value) {
             targetMoogFactor /= value;
-            PApplet.println(getTargetMoog());
         }
 
         public void setFullAmpDelay(float duration) {
@@ -80,6 +88,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         }
 
         public ADSR getFinalADSR(float amplitude) {
+
             return new ADSR(amplitude * 1.5f, fAdsrAttack, fAdsrDelay, amplitude, fAdsrRelease);
         }
 
@@ -88,7 +97,6 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
             int modPower = (int) (Math.log(modulatorFrequencyAmp) / Math.log(2));
             modPower = Math.min(modPower + value, 8);
             modulatorFrequencyAmp = (float) Math.pow(2f, modPower);
-            PApplet.println(modulatorFrequencyAmp);
         }
 
         @Override
@@ -138,6 +146,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
         }
 
+
         @Override
         public String toString() {
             return "BaseTemplate{" +
@@ -165,8 +174,6 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         public    boolean isPlaying                  = false;
         protected long    completesAt                = 0;
         protected int     envelopeFollowerBufferSize = 2048;
-        protected float   maxPitch                   = Note.getPitchOfIndex(-24);
-        protected float   minPitch                   = Note.getPitchOfIndex(24);
 
         public AudioOutput out;
         public Sink             sink             = xpy.sound_flock.Maestro.sink;

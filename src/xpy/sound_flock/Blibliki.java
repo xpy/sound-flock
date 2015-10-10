@@ -84,7 +84,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
                 BaseInstrumentGenerator.BaseInstrument instrument = instrumentGenerator.createInstrument(member.getNote().pitch, instrumentGenerator.getAmplitude(), out);
                 member.attachInstrument(instrument);
                 if (member.getNote().pitch > 0)
-                    out.playNoteAtBeat(phrase.getPhraseMeters(), i, phrase.legatos.get(j++) ? member.getNote().duration : Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
+                    out.playNoteAtBeat(phrase.getPhraseMeters(), i, phrase.legatos.get(j++) ? member.getNote().duration : instrumentGenerator.normalizeDuration(member.getNote().duration), instrument);
                 i += member.getNote().duration;
             }
         else
@@ -108,19 +108,22 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         int j = 0;
         if (hasBody)
             for (Member member : body.getMembers()) {
-
                 BaseInstrumentGenerator.BaseInstrument instrument = instrumentGenerator.createInstrument(member.getNote().pitch, instrumentGenerator.getAmplitude(), out);
                 member.attachInstrument(instrument);
-                if (member.getNote().pitch > 0)
-                    out.playNoteAtBeat(meterLength, i, phrase.legatos.get(j++) ? member.getNote().duration : Math.min(member.getNote().duration, instrumentGenerator.getMaxDuration()), instrument);
+
+                if (member.getNote().pitch > 0) {
+                    float duration = phrase.legatos.get(j++) ? member.getNote().duration : instrumentGenerator.normalizeDuration(member.getNote().duration);
+                    out.playNoteAtBeat(meterLength, i, duration, instrument);
+                }
                 i += member.getNote().duration;
             }
-        else
+        else{
+
             for (Note note : phrase.notes) {
                 InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(note.pitch, instrumentGenerator.getAmplitude(), out);
                 out.playNoteAtBeat(meterLength, i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrument);
                 i += note.duration;
-            }
+            }}
         loops++;
 //        out.resumeNotes();
     }
@@ -128,7 +131,6 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     public void update() {
 
         if (System.currentTimeMillis() - nextCheck >= 0 && loops < 100) {
-//            println("loops:" + loops);
             setNotes();
             loops++;
             nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters()) + 100;

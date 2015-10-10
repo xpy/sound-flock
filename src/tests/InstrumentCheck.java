@@ -38,13 +38,13 @@ public class InstrumentCheck extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        KickInstrumentGenerator generator = new KickInstrumentGenerator();
+        SnareInstrumentGenerator generator = new SnareInstrumentGenerator();
 
         int k =0;
-        float duration = .152f;
-        for (int i = -24; i < -12; i++) {
+
+        for (int i = -24; i < 12; i++) {
             float freq = Note.getPitchOfIndex(i);
-            InstrumentGenerator.Instrument inst = generator.createInstrument(freq, 1, out);
+            InstrumentGenerator.Instrument inst = generator.createInstrument(freq, .55f, out);
             println(freq);
             out.playNote(k++, .125f, inst);
 

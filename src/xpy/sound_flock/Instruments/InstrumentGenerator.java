@@ -9,6 +9,11 @@ import ddf.minim.ugens.*;
  */
 public interface InstrumentGenerator {
 
+    float getMaxDuration();
+
+    float normalizeDuration(float duration);
+
+
     interface Instrument extends ddf.minim.ugens.Instrument {
         Sink getSink();
 
@@ -22,7 +27,7 @@ public interface InstrumentGenerator {
 
     }
 
-    public Template getTemplate();
+    Template getTemplate();
 
     interface Template {
 
@@ -51,6 +56,7 @@ public interface InstrumentGenerator {
         ADSR getFinalADSR(float amplitude);
 
         void activateAmpLine(float dur, Multiplier ml);
+
     }
 
 
@@ -61,8 +67,6 @@ public interface InstrumentGenerator {
     BaseInstrumentGenerator.BaseInstrument createInstrument(float frequency, float amplitude, AudioOutput out);
 
 //    float getAmplitude ();
-
-    float getMaxDuration();
 
 
 }

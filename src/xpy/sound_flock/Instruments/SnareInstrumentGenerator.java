@@ -4,6 +4,7 @@ import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
 import processing.core.PApplet;
 import sun.security.krb5.internal.PAData;
+import xpy.sound_flock.Note;
 
 import java.util.Random;
 
@@ -16,8 +17,15 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
     Template template;
     public float amplitude = .55f;
 
+
     public SnareInstrumentGenerator() {
         template = createTemplate();
+        maxDuration = .125f;
+        minDuration = .125f;
+
+        minPitch = Note.getPitchOfIndex(-24);
+        maxPitch = Note.getPitchOfIndex(12);
+
     }
 
     public Template createTemplate() {
@@ -36,7 +44,7 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
 
     @Override
     public float getMaxDuration() {
-        return template.maxDuration;
+        return maxDuration;
     }
 
     @Override
@@ -51,20 +59,24 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
         ADSR     adsrModulator;
         Constant c;
 
+
         public SnareInstrument(float frequency, float amplitude, AudioOutput out) {
-            this.frequency = frequency;
+
+
+            this.frequency = normalizePitch(frequency);
             this.amplitude = amplitude;
 
             this.out = out;
 
-            c = new Constant(frequency );
-            Multiplier ml = new Multiplier(frequency );
-            osc = new Oscil(frequency , this.amplitude, template.wavetable);
+            c = new Constant(this.frequency);
+            Multiplier ml = new Multiplier(this.frequency);
+            osc = new Oscil(this.frequency, this.amplitude, template.wavetable);
             adsrModulator = new ADSR(1f, .0001f, .05f, .1f, .001f);
-            setMoog(new MoogFilter(frequency*template.targetMoogFactor*8, .1f, MoogFilter.Type.LP));
+            setMoog(new MoogFilter(this.frequency * template.targetMoogFactor * 8, .1f, MoogFilter.Type.LP));
 //            c.patch(adsrModulator).patch(osc.frequency);
 //            adsrModulator.patch(osc.amplitude);
             preFinalUgen = osc;
+
         }
 
         public void noteOn(float dur) {
@@ -85,9 +97,9 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
 
 
         public ADSR getFinalADSR(float amplitude) {
-            return new ADSR(amplitude*.25f, fAdsrAttack, fAdsrDelay, amplitude, fAdsrRelease);
+            return new ADSR(amplitude * .25f, fAdsrAttack, fAdsrDelay, amplitude, fAdsrRelease);
         }
-        float maxDuration = .125f;
+
         float     frequencyAmp;
         Wavetable wavetable;
 
@@ -96,7 +108,7 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
 
             fAdsrAttack = .025f;
             fAdsrDelay = .05f;
-            fAdsrRelease = .001f;
+            fAdsrRelease = .0001f;
 
             moogFrequency = 800;
 

@@ -14,8 +14,11 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
     Template template;
     public float amplitude = .5f;
 
+
     public SparkInstrumentGenerator() {
         template = createTemplate();
+        maxDuration = .25f;
+        minDuration = .125f;
     }
 
     public Template createTemplate() {
@@ -39,7 +42,7 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
     @Override
     public float getMaxDuration() {
-        return template.maxDuration;
+        return maxDuration;
     }
 
 
@@ -54,7 +57,7 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
             this.out = out;
 
             setMoog(new MoogFilter(template.getTargetMoog(), .2f, MoogFilter.Type.BP));
-            osc = new Oscil(frequency, amplitude, template.wavetable);
+            osc = new Oscil(this.frequency,  this.amplitude, template.wavetable);
 
             preFinalUgen = osc;
         }
@@ -65,14 +68,13 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
     public static class Template extends BaseInstrumentGenerator.BaseTemplate {
 
-        float maxDuration = .05f;
         float frequencyAmp;
 
         Wavetable wavetable;
 
         public Template() {
 
-            setFullAmpDelay((new Random()).nextInt(5)+1);
+            setFullAmpDelay((new Random()).nextInt(5) + 1);
             fAdsrAttack = .001f;
             fAdsrDelay = .0f;
             fAdsrRelease = .001f;

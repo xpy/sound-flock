@@ -14,8 +14,14 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
 
+
     public KickInstrumentGenerator() {
         template = createTemplate();
+        maxPitch = Note.getPitchOfIndex(-12);
+        minPitch = Note.getPitchOfIndex(-24);
+
+        maxDuration = .5f;
+        minDuration = .125f;
     }
 
     public Template createTemplate() {
@@ -34,14 +40,12 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
     @Override
     public float getMaxDuration() {
-        return template.maxDuration;
+        return maxDuration;
     }
 
 
     public class KickInstrument extends BaseInstrument {
 
-        float maxPitch = Note.getPitchOfIndex(-12);
-        float minPitch = Note.getPitchOfIndex(-24);
 
         ADSR adsrModulator;
 
@@ -51,8 +55,8 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
             this.out = out;
             Wavetable w = new Wavetable(Waves.SINE);
             w.addNoise(.0025f);
-            Constant c   = new Constant(1.5f * frequency);
-            Oscil    osc = new Oscil(frequency, amplitude, w);
+            Constant c   = new Constant(1.5f * this.frequency);
+            Oscil    osc = new Oscil(frequency, this.amplitude, w);
 
             adsrModulator = new ADSR(1f, 0.001f, 0.05f, .2f, 0.3f);
             c.patch(adsrModulator).patch(osc.frequency);
@@ -75,7 +79,6 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
     public static class Template extends BaseInstrumentGenerator.BaseTemplate {
 
-        float maxDuration = .1f;
         float frequencyAmp;
 
 

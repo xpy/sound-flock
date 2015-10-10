@@ -91,7 +91,6 @@ public class Phrases {
         phrase.phraseLength = 1;//r.nextInt(2) + 1;
         phrase.numOfNotes = 1;//(int) Math.pow(2, r.nextInt(2));
         int pitchIndex = r.nextInt(40) - 20;
-        PApplet.println("pitchIndex: " + pitchIndex);
         phrase.baseNotePitch = Note.getPitchOfIndex(pitchIndex);
         phrase.legato = false;
         phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;

@@ -22,9 +22,11 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
     protected Template template;
 
-
     public ToneInstrumentGenerator() {
+
         template = createTemplate();
+        maxDuration = .25f;
+        minDuration = .125f;
     }
 
     @Override
@@ -44,7 +46,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
     @Override
     public float getMaxDuration() {
-        return template.maxDuration;
+        return maxDuration;
     }
 
 
@@ -67,17 +69,17 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
             moogModulatorWavetable.offset(.7f);
             moogModulatorWavetable.normalize();
 
-            osc = new Oscil(frequency, this.amplitude / 2, getWaveTable(0));
-            Oscil      osc2 = new Oscil(frequency * template.modulatorFrequencyAmp, this.amplitude / 2, getWaveTable(template.modulatorWaveIndex));
-            Multiplier ml   = new Multiplier(frequency);
-            Multiplier ml2  = new Multiplier(frequency * template.modulatorFrequencyAmp);
+            osc = new Oscil(this.frequency, this.amplitude / 2, getWaveTable(0));
+            Oscil      osc2 = new Oscil(this.frequency * template.modulatorFrequencyAmp, this.amplitude / 2, getWaveTable(template.modulatorWaveIndex));
+            Multiplier ml   = new Multiplier(this.frequency);
+            Multiplier ml2  = new Multiplier(this.frequency * template.modulatorFrequencyAmp);
 
             (new Oscil(template.frequencyModulatorFrequency, 1, moogModulatorWavetable)).patch(ml).patch(osc.frequency);
             (new Oscil(template.frequencyModulatorFrequency, 1, moogModulatorWavetable)).patch(ml2).patch(osc2.frequency);
 
             osc2.patch(osc);
             setMoog(new MoogFilter(template.moogFrequency * template.targetMoogFactor, .7f, MoogFilter.Type.LP));
-            Delay del = new Delay( 0.05f, .7f, true, true );
+            Delay del = new Delay(0.05f, .7f, true, true);
             osc.patch(del);
             preFinalUgen = del;
 
@@ -88,7 +90,6 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
     public static class Template extends BaseInstrumentGenerator.BaseTemplate {
 
-        float maxDuration;
         int   waveIndex;
         int   modulatorWaveIndex;
         float frequencyModulatorFrequency;
@@ -111,7 +112,6 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
             }
 */
-            this.maxDuration = .1f;//Math.max(r.nextFloat() / 2, .01f);
 //            this.moogFactor = r.nextFloat() + .5f;
 //            this.targetMoogFactor = moogFactor;
         }
@@ -119,7 +119,6 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
         @Override
         public String toString() {
             return "Template{" +
-                   "maxDuration=" + maxDuration +
                    ", waveIndex=" + waveIndex +
                    ", modulatorWaveIndex=" + modulatorWaveIndex +
                    ", modulatorFrequencyAmp=" + modulatorFrequencyAmp +

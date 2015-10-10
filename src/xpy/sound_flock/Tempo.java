@@ -33,7 +33,6 @@ public class Tempo extends PApplet {
     public void update(){
 
         long now=System.currentTimeMillis();
-      //  println((now-lastEvent) - this.bitms);
 
         if (now -lastEvent>=this.bitms) {
             println((now-lastEvent) - this.bitms);
@@ -41,7 +40,6 @@ public class Tempo extends PApplet {
             lastEvent=now;
             for(BitListener l : listeners) {
                 l.tick();
-//                println("TICKKKK!!!");
             }
 
         }
