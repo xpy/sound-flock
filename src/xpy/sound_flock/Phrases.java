@@ -25,8 +25,6 @@ public class Phrases {
         phrase.meterLength = meterLength;
         phrase.phraseLength = r.nextInt(2) + 1;
         phrase.numOfNotes = Math.max(r.nextInt(meterLength) + 2, r.nextInt(phrase.phraseLength * meterLength));
-        // For 1 phrase ???
-//        phrase.numOfNotes = 2 * meterLength * phrase.phraseLength + r.nextInt(phrase.phraseLength * meterLength);
 
         phrase.baseNotePitch = Note.getPitchOfIndex(r.nextInt(48)-24);
 

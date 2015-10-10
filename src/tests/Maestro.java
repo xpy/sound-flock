@@ -18,10 +18,8 @@ public class Maestro extends PApplet {
     Minim                   minim;
     AudioOutput             out;
     Blibliki                blibliki;
-    Body                    body;
     AudioRecorder           recorder;
     xpy.sound_flock.Maestro maestro;
-    boolean tuned = false;
 
     boolean record = true;
 
