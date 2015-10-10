@@ -51,7 +51,7 @@ public class Phrases {
 
         Integer pitchPatterns[]    = new Integer[]{1, 4, 5, 6, 7};
         Integer divisionPatterns[] = new Integer[]{0};
-        Integer durationPatterns[] = new Integer[]{0, 1, 2, 4};
+        Integer durationPatterns[] = new Integer[]{0, 1, 4};
         Random  r                  = new Random();
         Phrase  phrase             = new Phrase();
 
@@ -124,7 +124,7 @@ public class Phrases {
         phrase.phraseLength = 1;
         phrase.repeatNotes = r.nextInt(2) + 1;
         phrase.numOfNotes = 2;
-        phrase.baseNotePitch = Note.getPitchOfIndex(((r.nextInt(12) + 1) * -1) - 12);
+        phrase.baseNotePitch = Note.getPitchOfIndex(((r.nextInt(24) + 1) * -1) - 12);
         phrase.legato = false;
 
         phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;

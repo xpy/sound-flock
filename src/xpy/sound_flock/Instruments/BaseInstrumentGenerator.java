@@ -5,6 +5,7 @@ import ddf.minim.AudioOutput;
 import ddf.minim.UGen;
 import ddf.minim.ugens.*;
 import processing.core.PApplet;
+import xpy.sound_flock.Note;
 
 /**
  * BaseInstrumentGenerator
@@ -164,6 +165,8 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         public    boolean isPlaying                  = false;
         protected long    completesAt                = 0;
         protected int     envelopeFollowerBufferSize = 2048;
+        protected float   maxPitch                   = Note.getPitchOfIndex(-24);
+        protected float   minPitch                   = Note.getPitchOfIndex(24);
 
         public AudioOutput out;
         public Sink             sink             = xpy.sound_flock.Maestro.sink;
@@ -203,6 +206,10 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
             patch(preFinalUgen, dur);
         }
 
+        public float normalizePitch(float pitch) {
+            return Math.max(minPitch, Math.min(pitch, maxPitch));
+        }
+
         @Override
         public void noteOff() {
             finalADSR.unpatchAfterRelease(out);
@@ -232,7 +239,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 //                l.patch(moogFilter.frequency);
 //                template.moogFactor = template.targetMoogFactor;
             }
-            getTemplate().activateAmpLine(duration+getTemplate().fAdsrRelease(), finalMultiplier);
+            getTemplate().activateAmpLine(duration + getTemplate().fAdsrRelease(), finalMultiplier);
             finalADSR = getTemplate().getFinalADSR(this.amplitude);
 
             lastUgen.patch(finalMultiplier).patch(finalADSR);

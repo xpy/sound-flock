@@ -47,7 +47,7 @@ public class PhraseDistortionGenerator {
 
     public static Distortion createRandomPartialToneDistortion(Phrase phrase) {
         Random r = new Random();
-        return new PartialToneDistortion(phrase, r.nextInt(3), r.nextInt(3), r.nextInt(phrase.numOfNotes - 1) + 1);
+        return new PartialToneDistortion(phrase, r.nextInt(3), r.nextInt(2)+1, r.nextInt(phrase.numOfNotes - 1) + 1);
     }
 
     public static Distortion createMoogDistortion(BaseInstrumentGenerator instrumentGenerator) {

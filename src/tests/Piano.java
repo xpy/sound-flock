@@ -9,6 +9,7 @@ import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.CircleBody;
 import xpy.sound_flock.Distortions.ModulatorFactorDistortion;
 import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
+import xpy.sound_flock.Instruments.InstrumentGenerator;
 import xpy.sound_flock.Instruments.SnareInstrumentGenerator;
 import xpy.sound_flock.Instruments.ToneInstrumentGenerator;
 import xpy.sound_flock.Phrase;
@@ -26,7 +27,7 @@ public class Piano extends PApplet {
     Long        startTime;
     boolean tuned = false;
 
-    public void setup () {
+    public void setup() {
         // initialize the drawing window
         size(512, 200);
 
@@ -37,39 +38,23 @@ public class Piano extends PApplet {
         out.setTempo(120);
 
         ToneInstrumentGenerator toneGenerator = new ToneInstrumentGenerator();
-
         println(toneGenerator.getTemplate());
-
-        Phrase phrase = new Phrase();
-        phrase.baseNoteLength = .5f;
-        phrase.meterLength = 3;
-        phrase.numOfNotes = 6;
-        phrase.phraseLength = 2;
-        phrase.baseNotePitch = 1760;
-        phrase.numOfPitchPeaks = 1;
-        phrase.repeatNotes = 1;
-        phrase.pitchPattern = Phrase.PITCH_PATTERN_ASC;
-        phrase.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_METER;
-        phrase.generatePhrase();
-
-        println(phrase);
-        body = new CircleBody(this);
-
-        blibliki = new Blibliki(phrase, toneGenerator, body, out);
-        blibliki.addDistortion(new ModulatorFactorDistortion(blibliki.instrumentGenerator));
-        blibliki.start();
-        blibliki.addLoopEvent(new Blibliki.LoopEvent() {
+        /*       blibliki.addLoopEvent(new Blibliki.LoopEvent() {
             @Override
             public void fire (int loopNum) {
 
             }
         });
+ */
         startTime = System.currentTimeMillis();
 
-
+        /*out.playNote(0,1,toneGenerator.createInstrument(440, 1, out));
+        out.playNote(2,1,toneGenerator.createInstrument(440, 1, out));
+        out.playNote(4.5f,1,toneGenerator.createInstrument(440, 1, out));
+        out.playNote(5,1,toneGenerator.createInstrument(440, 1, out));*/
     }
 
-    public void draw () {
+    public void draw() {
         // erase the window to black
         background(0);
         // draw using a white stroke
@@ -84,12 +69,10 @@ public class Piano extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
 
-        blibliki.update();
-
 
     }
 
-    public void keyPressed () {
+    public void keyPressed() {
         if (key == 'q') {
             blibliki.applyDistortion(0);
         } else if (key == 'a') {

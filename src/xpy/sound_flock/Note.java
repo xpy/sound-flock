@@ -220,10 +220,20 @@ public class Note extends PApplet {
     public static float getRandomDuration(float maxDuration) {
 
 //        return Math.min((new Random().nextInt(7) + 1) / 4f, maxDuration);
-        maxDuration = maxDuration < 1 ? Math.min(maxDuration, 2 / 4) : maxDuration;
+
+        for (int i = 6; i >0; i--) {
+            if(((Math.max(0, (i - 4)) + i) * .25f)<maxDuration){
+                maxDuration = (Math.max(0, (i - 4)) + i) * .25f;
+                break;
+            }
+
+        }
+
+        println("maxDuration: "+maxDuration);
+
 //        return Math.min((float)Math.pow(2,new Random().nextInt(4)-1) / 4f, maxDuration);
-        int x = new Random().nextInt(6)+1;
-        return Math.min((Math.max(0, (x  - 4)) + x) * .25f, maxDuration);
+        int x = new Random().nextInt(6) + 1;
+        return Math.min((Math.max(0, (x - 4)) + x) * .25f, maxDuration);
 
     }
 

@@ -2,6 +2,7 @@ package xpy.sound_flock.Instruments;
 
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
+import xpy.sound_flock.Note;
 
 import java.util.Random;
 
@@ -39,17 +40,19 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
     public class KickInstrument extends BaseInstrument {
 
+        float maxPitch = Note.getPitchOfIndex(-12);
+        float minPitch = Note.getPitchOfIndex(-24);
 
         ADSR adsrModulator;
 
         public KickInstrument(float frequency, float amplitude, AudioOutput out) {
-            this.frequency = frequency;
+            this.frequency = normalizePitch(frequency);
             this.amplitude = .4f;
             this.out = out;
-            Wavetable w   = new Wavetable(Waves.SINE);
+            Wavetable w = new Wavetable(Waves.SINE);
             w.addNoise(.0025f);
-            Constant  c   = new Constant(1.5f * frequency);
-            Oscil     osc = new Oscil(frequency, amplitude, w);
+            Constant c   = new Constant(1.5f * frequency);
+            Oscil    osc = new Oscil(frequency, amplitude, w);
 
             adsrModulator = new ADSR(1f, 0.001f, 0.05f, .2f, 0.3f);
             c.patch(adsrModulator).patch(osc.frequency);
@@ -74,6 +77,7 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
         float maxDuration = .1f;
         float frequencyAmp;
+
 
         public Template() {
             Random r = new Random();

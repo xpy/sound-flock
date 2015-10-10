@@ -116,7 +116,6 @@ public class Phrase extends PApplet {
 
                 break;
             case DURATION_PATTERN_METER_DIVISIONS:
-                Random r = new Random();
                 noteList.add(new Note(pitchFeed, Note.getRandomDuration(meterLength)));
 
                 for (int i = 1; i < numOfNotes; i++) {
@@ -139,12 +138,12 @@ public class Phrase extends PApplet {
 
                         for (int i = 1; i < numOfNotes; i++) {
                             biggestNoteDuration = Math.min(2f, phraseMeters - currentDuration - ((numOfNotes - i) * .25f));
-                            Note noteToAdd = new Note(getPitchByPattern(pitchFeed), Note.getRandomDuration(biggestNoteDuration));
+                            Note noteToAdd = new Note(getPitchByPattern(pitchFeed), Note.getRandomDuration(Note.getRandomDuration(biggestNoteDuration)));
                             currentDuration += noteToAdd.duration;
                             noteList.add(noteToAdd);
                         }
                         biggestNoteDuration = phraseMeters - currentDuration;
-                        Note noteToAdd = new Note(baseNotePitch, biggestNoteDuration);
+                        Note noteToAdd = new Note(baseNotePitch, Note.getRandomDuration(biggestNoteDuration));
                         noteList.add(noteToAdd);
                         break;
                 }
@@ -234,10 +233,9 @@ public class Phrase extends PApplet {
         }
         biggestNoteDuration = phraseMeters - currentDuration;
         Note noteToAdd;
-        if (positionPattern == POSITION_START)
-            noteToAdd = new Note(Note.getRandomPitch(), biggestNoteDuration);
-        else {
-            noteToAdd = Note.getRandomNote(biggestNoteDuration);
+        noteToAdd = new Note(Note.getRandomPitch(), Note.getRandomDuration(biggestNoteDuration));
+
+        if (positionPattern == POSITION_END) {
             float noteLengthSum = 0;
             for (Note aNoteList : noteList) {
                 noteLengthSum += aNoteList.duration;
@@ -247,7 +245,7 @@ public class Phrase extends PApplet {
             }
 
         }
-        currentDuration += noteToAdd.duration;
+//        currentDuration += noteToAdd.duration;
         noteList.add(noteToAdd);
 
 
@@ -279,7 +277,7 @@ public class Phrase extends PApplet {
         biggestNoteDuration = phraseMeters - currentDuration;
 
         Note noteToAdd = new Note(Note.getRandomPitchAroundPitch(pitch), Note.getRandomDuration(biggestNoteDuration));
-        currentDuration += noteToAdd.duration;
+//        currentDuration += noteToAdd.duration;
 
         noteList.add(noteToAdd);
         if (positionPattern == POSITION_END) {
@@ -354,5 +352,14 @@ public class Phrase extends PApplet {
                ", durationPattern=" + durationPattern +
 //               ", beatTime=" + beatTime +
                '}';
+    }
+
+    public String notesString() {
+        String str = "{ ";
+        for (int i = 0; i < notes.size(); i++) {
+            str += "Note " + i + ": " + notes.get(i).duration + " ";
+        }
+        str += " }";
+        return str;
     }
 }

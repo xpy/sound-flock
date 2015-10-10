@@ -9,6 +9,7 @@ import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.CircleBody;
 import xpy.sound_flock.Distortions.ModulatorFactorDistortion;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
+import xpy.sound_flock.Instruments.KickInstrumentGenerator;
 import xpy.sound_flock.Instruments.SnareInstrumentGenerator;
 import xpy.sound_flock.Instruments.ToneInstrumentGenerator;
 import xpy.sound_flock.Note;
@@ -27,7 +28,7 @@ public class InstrumentCheck extends PApplet {
     Long        startTime;
     boolean tuned = false;
 
-    public void setup () {
+    public void setup() {
         // initialize the drawing window
         size(512, 200);
 
@@ -37,18 +38,20 @@ public class InstrumentCheck extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        SnareInstrumentGenerator generator = new SnareInstrumentGenerator();
+        KickInstrumentGenerator generator = new KickInstrumentGenerator();
 
-        for (int i = -20; i < 20; i++) {
+        int k =0;
+        float duration = .152f;
+        for (int i = -24; i < -12; i++) {
             float freq = Note.getPitchOfIndex(i);
-            InstrumentGenerator.Instrument inst =generator.createInstrument(freq,1,out);
+            InstrumentGenerator.Instrument inst = generator.createInstrument(freq, 1, out);
             println(freq);
-            out.playNote(i,.125f,inst);
+            out.playNote(k++, .125f, inst);
 
         }
     }
 
-    public void draw () {
+    public void draw() {
         // erase the window to black
         background(0);
         // draw using a white stroke
@@ -62,7 +65,6 @@ public class InstrumentCheck extends PApplet {
             line(x1, 50 + out.left.get(i) * 50, x2, 50 + out.left.get(i + 1) * 50);
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
-
 
 
     }

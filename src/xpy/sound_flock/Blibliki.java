@@ -40,6 +40,8 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         this.addBody(body);
         this.out = out;
         this.instrumentGenerator = instrumentGenerator;
+        println(instrumentGenerator.getClass());
+        println(phrase.notesString());
     }
 
 /*

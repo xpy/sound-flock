@@ -23,6 +23,8 @@ public class Maestro extends PApplet {
     xpy.sound_flock.Maestro maestro;
     boolean tuned = false;
 
+    boolean record = true;
+
     public void setup() {
         // initialize the drawing window
         size(512, 200);
@@ -31,11 +33,13 @@ public class Maestro extends PApplet {
         minim = new Minim(this);
 //        minim.debugOn();
         out = minim.getLineOut(Minim.MONO, 2048);
-        recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_" + System.currentTimeMillis() + ".wav");
+//        recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_" + System.currentTimeMillis() + ".wav");
+        recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_1.wav");
 
         maestro = new xpy.sound_flock.Maestro(this, out);
         out.setTempo(120);
-        recorder.beginRecord();
+        if (record)
+            recorder.beginRecord();
         maestro.start();
     }
 
@@ -55,7 +59,7 @@ public class Maestro extends PApplet {
         }
 */
         maestro.update();
-        if (maestro.loops >= 54 && recorder.isRecording()) {
+        if (record && maestro.loops >= 54 && recorder.isRecording()) {
             recorder.endRecord();
             recorder.save();
         }

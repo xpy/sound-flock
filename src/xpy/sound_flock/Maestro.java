@@ -65,7 +65,7 @@ public class Maestro {
                 int numOfLast = 0;
 
                 for (Blibliki aBliblikia : bliblikia) {
-                    if (aBliblikia.getPhrase().phraseLength - (loops - aBliblikia.startingLoop) == 1 || aBliblikia.getPhrase().phraseLength == 1) {
+                    if (aBliblikia.isPlaying && aBliblikia.getPhrase().phraseLength - (loops - aBliblikia.startingLoop) == 1 || aBliblikia.getPhrase().phraseLength == 1) {
                         numOfLast++;
                     }
                     if (!aBliblikia.isPlaying) {
