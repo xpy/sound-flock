@@ -199,10 +199,6 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
             getTemplate().setHasMoog(true);
         }
 
-        public ADSR getFinalAdsr() {
-            return finalADSR;
-        }
-
         @Override
         public boolean isComplete() {
             return isComplete && System.currentTimeMillis() > completesAt;
