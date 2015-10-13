@@ -181,6 +181,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         public Multiplier       finalMultiplier  = new Multiplier(1);
         public MoogFilter moogFilter;
         public ADSR       finalADSR;
+        public ADSR       finalADSR2;
         public UGen       preFinalUgen;
 
         @Override
@@ -216,8 +217,9 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         @Override
         public void noteOff() {
             finalADSR.unpatchAfterRelease(out);
-            finalADSR.unpatchAfterRelease(envelopeFollower);
+            // finalADSR2.unpatchAfterRelease(envelopeFollower);
             finalADSR.noteOff();
+            // finalADSR2.noteOff();
             setComplete();
 
 
@@ -244,11 +246,14 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
             }
             getTemplate().activateAmpLine(duration + getTemplate().fAdsrRelease(), finalMultiplier);
             finalADSR = getTemplate().getFinalADSR(this.amplitude);
+            // finalADSR2 = getTemplate().getFinalADSR(this.amplitude);
 
-            lastUgen.patch(finalMultiplier).patch(finalADSR);
             finalADSR.patch(envelopeFollower).patch(sink);
-            finalADSR.patch(out);
+            lastUgen.patch(finalMultiplier).patch(finalADSR).patch(out);
+            // finalADSR2.patch(envelopeFollower).patch(sink);
+
             finalADSR.noteOn();
+            // finalADSR2.noteOn();
             isPlaying = true;
 
         }

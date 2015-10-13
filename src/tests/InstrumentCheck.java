@@ -4,13 +4,12 @@ import ddf.minim.AudioOutput;
 import ddf.minim.Minim;
 import processing.core.PApplet;
 import sun.security.krb5.internal.PAData;
-import xpy.sound_flock.Blibliki;
+import xpy.sound_flock.*;
 import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.CircleBody;
 import xpy.sound_flock.Distortions.ModulatorFactorDistortion;
 import xpy.sound_flock.Instruments.*;
-import xpy.sound_flock.Note;
-import xpy.sound_flock.Phrase;
+import xpy.sound_flock.Maestro;
 
 /**
  * InstrumentCheck
@@ -35,16 +34,21 @@ public class InstrumentCheck extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        TsikInstrumentGenerator generator = new TsikInstrumentGenerator();
+        xpy.sound_flock.Maestro a = new Maestro(this,out);
+
+        BaseInstrumentGenerator generator = new SnareInstrumentGenerator();
 
         int k =0;
 
-        for (int i = -36; i < 36; i++) {
+        for (int i = -24; i < -12; i++) {
             float freq = Note.getPitchOfIndex(i);
-            InstrumentGenerator.Instrument inst = generator.createInstrument(freq, .55f, out);
+            InstrumentGenerator.Instrument inst = generator.createInstrument(freq, generator.getAmplitude(), out);
             println(freq);
-            out.playNote(k+=1, 0.025f, inst);
-
+            float duration =  generator.normalizeDuration(.025f);
+            println("duration: "+duration);
+            out.playNote(k+=1, duration, inst);
+//            out.playNote(k+=1, 0.025f, inst);
+//            out.playNoteAtBeat(4,k+=1, 0.025f, inst);
         }
     }
 

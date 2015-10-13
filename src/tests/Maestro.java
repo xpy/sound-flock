@@ -31,11 +31,11 @@ public class Maestro extends PApplet {
         minim = new Minim(this);
 //        minim.debugOn();
         out = minim.getLineOut(Minim.MONO, 2048);
+        out.setTempo(120);
 //        recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_" + System.currentTimeMillis() + ".wav");
         recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_1.wav");
 
         maestro = new xpy.sound_flock.Maestro(this, out);
-        out.setTempo(120);
         if (record)
             recorder.beginRecord();
         maestro.start();

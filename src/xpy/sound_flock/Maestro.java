@@ -31,6 +31,7 @@ public class Maestro {
     public static final int B_KICK  = 2;
     public static final int B_SNARE = 3;
     public static final int B_TONE  = 4;
+    public static final int B_TSIK  = 5;
 
     public boolean             lastForAll     = false;
     public List<BliblikiRuler> bliblikiRulers = new ArrayList<>();
@@ -45,6 +46,7 @@ public class Maestro {
         bliblikiRulers.add(new BliblikiRuler(B_KICK, 1));
         bliblikiRulers.add(new BliblikiRuler(B_SNARE, 2));
         bliblikiRulers.add(new BliblikiRuler(B_TONE, 2));
+        bliblikiRulers.add(new BliblikiRuler(B_TSIK, 3));
     }
 
     private List<Blibliki> bliblikia = new ArrayList<>();
@@ -144,9 +146,11 @@ public class Maestro {
             case B_KICK:
                 return new Blibliki(Phrases.kickPhrase(4), new KickInstrumentGenerator(), new CircleBody(pa), out);
             case B_SNARE:
-                return new Blibliki(Phrases.widePhrase(4), new SnareInstrumentGenerator(), new CircleBody(pa), out);
+            return new Blibliki(Phrases.widePhrase(4), new SnareInstrumentGenerator(), new CircleBody(pa), out);
             case B_TONE:
-                return new Blibliki(Phrases.tonePhrase(4), new ToneInstrumentGenerator(), new CircleBody(pa), out);
+            return new Blibliki(Phrases.tonePhrase(4), new ToneInstrumentGenerator(), new CircleBody(pa), out);
+            case B_TSIK:
+                return new Blibliki(Phrases.tinyPhrase(4), new TsikInstrumentGenerator(), new CircleBody(pa), out);
         }
 
     }

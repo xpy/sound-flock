@@ -4,14 +4,13 @@ package tests;
 import processing.core.*;
 import ddf.minim.Minim;
 import ddf.minim.AudioOutput;
-import xpy.sound_flock.Blibliki;
+import xpy.sound_flock.*;
 import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.CircleBody;
 import xpy.sound_flock.Distortions.Distortion;
 import xpy.sound_flock.Distortions.FullToneDistortion;
 import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
 import xpy.sound_flock.Instruments.*;
-import xpy.sound_flock.Phrase;
 
 /**
  * PhraseTuning
@@ -36,20 +35,14 @@ public class PhraseTuning extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        ToneInstrumentGenerator toneGenerator = new ToneInstrumentGenerator();
+        xpy.sound_flock.Maestro a = new xpy.sound_flock.Maestro(this,out);
 
-        phrase.baseNoteLength = .5f;
-        phrase.meterLength = 1;
-        phrase.numOfNotes = 12;
-        phrase.phraseLength = 1;
-        phrase.baseNotePitch = 220;
-        phrase.numOfPitchPeaks = 4;
-        phrase.pitchPattern = Phrase.PITCH_PATTERN_PEAKS;
-        phrase.durationPattern = Phrase.DURATION_PATTERN_UNIFORM_PHRASE;
-        phrase.generatePhrase();
+        BaseInstrumentGenerator generator = new KickInstrumentGenerator();
+
+
         body = new CircleBody(this);
 
-        blibliki = new Blibliki(phrase, toneGenerator, body, out);
+        blibliki = new Blibliki(Phrases.kickPhrase(4), generator, body, out);
 //        blibliki.addDistortion(PhraseDistortionGenerator.createRandomPartialToneDistortion(phrase));
         blibliki.addDistortion(PhraseDistortionGenerator.createDistortion(0, blibliki));
 //        println(blibliki.getDistortion(0));
