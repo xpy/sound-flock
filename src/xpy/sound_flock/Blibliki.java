@@ -6,6 +6,7 @@ import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.Member;
 import xpy.sound_flock.Distortions.Distortion;
 import xpy.sound_flock.Distortions.DistortionApplication;
+import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
 import xpy.sound_flock.Instruments.BaseInstrumentGenerator;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 
@@ -167,6 +168,20 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         for (int i = 0; i < times; i++) {
             distortionApplications.get(index).distortion.apply();
 
+        }
+
+    }
+
+    public void handleDistortion(int index) {
+        if (loops % 2 == 0 && loops > 0 && loops % 4 != 0) {
+            if (distortionApplications.size() < 1)
+                addDistortion(PhraseDistortionGenerator.createDistortion(1, this));
+        }
+        if (distortionApplications.size() > 0) {
+            DistortionApplication da = distortionApplications.get(index);
+            if (loops % da.period == 0 && loops > 0) {
+                da.handleDistortion();
+            }
         }
 
     }

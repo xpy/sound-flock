@@ -82,24 +82,10 @@ public class Maestro {
                             blibliki.startingLoop = loops;
                             if (!blibliki.isPaused)
                                 blibliki.setNotes(meterLength);
-
-                            // DISTORTIONS
-                            if (blibliki.loops % 2 == 0 && blibliki.loops > 0 && blibliki.loops % 4 != 0) {
-                                if (blibliki.distortionApplications.size() < 1)
-                                    blibliki.addDistortion(PhraseDistortionGenerator.createDistortion(1, blibliki));
-                                blibliki.applyDistortion(0);
-                                if (r.nextBoolean())
-                                    blibliki.applyDistortion(0);
-
-                            }
-                            if (blibliki.loops % 4 == 0 && blibliki.loops > 0) {
-                                blibliki.revertDistortion(0);
-                                if (r.nextBoolean())
-                                    blibliki.revertDistortion(0);
-
-                            }
                         }
                     }
+
+                    bliblikiRuler.handleDistortions();
                 }
 
                 PApplet.println("numOfLast: " + numOfLast);

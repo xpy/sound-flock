@@ -97,7 +97,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
         public Template() {
             Random r = new Random();
-            moogFrequency = 1046;
+            moogFrequency = 880;
 
             fAdsrAttack = .001f;
             fAdsrDelay = .1f;

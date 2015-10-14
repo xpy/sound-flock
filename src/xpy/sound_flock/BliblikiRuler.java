@@ -4,6 +4,7 @@ import ddf.minim.AudioOutput;
 import ddf.minim.Minim;
 import processing.core.PApplet;
 import xpy.sound_flock.Body.CircleBody;
+import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
 import xpy.sound_flock.Instruments.*;
 
 import java.util.ArrayList;
@@ -75,6 +76,13 @@ public class BliblikiRuler {
                 return new Blibliki(Phrases.tonePhrase(4), new ToneInstrumentGenerator(), new CircleBody(pa), out);
             case B_TSIK:
                 return new Blibliki(Phrases.tinyPhrase(4), new TsikInstrumentGenerator(), new CircleBody(pa), out);
+        }
+
+    }
+
+    public void handleDistortions() {
+        for (Blibliki blibliki : bliblikia) {
+            blibliki.handleDistortion(0);
         }
 
     }
