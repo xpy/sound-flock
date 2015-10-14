@@ -5,6 +5,7 @@ import processing.core.*;
 import xpy.sound_flock.Body.Body;
 import xpy.sound_flock.Body.Member;
 import xpy.sound_flock.Distortions.Distortion;
+import xpy.sound_flock.Distortions.DistortionApplication;
 import xpy.sound_flock.Instruments.BaseInstrumentGenerator;
 import xpy.sound_flock.Instruments.InstrumentGenerator;
 
@@ -22,7 +23,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     private Phrase                  phrase;
     private Body                    body;
 
-    public List<Distortion> distortions = new ArrayList<>();
+    public List<DistortionApplication> distortionApplications = new ArrayList<>();
 
     private List<LoopEvent> loopEvents = new ArrayList<>();
 
@@ -31,7 +32,8 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     private long beatTime = (long) (60000f / 120f);
 
     private boolean hasBody      = false;
-    public  boolean isPlaying    = false;
+    public  boolean hasStarted   = false;
+    public  boolean isPaused     = false;
     public  int     startingLoop = 0;
 
     public Blibliki(Phrase phrase, BaseInstrumentGenerator instrumentGenerator, Body body, AudioOutput out) {
@@ -117,13 +119,14 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
                 }
                 i += member.getNote().duration;
             }
-        else{
+        else {
 
             for (Note note : phrase.notes) {
                 InstrumentGenerator.Instrument instrument = instrumentGenerator.createInstrument(note.pitch, instrumentGenerator.getAmplitude(), out);
                 out.playNoteAtBeat(meterLength, i, Math.min(note.duration, instrumentGenerator.getMaxDuration()), instrument);
                 i += note.duration;
-            }}
+            }
+        }
         loops++;
 //        out.resumeNotes();
     }
@@ -152,24 +155,24 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     }
 
     public void addDistortion(Distortion distortion) {
-        distortions.add(distortion);
+        distortionApplications.add(new DistortionApplication(distortion));
     }
 
     public void applyDistortion(int index) {
-        distortions.get(index).apply();
+        distortionApplications.get(index).distortion.apply();
 
     }
 
     public void applyDistortion(int index, int times) {
         for (int i = 0; i < times; i++) {
-            distortions.get(index).apply();
+            distortionApplications.get(index).distortion.apply();
 
         }
 
     }
 
     public void revertDistortion(int index) {
-        distortions.get(index).revert();
+        distortionApplications.get(index).distortion.revert();
     }
 
     public void addLoopEvent(LoopEvent loopEvent) {
@@ -177,7 +180,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     }
 
     public Distortion getDistortion(int index) {
-        return distortions.get(index);
+        return distortionApplications.get(index).distortion;
     }
 
     public static class LoopEvent {

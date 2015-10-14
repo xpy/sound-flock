@@ -3,9 +3,7 @@ package xpy.sound_flock;
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.Sink;
 import processing.core.PApplet;
-import xpy.sound_flock.Body.CircleBody;
 import xpy.sound_flock.Distortions.*;
-import xpy.sound_flock.Instruments.*;
 
 import java.util.*;
 
@@ -27,12 +25,6 @@ public class Maestro {
 
     public final static Sink sink = new Sink();
 
-    public static final int B_SYNTH = 0;
-    public static final int B_SPARK = 1;
-    public static final int B_KICK  = 2;
-    public static final int B_SNARE = 3;
-    public static final int B_TONE  = 4;
-    public static final int B_TSIK  = 5;
 
     public boolean             lastForAll     = false;
     public List<BliblikiRuler> bliblikiRulers = new ArrayList<>();
@@ -45,17 +37,20 @@ public class Maestro {
     public Maestro(PApplet pa, AudioOutput out) {
         this.out = out;
         this.pa = pa;
+
+        BliblikiRuler.out = this.out;
+        BliblikiRuler.pa = this.pa;
+
         sink.patch(out);
 
-        bliblikiRulers.add(new BliblikiRuler(B_SYNTH, 2, 1, 10, 0, 0));
-        bliblikiRulers.add(new BliblikiRuler(B_SPARK, 2, 1, 8, 5, 5));
-        bliblikiRulers.add(new BliblikiRuler(B_KICK, 1, 1, 7, 0, 0));
-        bliblikiRulers.add(new BliblikiRuler(B_SNARE, 2, 0, 0, 2, 3));
-        bliblikiRulers.add(new BliblikiRuler(B_TONE, 2, 1, 3, 2, 8));
-        bliblikiRulers.add(new BliblikiRuler(B_TSIK, 3, 1, 5, 5, 5));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SYNTH, 2, 1, 10, 0, 0));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, 2, 1, 8, 5, 5));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_KICK, 1, 1, 7, 0, 0));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SNARE, 2, 0, 0, 2, 3));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TONE, 2, 1, 3, 2, 8));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, 3, 1, 5, 5, 5));
     }
 
-    private List<Blibliki> bliblikia = new ArrayList<>();
 
     public void start() {
         nextCheck = System.currentTimeMillis() + out.nextMeterStart(meterLength) + 100;
@@ -69,47 +64,47 @@ public class Maestro {
 
             if (loops < numOfLoops) {
                 PApplet.println("Maestro Loops:" + loops);
-                PApplet.println("Maestro Bliblikia:" + bliblikia.size());
+                PApplet.println("Maestro Bliblikia:" + numOfBliblikia());
                 int numOfLast = 0;
 
-                for (Blibliki aBliblikia : bliblikia) {
-                    if (aBliblikia.isPlaying && aBliblikia.getPhrase().phraseLength - (loops - aBliblikia.startingLoop) == 1 || aBliblikia.getPhrase().phraseLength == 1) {
-                        numOfLast++;
-                    }
-                    if (!aBliblikia.isPlaying) {
-                        aBliblikia.setNotes(meterLength);
-
-                        aBliblikia.isPlaying = true;
-                        aBliblikia.startingLoop = loops;
-                    } else if (loops - aBliblikia.startingLoop == aBliblikia.getPhrase().phraseLength) {
-
-                        // LOOPS
-                        aBliblikia.startingLoop = loops;
-//                        if (r.nextInt(10) > 2 && numOfLast != bliblikia.size())
-                        aBliblikia.setNotes(meterLength);
-
-                        // DISTORTIONS
-                        if (aBliblikia.loops % 2 == 0 && aBliblikia.loops > 0 && aBliblikia.loops % 4 != 0) {
-                            if (aBliblikia.distortions.size() < 1)
-                                aBliblikia.addDistortion(PhraseDistortionGenerator.createDistortion(1, aBliblikia));
-                            aBliblikia.applyDistortion(0);
-                            if (r.nextBoolean())
-                                aBliblikia.applyDistortion(0);
-
+                for (BliblikiRuler bliblikiRuler : bliblikiRulers) {
+                    for (Blibliki blibliki : bliblikiRuler.bliblikia) {
+                        if (blibliki.hasStarted && blibliki.getPhrase().phraseLength - (loops - blibliki.startingLoop) == 1 || blibliki.getPhrase().phraseLength == 1) {
+                            numOfLast++;
                         }
-                        if (aBliblikia.loops % 4 == 0 && aBliblikia.loops > 0) {
-                            aBliblikia.revertDistortion(0);
-                            if (r.nextBoolean())
-                                aBliblikia.revertDistortion(0);
+                        if (!blibliki.hasStarted) {
+                            blibliki.setNotes(meterLength);
+                            blibliki.hasStarted = true;
+                            blibliki.startingLoop = loops;
+                        } else if (loops - blibliki.startingLoop == blibliki.getPhrase().phraseLength) {
 
+                            // LOOPS
+                            blibliki.startingLoop = loops;
+                            if (!blibliki.isPaused)
+                                blibliki.setNotes(meterLength);
+
+                            // DISTORTIONS
+                            if (blibliki.loops % 2 == 0 && blibliki.loops > 0 && blibliki.loops % 4 != 0) {
+                                if (blibliki.distortionApplications.size() < 1)
+                                    blibliki.addDistortion(PhraseDistortionGenerator.createDistortion(1, blibliki));
+                                blibliki.applyDistortion(0);
+                                if (r.nextBoolean())
+                                    blibliki.applyDistortion(0);
+
+                            }
+                            if (blibliki.loops % 4 == 0 && blibliki.loops > 0) {
+                                blibliki.revertDistortion(0);
+                                if (r.nextBoolean())
+                                    blibliki.revertDistortion(0);
+
+                            }
                         }
-
                     }
                 }
 
                 PApplet.println("numOfLast: " + numOfLast);
 
-                if (r.nextInt(10) > 2 && numOfLast == bliblikia.size()) {
+                if (r.nextInt(10) > 2 && numOfLast == numOfBliblikia()) {
                     addBliblikiByRules();
 //                    addBlibliki(createBlibliki(B_SYNTH));
                 }
@@ -122,49 +117,28 @@ public class Maestro {
             out.resumeNotes();
         }
 
-        for (Blibliki aBliblikia : bliblikia) {
-            if (aBliblikia.hasBody())
-                aBliblikia.getBody().update();
+        for (BliblikiRuler bliblikiRuler : bliblikiRulers) {
+            for (Blibliki aBliblikia : bliblikiRuler.bliblikia) {
+                if (aBliblikia.hasBody())
+                    aBliblikia.getBody().update();
+            }
         }
 
 
     }
 
-    public void addBlibliki(Blibliki blibliki) {
-        this.bliblikia.add(blibliki);
+    public int numOfBliblikia() {
+        int sum = 0;
+        for (BliblikiRuler bliblikiRuler : bliblikiRulers) {
+            sum += bliblikiRuler.bliblikia.size();
+        }
+        return sum;
     }
+
 
     public void addBlibliki(BliblikiRuler bliblikiRuler) {
-        this.bliblikia.add(createBlibliki(bliblikiRuler.blibliki));
+        bliblikiRuler.addBlibliki();
         bliblikiRuler.numOfInstances++;
-    }
-
-    public Blibliki createBlibliki() {
-
-        Random r = new Random();
-
-        return createBlibliki(r.nextInt(5));
-
-    }
-
-    public Blibliki createBlibliki(int bliblikiIndex) {
-
-
-        switch (bliblikiIndex) {
-            default:
-                return new Blibliki(Phrases.synthPhrase(4), new SynthInstrumentGenerator(), new CircleBody(pa), out);
-            case B_SPARK:
-                return new Blibliki(Phrases.tinyPhrase(4), new SparkInstrumentGenerator(), new CircleBody(pa), out);
-            case B_KICK:
-                return new Blibliki(Phrases.kickPhrase(4), new KickInstrumentGenerator(), new CircleBody(pa), out);
-            case B_SNARE:
-                return new Blibliki(Phrases.widePhrase(4), new SnareInstrumentGenerator(), new CircleBody(pa), out);
-            case B_TONE:
-                return new Blibliki(Phrases.tonePhrase(4), new ToneInstrumentGenerator(), new CircleBody(pa), out);
-            case B_TSIK:
-                return new Blibliki(Phrases.tinyPhrase(4), new TsikInstrumentGenerator(), new CircleBody(pa), out);
-        }
-
     }
 
     public boolean addPreludeBlibliki() {
@@ -183,9 +157,8 @@ public class Maestro {
             int next = r.nextInt(chanceSum);
             for (HashMap.Entry<BliblikiRuler, Integer> pm : preludeMap.entrySet()) {
                 if (pm.getValue() > next) {
-                    addBlibliki(createBlibliki(pm.getKey().blibliki));
+                    pm.getKey().addBlibliki();
                     pm.getKey().numOfPreludeInstances++;
-                    pm.getKey().numOfInstances++;
                     added = true;
                     break;
                 }
@@ -216,8 +189,8 @@ public class Maestro {
             if (validBlibliki.size() == 0)
                 return false;
             int nextBlibliki = r.nextInt(validBlibliki.size());
-            bliblikiRulers.get(validBlibliki.get(nextBlibliki)).numOfInstances++;
-            addBlibliki(createBlibliki(validBlibliki.get(nextBlibliki)));
+            bliblikiRulers.get(validBlibliki.get(nextBlibliki)).addBlibliki();
+
 
         }
         return false;
