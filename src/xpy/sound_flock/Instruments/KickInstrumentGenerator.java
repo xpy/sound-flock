@@ -20,8 +20,8 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
         maxPitch = Note.getPitchOfIndex(-12);
         minPitch = Note.getPitchOfIndex(-24);
 
-        maxDuration = .5f;
-        minDuration = .125f;
+        maxDuration = .025f;
+        minDuration = .025f;
     }
 
     public Template createTemplate() {
@@ -54,11 +54,11 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
             this.amplitude = .4f;
             this.out = out;
             Wavetable w = new Wavetable(Waves.SINE);
-            w.addNoise(.0025f);
+//            w.addNoise(.0025f);
             Constant c   = new Constant(1.5f * this.frequency);
             Oscil    osc = new Oscil(frequency, this.amplitude, w);
 
-            adsrModulator = new ADSR(1f, 0.001f, 0.05f, .2f, 0.3f);
+            adsrModulator = new ADSR(1f, 0.002f, 0.015f, .1f, 0.2f);
             c.patch(adsrModulator).patch(osc.frequency);
             preFinalUgen = osc;
         }
@@ -79,7 +79,6 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
     public static class Template extends BaseInstrumentGenerator.BaseTemplate {
 
-        float frequencyAmp;
 
 
         public Template() {
@@ -88,7 +87,6 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
             fAdsrDelay = .05f;
             fAdsrRelease = .3f;
 
-            frequencyAmp = (r.nextInt(4) + 4) * .125f;
 //            this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
         }
     }

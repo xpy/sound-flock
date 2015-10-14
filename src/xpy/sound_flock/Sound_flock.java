@@ -42,8 +42,8 @@ public class Sound_flock extends PApplet {
 
     Body body;
 
-    // Every instrument must implement the Instrument interface so
-    // playNote() can call the instrument's methods.
+    // Every blibliki must implement the Instrument interface so
+    // playNote() can call the blibliki's methods.
     public static void main(String args[]) {
         // full-screen mode can be activated via parameters to PApplets main method.
         PApplet.main(new String[] {"xpy.sound_flock.Sound_flock"});

@@ -86,9 +86,9 @@ public class Phrases {
 
 
         phrase.meterLength = meterLength;
-        phrase.phraseLength = 1;//r.nextInt(2) + 1;
+        phrase.phraseLength = r.nextInt(2) + 1;
         phrase.numOfNotes = 1;//(int) Math.pow(2, r.nextInt(2));
-        int pitchIndex = r.nextInt(40) - 20;
+        int pitchIndex = r.nextInt(37) - 24;
         phrase.baseNotePitch = Note.getPitchOfIndex(pitchIndex);
         phrase.legato = false;
         phrase.baseNoteLength = (float) phrase.getPhraseMeters() / (float) phrase.numOfNotes;

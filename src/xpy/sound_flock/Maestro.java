@@ -7,9 +7,7 @@ import xpy.sound_flock.Body.CircleBody;
 import xpy.sound_flock.Distortions.*;
 import xpy.sound_flock.Instruments.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Maestro
@@ -22,7 +20,10 @@ public class Maestro {
     public  int loops       = 0;
     private int meterLength = 4;
     private PApplet pa;
-    private int numOfLoops = 50;
+    private int     numOfLoops       = 50;
+    private boolean isPrelude        = true;
+    private int     preludeEnd       = 10;
+    private int     preludeEndChance = 0;
 
     public final static Sink sink = new Sink();
 
@@ -36,17 +37,22 @@ public class Maestro {
     public boolean             lastForAll     = false;
     public List<BliblikiRuler> bliblikiRulers = new ArrayList<>();
 
+    public static void main(String args[]) {
+        // full-screen mode can be activated via parameters to PApplets main method.
+        PApplet.main(new String[]{"xpy.sound_flock.Sound_flock"});
+    }
+
     public Maestro(PApplet pa, AudioOutput out) {
         this.out = out;
         this.pa = pa;
         sink.patch(out);
 
-        bliblikiRulers.add(new BliblikiRuler(B_SYNTH, 2));
-        bliblikiRulers.add(new BliblikiRuler(B_SPARK, 2));
-        bliblikiRulers.add(new BliblikiRuler(B_KICK, 1));
-        bliblikiRulers.add(new BliblikiRuler(B_SNARE, 2));
-        bliblikiRulers.add(new BliblikiRuler(B_TONE, 2));
-        bliblikiRulers.add(new BliblikiRuler(B_TSIK, 3));
+        bliblikiRulers.add(new BliblikiRuler(B_SYNTH, 2, 1, 10, 0, 0));
+        bliblikiRulers.add(new BliblikiRuler(B_SPARK, 2, 1, 8, 5, 5));
+        bliblikiRulers.add(new BliblikiRuler(B_KICK, 1, 1, 7, 0, 0));
+        bliblikiRulers.add(new BliblikiRuler(B_SNARE, 2, 0, 0, 2, 3));
+        bliblikiRulers.add(new BliblikiRuler(B_TONE, 2, 1, 3, 2, 8));
+        bliblikiRulers.add(new BliblikiRuler(B_TSIK, 3, 1, 5, 5, 5));
     }
 
     private List<Blibliki> bliblikia = new ArrayList<>();
@@ -79,8 +85,8 @@ public class Maestro {
 
                         // LOOPS
                         aBliblikia.startingLoop = loops;
-                        if (r.nextInt(10) > 2 && numOfLast != bliblikia.size())
-                            aBliblikia.setNotes(meterLength);
+//                        if (r.nextInt(10) > 2 && numOfLast != bliblikia.size())
+                        aBliblikia.setNotes(meterLength);
 
                         // DISTORTIONS
                         if (aBliblikia.loops % 2 == 0 && aBliblikia.loops > 0 && aBliblikia.loops % 4 != 0) {
@@ -105,6 +111,7 @@ public class Maestro {
 
                 if (r.nextInt(10) > 2 && numOfLast == bliblikia.size()) {
                     addBliblikiByRules();
+//                    addBlibliki(createBlibliki(B_SYNTH));
                 }
 
             }
@@ -127,6 +134,11 @@ public class Maestro {
         this.bliblikia.add(blibliki);
     }
 
+    public void addBlibliki(BliblikiRuler bliblikiRuler) {
+        this.bliblikia.add(createBlibliki(bliblikiRuler.blibliki));
+        bliblikiRuler.numOfInstances++;
+    }
+
     public Blibliki createBlibliki() {
 
         Random r = new Random();
@@ -146,28 +158,68 @@ public class Maestro {
             case B_KICK:
                 return new Blibliki(Phrases.kickPhrase(4), new KickInstrumentGenerator(), new CircleBody(pa), out);
             case B_SNARE:
-            return new Blibliki(Phrases.widePhrase(4), new SnareInstrumentGenerator(), new CircleBody(pa), out);
+                return new Blibliki(Phrases.widePhrase(4), new SnareInstrumentGenerator(), new CircleBody(pa), out);
             case B_TONE:
-            return new Blibliki(Phrases.tonePhrase(4), new ToneInstrumentGenerator(), new CircleBody(pa), out);
+                return new Blibliki(Phrases.tonePhrase(4), new ToneInstrumentGenerator(), new CircleBody(pa), out);
             case B_TSIK:
                 return new Blibliki(Phrases.tinyPhrase(4), new TsikInstrumentGenerator(), new CircleBody(pa), out);
         }
 
     }
 
+    public boolean addPreludeBlibliki() {
+        Random                          r          = new Random();
+        boolean                         added      = false;
+        HashMap<BliblikiRuler, Integer> preludeMap = new HashMap<>();
+        int                             chanceSum  = 0;
+
+        for (BliblikiRuler bliblikiRuler : bliblikiRulers) {
+            if (bliblikiRuler.preluder > 0 && bliblikiRuler.canPrelude()) {
+                chanceSum += bliblikiRuler.preluder;
+                preludeMap.put(bliblikiRuler, chanceSum);
+            }
+        }
+        if (chanceSum > 0) {
+            int next = r.nextInt(chanceSum);
+            for (HashMap.Entry<BliblikiRuler, Integer> pm : preludeMap.entrySet()) {
+                if (pm.getValue() > next) {
+                    addBlibliki(createBlibliki(pm.getKey().blibliki));
+                    pm.getKey().numOfPreludeInstances++;
+                    pm.getKey().numOfInstances++;
+                    added = true;
+                    break;
+                }
+
+            }
+        }
+        int pe = r.nextInt(preludeEnd);
+//            PApplet.println("pe: "+pe);
+//            PApplet.println("preludeEndChance: "+preludeEndChance);
+        isPrelude = pe > preludeEndChance++;
+        return added;
+
+    }
+
     public boolean addBliblikiByRules() {
 
-        Random        r             = new Random();
-        List<Integer> validBlibliki = new ArrayList<>();
-        for (int i = 0; i < bliblikiRulers.size(); i++) {
-            if (bliblikiRulers.get(i).hasSpace())
-                validBlibliki.add(i);
+        Random r = new Random();
+        PApplet.println("isPrelude: " + isPrelude);
+        if (isPrelude) {
+            return addPreludeBlibliki();
+        } else {
+            List<Integer> validBlibliki = new ArrayList<>();
+
+            for (int i = 0; i < bliblikiRulers.size(); i++) {
+                if (bliblikiRulers.get(i).hasSpace())
+                    validBlibliki.add(bliblikiRulers.get(i).blibliki);
+            }
+            if (validBlibliki.size() == 0)
+                return false;
+            int nextBlibliki = r.nextInt(validBlibliki.size());
+            bliblikiRulers.get(validBlibliki.get(nextBlibliki)).numOfInstances++;
+            addBlibliki(createBlibliki(validBlibliki.get(nextBlibliki)));
+
         }
-        if (validBlibliki.size() == 0)
-            return false;
-        int nextBlibliki = r.nextInt(validBlibliki.size());
-        bliblikiRulers.get(validBlibliki.get(nextBlibliki)).numOfInstances++;
-        addBlibliki(createBlibliki(validBlibliki.get(nextBlibliki)));
         return false;
     }
 }

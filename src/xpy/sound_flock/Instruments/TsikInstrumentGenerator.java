@@ -1,6 +1,7 @@
 package xpy.sound_flock.Instruments;
 
 import ddf.minim.ugens.ADSR;
+import ddf.minim.ugens.Waves;
 
 /**
  * TsikInstrumentGenerator
@@ -9,8 +10,8 @@ import ddf.minim.ugens.ADSR;
 public class TsikInstrumentGenerator extends SparkInstrumentGenerator {
 
 
-
     public TsikInstrumentGenerator() {
+        amplitude = .4f;
         template = createTemplate();
         maxDuration = .25f;
         minDuration = .125f;
@@ -27,6 +28,11 @@ public class TsikInstrumentGenerator extends SparkInstrumentGenerator {
             return new ADSR(amplitude * 1.5f, fAdsrAttack, fAdsrDelay, 0, fAdsrRelease);
         }
 
+        public Template() {
+            super();
+            moogFrequency = 1000;
+
+        }
     }
 
 }

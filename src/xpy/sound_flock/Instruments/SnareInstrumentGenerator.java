@@ -20,8 +20,8 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
 
     public SnareInstrumentGenerator() {
         template = createTemplate();
-        maxDuration = .125f;
-        minDuration = .125f;
+        maxDuration = .075f;
+        minDuration = .075f;
 
         minPitch = Note.getPitchOfIndex(-24);
         maxPitch = Note.getPitchOfIndex(12);

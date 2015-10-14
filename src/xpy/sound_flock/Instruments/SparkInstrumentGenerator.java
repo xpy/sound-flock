@@ -12,13 +12,14 @@ import java.util.Random;
 public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
-    public float amplitude = .5f;
 
 
     public SparkInstrumentGenerator() {
         template = createTemplate();
         maxDuration = .25f;
         minDuration = .125f;
+        amplitude = .25f;
+
     }
 
     public Template createTemplate() {
@@ -56,7 +57,7 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
             this.amplitude = amplitude;
             this.out = out;
 
-            setMoog(new MoogFilter(template.getTargetMoog(), .2f, MoogFilter.Type.BP));
+            setMoog(new MoogFilter(template.getTargetMoog(), .7f, MoogFilter.Type.BP));
             osc = new Oscil(this.frequency,  this.amplitude, template.wavetable);
 
             preFinalUgen = osc;
@@ -74,7 +75,7 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
         public Template() {
 
-            setFullAmpDelay((new Random()).nextInt(5) + 1);
+//            setFullAmpDelay((new Random()).nextInt(5) + 1);
             fAdsrAttack = .001f;
             fAdsrDelay = .0f;
             fAdsrRelease = .001f;

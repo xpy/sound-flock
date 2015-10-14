@@ -3,6 +3,7 @@ package xpy.sound_flock.Instruments;
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.*;
 import processing.core.PApplet;
+import xpy.sound_flock.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,14 @@ import static processing.core.PApplet.println;
 public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
-    public float amplitude = .65f;
 
 
     public SynthInstrumentGenerator() {
-
+        amplitude = .35f;
+        maxPitch = Note.getPitchOfIndex(-24);
+        minPitch = Note.getPitchOfIndex(12);
         this.template = createTemplate();
+        println(this.template);
         maxDuration = 120f;
         minDuration = .25f;
     }
@@ -85,32 +88,23 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             this.amplitude = amplitude;
 
             for (int i = 0; i < template.numOfOscillators; i++) {
-                Oscil osc = new Oscil(initialFrequency * template.oscillatorFrequencyFactor.get(i), amplitude / (template.numOfOscillators + 1), getWaveTable(template.oscillatorWave.get(i)));
+                Oscil osc = new Oscil(initialFrequency * template.oscillatorFrequencyFactor.get(i), this.amplitude / (template.numOfOscillators), getWaveTable(template.oscillatorWave.get(i)));
                 oscillators.add(osc);
             }
 
-            this.modulator = new Oscil(initialFrequency, amplitude / (template.numOfOscillators + 1), getWaveTable(template.modulatorWaveTable));
-//            ampLine.patch(modulator.amplitude);
-            for (int i = 0; i < template.numOfOscillators; i++) {
-                this.modulator.patch(oscillators.get(i)).patch(s);
-//                ampLine.patch(oscillators.get(i).amplitude);
+            // this.modulator = new Oscil(initialFrequency, amplitude / (template.numOfOscillators + 1), getWaveTable(template.modulatorWaveTable));
 
+            for (int i = 0; i < template.numOfOscillators; i++) {
+                (oscillators.get(i)).patch(s);
             }
 
-//        ml = new Multiplier((r.nextInt(7) + 2) * initialFrequency);
             ml = new Multiplier(template.getTargetMoog());
 
-            setMoog(new MoogFilter(template.getTargetMoog(), .7f, MoogFilter.Type.LP));
+            setMoog(new MoogFilter(template.getTargetMoog(), .2f, MoogFilter.Type.LP));
             moogModulator = new Oscil(template.moogModulatorFrequency, 1, template.moogModulatorWavetable);
             moogModulator.patch(ml).patch(moogFilter.frequency);
-//        moogFilter = new MoogFilter((r.nextInt(7) + 2) * initialFrequency, .7f, MoogFilter.Type.LP);
 
             preFinalUgen = s;
-        }
-
-        @Override
-        public void noteOn(float dur) {
-            super.noteOn(dur);
         }
 
         public void setInitialFrequency(float frequency) {
@@ -133,26 +127,35 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
         Template() {
 
-            fAdsrAttack = 0.3f;
-            fAdsrDelay = .3f;
-            fAdsrRelease = 0.3f;
-            moogFrequency = 400;
-            setFullAmpDelay(15);
-
             Random r = new Random();
-            moogModulatorFrequency = (float) Math.pow(2, r.nextInt(8) - 2);
-            this.numOfOscillators = r.nextInt(4) + 1;
-            this.modulatorWaveTable = r.nextInt(4);
-
-            for (int i = 0; i < this.numOfOscillators; i++) {
-                oscillatorFrequencyFactor.add(1 - i * .25f);
-                oscillatorWave.add(r.nextInt(6));
-            }
-            moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{0});
+            fAdsrAttack = 0.1f;
+            fAdsrDelay = .02f;
+            fAdsrRelease = 0.1f;
+            moogFrequency = 440 * (r.nextInt(2) + 1);
+            setFullAmpDelay(15);
+            Integer[] mogModulatorWaveTables = new Integer[]{0, 1, 5};
+            int       a                      = r.nextInt(3);
+            moogModulatorWavetable = new Wavetable(getWaveTable(mogModulatorWaveTables[a]));
             moogModulatorWavetable.offset(1f);
             moogModulatorWavetable.normalize();
-            moogModulatorWavetable.offset(.7f);
+            moogModulatorWavetable.offset(.3f);
             moogModulatorWavetable.normalize();
+
+
+            moogModulatorFrequency = (float) Math.pow(2, r.nextInt(5) - 2);
+
+            this.numOfOscillators = 2;
+//            this.modulatorWaveTable = 0;
+
+            for (int i = 0; i < this.numOfOscillators; i++) {
+//                oscillatorFrequencyFactor.add(1 - i * .25f);
+//                oscillatorWave.add(r.nextInt(6));
+            }
+            oscillatorFrequencyFactor.add(1f);
+            oscillatorFrequencyFactor.add((r.nextInt(6) + 1) * .125f);
+
+            oscillatorWave.add(0);
+            oscillatorWave.add(r.nextInt(6));
 
 
         }

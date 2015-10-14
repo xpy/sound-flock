@@ -58,15 +58,16 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
             this.out = out;
             this.frequency = frequency;
-            this.amplitude = .5f;//amplitude;
+            this.amplitude = .4f;//amplitude;
             if (template.modulatorFrequencyAmp > 32)
                 this.amplitude = amplitude * .5f;
 
             finalADSR = template.getFinalADSR(this.amplitude);
             Wavetable moogModulatorWavetable = WavetableGenerator.gen9(4086, new float[]{1}, new float[]{1}, new float[]{1});
+//            Wavetable moogModulatorWavetable =new Wavetable(Waves.SQUARE);
             moogModulatorWavetable.offset(1f);
             moogModulatorWavetable.normalize();
-            moogModulatorWavetable.offset(.7f);
+            moogModulatorWavetable.offset(.5f);
             moogModulatorWavetable.normalize();
 
             osc = new Oscil(this.frequency, this.amplitude / 2, getWaveTable(0));
@@ -79,7 +80,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
             osc2.patch(osc);
             setMoog(new MoogFilter(template.moogFrequency * template.targetMoogFactor, .7f, MoogFilter.Type.LP));
-            Delay del = new Delay(0.05f, .7f, true, true);
+            Delay del = new Delay(0.075f, .75f, true, true);
             osc.patch(del);
             preFinalUgen = del;
 
@@ -100,20 +101,12 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
             fAdsrAttack = .001f;
             fAdsrDelay = .1f;
-            fAdsrRelease = .2f;
+            fAdsrRelease = .75f;
             waveIndex = 0;//r.nextInt(6);
             modulatorWaveIndex = r.nextInt(6);
             frequencyModulatorFrequency = (float) Math.pow(2, r.nextInt(9) + 8);
             modulatorFrequencyAmp = (float) Math.pow(2, r.nextInt(4) - 2);
-/*
-            if (waveIndex == modulatorWaveIndex && (modulatorWaveIndex == 2 || modulatorWaveIndex == 5)) {
-                if (modulatorFrequencyAmp == 1)
-                    modulatorFrequencyAmp = (float) Math.pow(2, r.nextInt(4) + 2);
 
-            }
-*/
-//            this.moogFactor = r.nextFloat() + .5f;
-//            this.targetMoogFactor = moogFactor;
         }
 
         @Override

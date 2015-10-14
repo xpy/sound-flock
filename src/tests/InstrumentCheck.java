@@ -23,6 +23,7 @@ public class InstrumentCheck extends PApplet {
     Body        body;
     Long        startTime;
     boolean tuned = false;
+    long t;
 
     public void setup() {
         // initialize the drawing window
@@ -34,22 +35,30 @@ public class InstrumentCheck extends PApplet {
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
 
-        xpy.sound_flock.Maestro a = new Maestro(this,out);
+        xpy.sound_flock.Maestro a = new Maestro(this, out);
 
-        BaseInstrumentGenerator generator = new SnareInstrumentGenerator();
+        BaseInstrumentGenerator generator = new ToneInstrumentGenerator();
 
-        int k =0;
+        int k = 0;
+ /*
+        float freq = Note.getPitchOfIndex(0);
+        InstrumentGenerator.Instrument inst = generator.createInstrument(freq, generator.getAmplitude(), out);
+        out.playNote(1, 4, inst);
 
-        for (int i = -24; i < -12; i++) {
+*/
+        for (int i = -0; i < 24; i++) {
             float freq = Note.getPitchOfIndex(i);
             InstrumentGenerator.Instrument inst = generator.createInstrument(freq, generator.getAmplitude(), out);
             println(freq);
-            float duration =  generator.normalizeDuration(.025f);
-            println("duration: "+duration);
-            out.playNote(k+=1, duration, inst);
+            float duration = generator.normalizeDuration(1);
+            println("duration: " + duration);
+            out.playNote(k *( .5f + duration), duration, inst);
+            k++;
 //            out.playNote(k+=1, 0.025f, inst);
 //            out.playNoteAtBeat(4,k+=1, 0.025f, inst);
         }
+
+        t = System.currentTimeMillis();
     }
 
     public void draw() {
@@ -67,6 +76,9 @@ public class InstrumentCheck extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
 
+        if (System.currentTimeMillis() - t > 10000) {
+            t = System.currentTimeMillis();
+        }
 
     }
 
