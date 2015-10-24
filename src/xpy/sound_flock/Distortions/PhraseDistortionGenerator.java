@@ -13,11 +13,10 @@ import java.util.Random;
  */
 public class PhraseDistortionGenerator {
 
-    public static final int DISTORTION_TONE_FULL    = 0;
-    public static final int DISTORTION_TONE_PARTIAL = 1;
-    public static final int DISTORTION_MOOG         = 2;
-    public static final int DISTORTION_TONE_PARTIAL_RANDOM = 3;
-
+    public static final int DISTORTION_TONE_FULL           = 0;
+    public static final int DISTORTION_TONE_PARTIAL        = 1;
+    public static final int DISTORTION_TONE_PARTIAL_RANDOM = 2;
+    public static final int DISTORTION_MOOG                = 3;
 
 
     public static void full_tone_distortion() {
@@ -33,7 +32,7 @@ public class PhraseDistortionGenerator {
                 return new PartialToneDistortion(blibliki.getPhrase());
             case (DISTORTION_TONE_PARTIAL_RANDOM):
                 Random r = new Random();
-                return new PartialToneDistortion(blibliki.getPhrase(),r.nextInt(3),r.nextInt(3),r.nextInt(blibliki.getPhrase().numOfNotes));
+                return new PartialToneDistortion(blibliki.getPhrase(), r.nextInt(3), r.nextInt(3), r.nextInt(blibliki.getPhrase().numOfNotes)+1);
             case (DISTORTION_MOOG):
                 return new MoogFactorDistortion(blibliki.instrumentGenerator);
             default:
@@ -47,7 +46,7 @@ public class PhraseDistortionGenerator {
 
     public static Distortion createRandomPartialToneDistortion(Phrase phrase) {
         Random r = new Random();
-        return new PartialToneDistortion(phrase, r.nextInt(3), r.nextInt(2)+1, r.nextInt(phrase.numOfNotes - 1) + 1);
+        return new PartialToneDistortion(phrase, r.nextInt(3), r.nextInt(2) + 1, r.nextInt(phrase.numOfNotes - 1) + 1);
     }
 
     public static Distortion createMoogDistortion(BaseInstrumentGenerator instrumentGenerator) {

@@ -1,5 +1,6 @@
 package tests;
 
+import Boids.FlockWorld.FlockWorld;
 import ddf.minim.*;
 import processing.core.PApplet;
 import xpy.sound_flock.Blibliki;
@@ -32,6 +33,7 @@ public class Maestro extends PApplet {
 //        minim.debugOn();
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
+        println("out.getVolume(): " + out.getVolume());
 //        recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_" + System.currentTimeMillis() + ".wav");
         recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_1.wav");
 
@@ -39,13 +41,15 @@ public class Maestro extends PApplet {
         if (record)
             recorder.beginRecord();
         maestro.start();
+        background(0);
     }
 
     public void draw() {
         // erase the window to black
-        background(0);
-        // draw using a white stroke
-        stroke(255);
+/*
+        fill(0, 0, 0, 10);
+        rect(0, 0, width, height);
+*/
         // draw the waveforms
  /*       for (int i = 0; i < out.bufferSize() - 1; i++) {
             // find the x position of each buffer value

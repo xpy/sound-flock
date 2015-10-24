@@ -223,15 +223,15 @@ public class Note extends PApplet {
 //        return Math.min((new Random().nextInt(7) + 1) / 4f, maxDuration);
 
         for (int i = 6; i >0; i--) {
-            if(((Math.max(0, (i - 4)) + i) * .25f)<maxDuration){
-                maxDuration = (Math.max(0, (i - 4)) + i) * .25f;
+            if(((Math.max(0, (i - 4)) + i) * .5f)<maxDuration){
+                maxDuration = (Math.max(0, (i - 4)) + i) * .5f;
                 break;
             }
 
         }
 //        return Math.min((float)Math.pow(2,new Random().nextInt(4)-1) / 4f, maxDuration);
         int x = new Random().nextInt(6) + 1;
-        return Math.min((Math.max(0, (x - 4)) + x) * .25f, maxDuration);
+        return Math.min((Math.max(0, (x - 4)) + x) * .5f, maxDuration);
 
     }
 

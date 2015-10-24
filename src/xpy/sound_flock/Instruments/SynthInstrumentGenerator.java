@@ -102,6 +102,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
             setMoog(new MoogFilter(template.getTargetMoog(), .2f, MoogFilter.Type.LP));
             moogModulator = new Oscil(template.moogModulatorFrequency, 1, template.moogModulatorWavetable);
+//            moogModulator.setPhase(template.moogModulatorPhase);
             moogModulator.patch(ml).patch(moogFilter.frequency);
 
             preFinalUgen = s;
@@ -124,6 +125,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
         int       numOfOscillators;
         Wavetable moogModulatorWavetable;
+        float     moogModulatorPhase;
 
         Template() {
 
@@ -133,8 +135,22 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             fAdsrRelease = 0.1f;
             moogFrequency = 440 * (r.nextInt(2) + 1);
             setFullAmpDelay(15);
-            Integer[] mogModulatorWaveTables = new Integer[]{0, 1, 5};
-            int       a                      = r.nextInt(3);
+            Integer[] mogModulatorWaveTables = new Integer[]{0, 1, 3};
+            int       a                      = r.nextInt(mogModulatorWaveTables.length);
+            switch (mogModulatorWaveTables[a]) {
+                default:
+                    moogModulatorPhase = .25f;
+                    break;
+                case 1:
+                    moogModulatorPhase = 0;
+                    break;
+                case 3:
+                    moogModulatorPhase = .5f;
+                    break;
+            }
+            if (mogModulatorWaveTables[a] == 0) {
+                moogModulatorPhase = .25f;
+            }
             moogModulatorWavetable = new Wavetable(getWaveTable(mogModulatorWaveTables[a]));
             moogModulatorWavetable.offset(1f);
             moogModulatorWavetable.normalize();

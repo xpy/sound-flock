@@ -1,5 +1,6 @@
 package xpy.sound_flock;
 
+import Boids.Flock.Flock;
 import ddf.minim.AudioOutput;
 import processing.core.*;
 import xpy.sound_flock.Body.Body;
@@ -12,6 +13,7 @@ import xpy.sound_flock.Instruments.InstrumentGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Blibliki
@@ -67,7 +69,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
         body = bodyToAdd;
         body.attachPhrase(this.phrase);
-
+        Maestro.fw.addFlock((Flock) body);
         hasBody = true;
     }
 
@@ -139,8 +141,8 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
             loops++;
             nextCheck = System.currentTimeMillis() + out.nextMeterStart(phrase.getPhraseMeters()) + 100;
         }
-        if (hasBody)
-            body.update();
+//        if (hasBody)
+//            body.update();
     }
 
     public float millisToBeats(long millis) {
@@ -173,10 +175,10 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     }
 
     public void handleDistortion(int index) {
-        if (loops % 2 == 0 && loops > 0 && loops % 4 != 0) {
-            if (distortionApplications.size() < 1)
-                addDistortion(PhraseDistortionGenerator.createDistortion(1, this));
-        }
+//        if (loops % 2 == 0 && loops > 0) {
+        if (distortionApplications.size() < 1)
+            addDistortion(PhraseDistortionGenerator.createDistortion((new Random()).nextInt(4), this));
+//        }
         if (distortionApplications.size() > 0) {
             DistortionApplication da = distortionApplications.get(index);
             if (loops % da.period == 0 && loops > 0) {
