@@ -35,7 +35,7 @@ public class CircleBody extends PApplet implements Body {
     public void update () {
 
         for (int i = 0; i < members.size(); i++) {
-            members.get(i).update();
+            members.get(i).update(this);
         }
 
     }

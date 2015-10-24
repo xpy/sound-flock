@@ -47,7 +47,7 @@ public class CircleMember implements Member {
 
     }
 
-    public void update () {
+    public void update (Body body) {
 
         int     prevFill   = pa.g.fillColor;
         boolean prevStroke = pa.g.stroke;

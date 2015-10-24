@@ -9,15 +9,15 @@ import xpy.sound_flock.Note;
  */
 public interface Member {
 
-    void update ();
+    void update(Body body);
 
-    void attachInstrument (BaseInstrumentGenerator.BaseInstrument instrument);
+    void attachInstrument(BaseInstrumentGenerator.BaseInstrument instrument);
 
-    void setX (float value);
+    void setX(float value);
 
-    void setY (float value);
+    void setY(float value);
 
-    void setColor (int color);
+    void setColor(int color);
 
     Note getNote();
 }

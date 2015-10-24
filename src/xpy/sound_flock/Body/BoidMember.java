@@ -37,7 +37,7 @@ public class BoidMember implements Member {
 
 
     @Override
-    public void update() {
+    public void update(Body body) {
 
     }
 
