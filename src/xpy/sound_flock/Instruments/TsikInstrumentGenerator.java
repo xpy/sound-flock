@@ -11,7 +11,6 @@ public class TsikInstrumentGenerator extends SparkInstrumentGenerator {
 
 
     public TsikInstrumentGenerator() {
-        amplitude = .4f;
         template = createTemplate();
         maxDuration = .25f;
         minDuration = .125f;

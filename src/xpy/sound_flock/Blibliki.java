@@ -69,7 +69,6 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
         body = bodyToAdd;
         body.attachPhrase(this.phrase);
-        Maestro.fw.addFlock((Flock) body);
         hasBody = true;
     }
 

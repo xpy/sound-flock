@@ -13,7 +13,7 @@ import xpy.sound_flock.Note;
  */
 public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
-    public    float amplitude   = .85f;
+    public    float amplitude   = .75f;
     public    float minDuration = .25f;
     public    float maxDuration = 2;
     protected float maxPitch    = Note.getPitchOfIndex(-24);

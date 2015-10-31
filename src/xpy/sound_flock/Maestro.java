@@ -27,7 +27,6 @@ public class Maestro {
 
     public final static Sink sink = new Sink();
 
-    public final static FlockWorld fw = new FlockWorld();
 
     public boolean             lastForAll     = false;
     public List<BliblikiRuler> bliblikiRulers = new ArrayList<>();
@@ -46,12 +45,12 @@ public class Maestro {
 
         sink.patch(out);
 
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SYNTH, 2, 1, 10, 0, 0));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SYNTH, 1, 1, 10, 0, 0));
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, 2, 1, 8, 5, 5));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_KICK, 1, 1, 7, 0, 0));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SNARE, 2, 0, 0, 2, 3));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_KICK, 1, 1, 3, 0, 0));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SNARE, 2, 0, 0, 5, 3));
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TONE, 2, 1, 3, 2, 8));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, 3, 1, 5, 5, 5));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, 2, 1, 5, 5, 5));
     }
 
 
@@ -60,7 +59,6 @@ public class Maestro {
     }
 
     public void update() {
-        fw.update();
         Random r = new Random();
         if (System.currentTimeMillis() - nextCheck >= 0) {
             out.pauseNotes();
@@ -93,14 +91,22 @@ public class Maestro {
                                 blibliki.setNotes(meterLength);
                         }
 
+                        if (bliblikiRuler.leaver > 0) {
+                            blibliki.isPaused = r.nextInt(10) < bliblikiRuler.leaver;
+                        } else if (blibliki.isPaused && bliblikiRuler.returner > 0) {
+                            blibliki.isPaused = r.nextInt(10) > bliblikiRuler.returner;
+
+                        }
+/*
                         blibliki.isPaused = false;
-                        if (numOfBliblikia() == 6 && numOfLast == numOfBliblikia()) {
+                        if (numOfBliblikia() == 4 && numOfLast == numOfBliblikia()) {
                             forcePut = true;
                             if (blibliki.hasStarted) {
                                 blibliki.isPaused = true;
-                                blibliki.startingLoop = (loops + 1) - blibliki.getPhrase().phraseLength;
+                                blibliki.startingLoop = (loops + 2) - blibliki.getPhrase().phraseLength;
                             }
                         }
+*/
 
                     }
 

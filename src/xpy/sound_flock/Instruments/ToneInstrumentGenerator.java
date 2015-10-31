@@ -24,6 +24,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
     public ToneInstrumentGenerator() {
 
+        amplitude = .5f;
         template = createTemplate();
         maxDuration = .25f;
         minDuration = .125f;
@@ -58,7 +59,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
             this.out = out;
             this.frequency = frequency;
-            this.amplitude = .4f;//amplitude;
+            this.amplitude = amplitude;
             if (template.modulatorFrequencyAmp > 32)
                 this.amplitude = amplitude * .5f;
 
@@ -79,7 +80,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
             (new Oscil(template.frequencyModulatorFrequency, 1, moogModulatorWavetable)).patch(ml2).patch(osc2.frequency);
 
             osc2.patch(osc);
-            setMoog(new MoogFilter(template.moogFrequency * template.targetMoogFactor, .7f, MoogFilter.Type.LP));
+            setMoog(new MoogFilter(template.moogFrequency * template.targetMoogFactor, .5f, MoogFilter.Type.LP));
             Delay del = new Delay(0.075f, .75f, true, true);
             osc.patch(del);
             preFinalUgen = del;

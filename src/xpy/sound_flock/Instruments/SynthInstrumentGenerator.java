@@ -24,7 +24,6 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
 
     public SynthInstrumentGenerator() {
-        amplitude = .35f;
         maxPitch = Note.getPitchOfIndex(-24);
         minPitch = Note.getPitchOfIndex(12);
         this.template = createTemplate();
@@ -85,7 +84,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
             this.out = out;
             this.baseFrequency = frequency;
             this.initialFrequency = baseFrequency;
-            this.amplitude = amplitude;
+            this.amplitude = amplitude*.75f;
 
             for (int i = 0; i < template.numOfOscillators; i++) {
                 Oscil osc = new Oscil(initialFrequency * template.oscillatorFrequencyFactor.get(i), this.amplitude / (template.numOfOscillators), getWaveTable(template.oscillatorWave.get(i)));

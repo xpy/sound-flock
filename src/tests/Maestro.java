@@ -1,14 +1,18 @@
 package tests;
 
-import Boids.FlockWorld.FlockWorld;
+import Constellation.*;
 import ddf.minim.*;
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.opengl.PGraphics3D;
 import xpy.sound_flock.Blibliki;
+import xpy.sound_flock.BliblikiRuler;
 import xpy.sound_flock.Body.Body;
-import xpy.sound_flock.Body.CircleBody;
-import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
-import xpy.sound_flock.Instruments.ToneInstrumentGenerator;
-import xpy.sound_flock.Phrase;
+import xpy.sound_flock.Body.ConstellationMember;
+import xpy.sound_flock.Body.Member;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Maestro
@@ -23,10 +27,19 @@ public class Maestro extends PApplet {
     xpy.sound_flock.Maestro maestro;
 
     boolean record = true;
+    PGraphics currentLayer;
 
+    public static int numOfLayers = 1;
+    public        int layerDelay  = 0;
+    List<PGraphics> layers = new ArrayList<>();
+
+    public static void main(String args[]) {
+        // full-screen mode can be activated via parameters to PApplets main method.
+        PApplet.main(new String[] {"tests.Maestro"});
+    }
     public void setup() {
         // initialize the drawing window
-        size(512, 200);
+        size(800, 600, P3D);
 
         // initialize the minim and out objects
         minim = new Minim(this);
@@ -41,10 +54,16 @@ public class Maestro extends PApplet {
         if (record)
             recorder.beginRecord();
         maestro.start();
+        Constellation.offset = 50;
+        Constellation.offsetStep = 50;
         background(0);
+        currentLayer = createGraphics(width, height, P3D);
+
     }
 
+
     public void draw() {
+
         // erase the window to black
 /*
         fill(0, 0, 0, 10);
@@ -60,7 +79,10 @@ public class Maestro extends PApplet {
             line(x1, 150 + out.right.get(i) * 50, x2, 150 + out.right.get(i + 1) * 50);
         }
 */
+        background(0);
+
         maestro.update();
+
         if (record && maestro.loops >= 54 && recorder.isRecording()) {
             recorder.endRecord();
             recorder.save();

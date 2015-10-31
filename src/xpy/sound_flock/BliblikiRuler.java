@@ -5,6 +5,7 @@ import ddf.minim.Minim;
 import processing.core.PApplet;
 import xpy.sound_flock.Body.BoidBody;
 import xpy.sound_flock.Body.CircleBody;
+import xpy.sound_flock.Body.ConstellationBody;
 import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
 import xpy.sound_flock.Instruments.*;
 
@@ -66,17 +67,17 @@ public class BliblikiRuler {
 
         switch (bliblikiIndex) {
             default:
-                return new Blibliki(Phrases.synthPhrase(4), new SynthInstrumentGenerator(), new BoidBody(pa), out);
+                return new Blibliki(Phrases.synthPhrase(4), new SynthInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_SPARK:
-                return new Blibliki(Phrases.tinyPhrase(4), new SparkInstrumentGenerator(), new BoidBody(pa), out);
+                return new Blibliki(Phrases.tinyPhrase(4), new SparkInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_KICK:
-                return new Blibliki(Phrases.kickPhrase(4), new KickInstrumentGenerator(), new BoidBody(pa), out);
+                return new Blibliki(Phrases.kickPhrase(4), new KickInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_SNARE:
-                return new Blibliki(Phrases.widePhrase(4), new SnareInstrumentGenerator(), new BoidBody(pa), out);
+                return new Blibliki(Phrases.widePhrase(4), new SnareInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_TONE:
-                return new Blibliki(Phrases.tonePhrase(4), new ToneInstrumentGenerator(), new BoidBody(pa), out);
+                return new Blibliki(Phrases.tonePhrase(4), new ToneInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_TSIK:
-                return new Blibliki(Phrases.tinyPhrase(4), new TsikInstrumentGenerator(), new BoidBody(pa), out);
+                return new Blibliki(Phrases.tinyPhrase(4), new TsikInstrumentGenerator(), new ConstellationBody(pa), out);
         }
 
     }

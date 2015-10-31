@@ -310,15 +310,16 @@ public class Phrase extends PApplet {
 
 
         for (int i = 0; i < tuneAmounts.length; i++) {
-
-            notes.get(noteIndexes[i]).tune(tuneAmounts[i]);
+            if (notes.get(noteIndexes[i]).pitch > 0)
+                notes.get(noteIndexes[i]).tune(tuneAmounts[i]);
         }
 
     }
 
     public void tune(int tuneAmount) {
         for (Note note : notes) {
-            note.tune(tuneAmount);
+            if (note.pitch > 0)
+                note.tune(tuneAmount);
         }
 
     }

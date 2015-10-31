@@ -15,7 +15,6 @@ import java.util.Random;
 public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
-    public float amplitude = .55f;
 
 
     public SnareInstrumentGenerator() {

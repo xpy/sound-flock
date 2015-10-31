@@ -44,7 +44,6 @@ public class BoidMember implements Member {
     public void _update(Flock flock) {
 
         for (Boid b : boids) {
-            b.run(xpy.sound_flock.Maestro.fw, flock);
 
             for (BaseInstrumentGenerator.BaseInstrument instrument : instruments) {
                 if (hasStarted || instrument.isPlaying) {

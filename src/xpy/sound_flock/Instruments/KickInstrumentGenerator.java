@@ -19,7 +19,7 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
         template = createTemplate();
         maxPitch = Note.getPitchOfIndex(-12);
         minPitch = Note.getPitchOfIndex(-24);
-
+        amplitude = .7f;
         maxDuration = .025f;
         minDuration = .025f;
     }
@@ -51,7 +51,7 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
         public KickInstrument(float frequency, float amplitude, AudioOutput out) {
             this.frequency = normalizePitch(frequency);
-            this.amplitude = .4f;
+            this.amplitude = amplitude;
             this.out = out;
             Wavetable w = new Wavetable(Waves.SINE);
 //            w.addNoise(.0025f);
@@ -78,7 +78,6 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
 
     public static class Template extends BaseInstrumentGenerator.BaseTemplate {
-
 
 
         public Template() {

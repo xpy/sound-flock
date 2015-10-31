@@ -13,12 +13,11 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
     Template template;
 
-
     public SparkInstrumentGenerator() {
         template = createTemplate();
+        amplitude=.5f;
         maxDuration = .25f;
         minDuration = .125f;
-        amplitude = .25f;
 
     }
 
@@ -57,8 +56,8 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
             this.amplitude = amplitude;
             this.out = out;
 
-            setMoog(new MoogFilter(template.getTargetMoog(), .7f, MoogFilter.Type.BP));
-            osc = new Oscil(this.frequency,  this.amplitude, template.wavetable);
+            setMoog(new MoogFilter(template.getTargetMoog(), .5f, MoogFilter.Type.LP));
+            osc = new Oscil(this.frequency, this.amplitude, template.wavetable);
 
             preFinalUgen = osc;
         }
@@ -83,6 +82,7 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
             frequencyAmp = 1;//(r.nextInt(4)+4)*.125f;
             wavetable = Waves.randomNoise();
+            wavetable.normalize();
             wavetable.warp(1f, .1f);
 
 //            this.maxDuration = Math.max(r.nextFloat() / 2, .2f);
