@@ -83,7 +83,7 @@ public class Maestro extends PApplet {
 
         maestro.update();
 
-        if (record && maestro.loops >= 54 && recorder.isRecording()) {
+        if (record && maestro.loops >= maestro.numOfLoops + 4 && recorder.isRecording()) {
             recorder.endRecord();
             recorder.save();
         }

@@ -20,8 +20,8 @@ public class DistortionApplication {
         Random r = new Random();
 
         this.distortion = distortion;
-        this.period = (int) Math.pow(2, r.nextInt(3));
-        this.maxApplications  = r.nextInt(10)+1;
+        this.period = (int) Math.pow(2, r.nextInt(2));
+        this.maxApplications  = r.nextInt(6)+1;
     }
 
     public void applyDistortion() {

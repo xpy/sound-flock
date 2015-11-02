@@ -63,7 +63,7 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
 
 
             this.frequency = normalizePitch(frequency);
-            this.amplitude = amplitude;
+            this.amplitude = amplitude*.5f;
 
             this.out = out;
 

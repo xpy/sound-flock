@@ -1,16 +1,15 @@
 package xpy.sound_flock;
 
 import ddf.minim.AudioOutput;
-import ddf.minim.Minim;
 import processing.core.PApplet;
-import xpy.sound_flock.Body.BoidBody;
-import xpy.sound_flock.Body.CircleBody;
 import xpy.sound_flock.Body.ConstellationBody;
+import xpy.sound_flock.Distortions.Distortion;
 import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
 import xpy.sound_flock.Instruments.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * BliblikiRuler
@@ -18,7 +17,8 @@ import java.util.List;
  */
 public class BliblikiRuler {
 
-    public int blibliki;
+    public int instrument;
+    public int phraseType;
     public int numOfInstances = 0;
     public int maxInstances;
     public int numOfPreludeInstances = 0;
@@ -39,8 +39,9 @@ public class BliblikiRuler {
 
     public List<Blibliki> bliblikia = new ArrayList<>();
 
-    public BliblikiRuler(int blibkiki, int maxInstances, int maxPreludeInstances, int preluder, int leaver, int returner) {
-        this.blibliki = blibkiki;
+    public BliblikiRuler(int instrument, int phraseType, int maxInstances, int maxPreludeInstances, int preluder, int leaver, int returner) {
+        this.instrument = instrument;
+        this.phraseType = phraseType;
         this.maxInstances = maxInstances;
         this.maxPreludeInstances = maxPreludeInstances;
         this.preluder = preluder;
@@ -57,7 +58,7 @@ public class BliblikiRuler {
     }
 
     public void addBlibliki() {
-        this.bliblikia.add(createBlibliki(blibliki));
+        this.bliblikia.add(createBlibliki(instrument));
         numOfInstances++;
 
     }
@@ -67,24 +68,30 @@ public class BliblikiRuler {
 
         switch (bliblikiIndex) {
             default:
-                return new Blibliki(Phrases.synthPhrase(4), new SynthInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SynthInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_SPARK:
-                return new Blibliki(Phrases.tinyPhrase(4), new SparkInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SparkInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_KICK:
-                return new Blibliki(Phrases.kickPhrase(4), new KickInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new KickInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_SNARE:
-                return new Blibliki(Phrases.widePhrase(4), new SnareInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SnareInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_TONE:
-                return new Blibliki(Phrases.tonePhrase(4), new ToneInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new ToneInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_TSIK:
-                return new Blibliki(Phrases.tinyPhrase(4), new TsikInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new TsikInstrumentGenerator(), new ConstellationBody(pa), out);
         }
 
     }
 
     public void handleDistortions() {
+
         for (Blibliki blibliki : bliblikia) {
-            blibliki.handleDistortion(0);
+            if (blibliki.distortionApplications.size() < 1)
+                blibliki.addDistortion(PhraseDistortionGenerator.createDistortion((new Random()).nextInt(4), blibliki));
+            for (int i = 0; i < blibliki.distortionApplications.size(); i++) {
+
+                blibliki.handleDistortion(i);
+            }
         }
 
     }

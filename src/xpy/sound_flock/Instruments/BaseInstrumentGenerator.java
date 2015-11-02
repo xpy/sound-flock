@@ -76,7 +76,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
         @Override
         public float getTargetMoog() {
-            return Math.min(moogFrequency * targetMoogFactor, 20000);
+            return Math.min(moogFrequency * targetMoogFactor, 2000);
         }
 
         public void decreaseMoogFactor(float value) {
@@ -89,7 +89,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
         public ADSR getFinalADSR(float amplitude) {
 
-            return new ADSR(amplitude * 1.5f, fAdsrAttack, fAdsrDelay, amplitude, fAdsrRelease);
+            return new ADSR(amplitude, fAdsrAttack, fAdsrDelay, amplitude, fAdsrRelease);
         }
 
         @Override
@@ -261,6 +261,17 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         public void unpatch() {
 //            sink.unpatch(out);
             envelopeFollower.unpatch(sink);
+        }
+
+        public float amplitudeByFrequency(float amplitude, float frequency) {
+
+   /*         if (frequency > 0 && frequency < 500) {
+                amplitude = amplitude *(.6f + .4f* (frequency / 500));
+            } else if (frequency >= 500) {
+                amplitude = amplitude * (.6f + .4f* (1 - (frequency-500) /5000));
+
+            }
+ */           return amplitude;
         }
     }
 }

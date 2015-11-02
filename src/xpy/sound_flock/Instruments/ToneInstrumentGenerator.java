@@ -59,7 +59,7 @@ public class ToneInstrumentGenerator extends BaseInstrumentGenerator {
 
             this.out = out;
             this.frequency = frequency;
-            this.amplitude = amplitude;
+            this.amplitude = amplitudeByFrequency(amplitude,frequency);
             if (template.modulatorFrequencyAmp > 32)
                 this.amplitude = amplitude * .5f;
 

@@ -32,7 +32,7 @@ public class PhraseDistortionGenerator {
                 return new PartialToneDistortion(blibliki.getPhrase());
             case (DISTORTION_TONE_PARTIAL_RANDOM):
                 Random r = new Random();
-                return new PartialToneDistortion(blibliki.getPhrase(), r.nextInt(3), r.nextInt(3), r.nextInt(blibliki.getPhrase().numOfNotes)+1);
+                return new PartialToneDistortion(blibliki.getPhrase(), r.nextInt(2) + 1, r.nextInt(2) + 1, (int) Math.max(r.nextInt(blibliki.getPhrase().numOfNotes), Math.ceil(blibliki.getPhrase().numOfNotes / 2)));
             case (DISTORTION_MOOG):
                 return new MoogFactorDistortion(blibliki.instrumentGenerator);
             default:

@@ -51,7 +51,7 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
 
         public KickInstrument(float frequency, float amplitude, AudioOutput out) {
             this.frequency = normalizePitch(frequency);
-            this.amplitude = amplitude;
+            this.amplitude = amplitudeByFrequency(amplitude,frequency);
             this.out = out;
             Wavetable w = new Wavetable(Waves.SINE);
 //            w.addNoise(.0025f);

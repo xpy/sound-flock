@@ -175,8 +175,6 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
 
     public void handleDistortion(int index) {
 //        if (loops % 2 == 0 && loops > 0) {
-        if (distortionApplications.size() < 1)
-            addDistortion(PhraseDistortionGenerator.createDistortion((new Random()).nextInt(4), this));
 //        }
         if (distortionApplications.size() > 0) {
             DistortionApplication da = distortionApplications.get(index);
