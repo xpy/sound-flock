@@ -25,7 +25,7 @@ public class SynthInstrumentGenerator extends BaseInstrumentGenerator {
 
     public SynthInstrumentGenerator() {
         maxPitch = Note.getPitchOfIndex(-24);
-        minPitch = Note.getPitchOfIndex(12);
+        minPitch = Note.getPitchOfIndex(0);
         this.template = createTemplate();
         println(this.template);
         maxDuration = 120f;

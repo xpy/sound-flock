@@ -71,7 +71,7 @@ public class SnareInstrumentGenerator extends BaseInstrumentGenerator {
             Multiplier ml = new Multiplier(this.frequency);
             osc = new Oscil(this.frequency, this.amplitude, template.wavetable);
             adsrModulator = new ADSR(1f, .0001f, .05f, .1f, .001f);
-            setMoog(new MoogFilter(this.frequency * template.targetMoogFactor * 8, .1f, MoogFilter.Type.LP));
+            setMoog(new MoogFilter(this.frequency * template.targetMoogFactor , .1f, MoogFilter.Type.LP));
 //            c.patch(adsrModulator).patch(osc.frequency);
 //            adsrModulator.patch(osc.amplitude);
             preFinalUgen = osc;

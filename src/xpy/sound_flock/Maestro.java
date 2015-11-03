@@ -28,6 +28,7 @@ public class Maestro {
 
     public boolean             lastForAll     = false;
     public List<BliblikiRuler> bliblikiRulers = new ArrayList<>();
+    private boolean silence;
 
     public static void main(String args[]) {
         // full-screen mode can be activated via parameters to PApplets main method.
@@ -45,18 +46,23 @@ public class Maestro {
 
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SYNTH, Phrases.P_SYNTH_PHRASE, 1, 1, 10, 0, 10));
 //        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SYNTH, Phrases.P_TINY_PHRASE, 1, 1, 5, 2, 2));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SYNTH, Phrases.P_TONE, 1, 0, 1, 5, 2));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_TINY_PHRASE, 3, 1, 8, 3, 1));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_TONE, 2, 1, 1, 3, 1));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_WIDE_PHRASE, 3, 1, 1, 3, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SYNTH, Phrases.P_TONE, 1, 0, 1, 2, 2));
+
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_TINY_PHRASE, 3, 1, 8, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_TONE, 2, 1, 1, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_WIDE_PHRASE, 3, 1, 1, 2, 1));
+
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_KICK, Phrases.P_KICK_PHRASE, 1, 0, 0, 0, 10));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SNARE, Phrases.P_WIDE_PHRASE, 5, 0, 0, 3, 1));
+
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SNARE, Phrases.P_WIDE_PHRASE, 5, 0, 0, 2, 1));
+
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TONE, Phrases.P_TONE, 1, 1, 3, 1, 3));
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TONE, Phrases.P_WIDE_PHRASE, 1, 0, 3, 1, 1));
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TONE, Phrases.P_TINY_PHRASE, 1, 0, 1, 1, 2));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_TINY_PHRASE, 2, 1, 5, 3, 1));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_WIDE_PHRASE, 2, 1, 1, 3, 1));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_TONE, 2, 1, 1, 3, 1));
+
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_TINY_PHRASE, 2, 1, 5, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_WIDE_PHRASE, 2, 1, 1, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_TONE, 2, 1, 1, 2, 1));
     }
 
 
@@ -77,7 +83,20 @@ public class Maestro {
                 // GET numOfLast
                 for (BliblikiRuler bliblikiRuler : bliblikiRulers) {
                     for (Blibliki blibliki : bliblikiRuler.bliblikia) {
-                        if (blibliki.hasStarted && !blibliki.isPaused && (((blibliki.getPhrase().phraseLength - (loops - blibliki.startingLoop)) == 1) || blibliki.getPhrase().phraseLength == 1)) {
+                        if (blibliki.hasStarted && !blibliki.isPaused) {
+                            PApplet.println("blibliki.isLastLoop(): " + blibliki.isLastLoop(loops));
+                            PApplet.println("blibliki.startingLoop: " + blibliki.startingLoop);
+                            PApplet.println("blibliki.loops: " + loops);
+                            PApplet.println("blibliki.getPhrase().phraseLength: " + blibliki.getPhrase().phraseLength);
+                        }
+                        if (silence || (loops - blibliki.startingLoop - blibliki.getPhrase().phraseLength == 0)) {
+                            if (!blibliki.isPaused && bliblikiRuler.leaver > 0) {
+                                blibliki.isPaused = silence || r.nextInt(20) < bliblikiRuler.leaver;
+                                if (blibliki.isPaused)
+                                    blibliki.leaved = true;
+                            }
+                        }
+                        if (blibliki.hasStarted && !blibliki.isPaused && blibliki.isLastLoop(loops)) {
                             numOfLast++;
                         }
                     }
@@ -85,50 +104,44 @@ public class Maestro {
 
                 int numOfPlayingBliblikia = numOfPlayingBliblikia();
                 PApplet.println("Maestro Playing Bliblikia:" + numOfPlayingBliblikia);
-                boolean silence = numOfLast == numOfPlayingBliblikia && r.nextInt(100) < 20;
+                PApplet.println("numOfLast: " + numOfLast);
+                silence = (numOfPlayingBliblikia - numOfLast == 0) && r.nextInt(100) < 10;
+                if (silence)
+                    PApplet.println("---------------------------SILENCE!");
+
+                if (forcePut || (r.nextInt(10) > 2 && numOfLast == numOfPlayingBliblikia)) {
+                    forcePut = false;
+                    addBliblikiByRules();
+                }
+
                 for (BliblikiRuler bliblikiRuler : bliblikiRulers) {
                     for (Blibliki blibliki : bliblikiRuler.bliblikia) {
+
+                        if (!silence && !blibliki.leaved) {
+                            if (blibliki.isPaused && bliblikiRuler.returner > 0 && numOfLast == numOfPlayingBliblikia) {
+                                blibliki.isPaused = r.nextInt(20) > bliblikiRuler.returner;
+                                if (!blibliki.isPaused)
+                                    blibliki.startingLoop = loops - blibliki.getPhrase().phraseLength;
+                            }
+                        }
 
                         if (!blibliki.isPaused) {
                             if (!blibliki.hasStarted) {
                                 blibliki.setNotes(meterLength);
                                 blibliki.hasStarted = true;
                                 blibliki.startingLoop = loops;
-                            } else if ((loops - blibliki.startingLoop == blibliki.getPhrase().phraseLength)) {
+                            } else if (blibliki.isLastLoop(loops)) {
                                 blibliki.startingLoop = loops;
 
                                 blibliki.setNotes(meterLength);
                             }
                         }
-
-                        boolean leaved = false;
-                        if (silence) {
-                            blibliki.isPaused = true;
-                            forcePut = true;
-                            PApplet.println("--------------SILENCE!!!!!!!!!!!!!!!!!!!!!!!!");
-                        } else if (blibliki.loops > 0 && blibliki.loops % blibliki.getPhrase().phraseLength == 0) {
-                            if (!blibliki.isPaused && bliblikiRuler.leaver > 0) {
-                                blibliki.isPaused = r.nextInt(20) < bliblikiRuler.leaver;
-                                leaved = true;
-                            }
-                        }
-                        if (!silence && !leaved) {
-                            if (blibliki.isPaused && bliblikiRuler.returner > 0 && numOfLast == numOfPlayingBliblikia) {
-                                blibliki.isPaused = r.nextInt(10) > bliblikiRuler.returner;
-                            }
-                        }
+                        blibliki.leaved = false;
                     }
 
                     bliblikiRuler.handleDistortions();
                 }
 
-                PApplet.println("numOfLast: " + numOfLast);
-
-                if (forcePut || (r.nextInt(10) > 2 && numOfLast == numOfPlayingBliblikia)) {
-                    forcePut = false;
-                    addBliblikiByRules();
-//                    addBlibliki(createBlibliki(B_SYNTH));
-                }
 
             }
             nextCheck = System.currentTimeMillis() + nextMeterStart + 100;
