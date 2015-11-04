@@ -17,7 +17,7 @@ public class Maestro {
     public  int loops       = 0;
     private int meterLength = 4;
     private PApplet pa;
-    public  int     numOfLoops       = 100;
+    public  int     numOfLoops       = 60;
     private boolean isPrelude        = true;
     private int     preludeEnd       = 10;
     private int     preludeEndChance = 0;
