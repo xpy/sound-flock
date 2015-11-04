@@ -23,7 +23,7 @@ public class DistortionApplication {
 
         this.distortion = distortion;
         this.period = (int) Math.pow(2, r.nextInt(2));
-        this.maxApplications = r.nextInt(6) + 1;
+        this.maxApplications = (int) Math.pow(2, r.nextInt(3));
         this.applicationMode = r.nextInt(2);
     }
 
@@ -52,7 +52,7 @@ public class DistortionApplication {
             if (applications < maxApplications) {
                 applyDistortion();
             } else if (applications == maxApplications) {
-                for (int i = 0; i < maxApplications; i++) {
+                for (int i = 0; i <= maxApplications; i++) {
                     revertDistortion();
                 }
             }

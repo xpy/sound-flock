@@ -231,7 +231,7 @@ public class Note extends PApplet {
         }
 //        return Math.min((float)Math.pow(2,new Random().nextInt(4)-1) / 4f, maxDuration);
         int x = new Random().nextInt(6) + 1;
-        return Math.min((Math.max(0, (x - 4)) + x) * .25f, maxDuration);
+        return Math.min((Math.max(0, (x - 4)) + x) * .5f, maxDuration);
 
     }
 

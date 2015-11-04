@@ -20,9 +20,9 @@ public class Phrases {
 
     public static Phrase tonePhrase(int meterLength) {
 
-        Integer pitchPatterns[]    = new Integer[]{1, 2, 3, 4, 5, 6, 7};
+        Integer pitchPatterns[]    = new Integer[]{1, 2, 3, 4, 5, 6, 7,8};
         Integer divisionPatterns[] = new Integer[]{0};
-        Integer durationPatterns[] = new Integer[]{0, 4};
+        Integer durationPatterns[] = new Integer[]{0,2,3, 4};
         Random  r                  = new Random();
         Phrase  phrase             = new Phrase();
 
@@ -53,7 +53,7 @@ public class Phrases {
 
     public static Phrase tinyPhrase(int meterLength) {
 
-        Integer pitchPatterns[]    = new Integer[]{1, 2, 3, 4, 5, 6, 7};
+        Integer pitchPatterns[]    = new Integer[]{1, 2, 3, 4, 5, 6, 7,8};
         Integer divisionPatterns[] = new Integer[]{0};
         Integer durationPatterns[] = new Integer[]{0, 1, 4};
         Random  r                  = new Random();
@@ -115,7 +115,7 @@ public class Phrases {
 
     public static Phrase kickPhrase(int meterLength) {
 
-        Integer pitchPatterns[]    = new Integer[]{1, 5, 6, 7};
+        Integer pitchPatterns[]    = new Integer[]{1, 5, 6, 7,8};
         Integer divisionPatterns[] = new Integer[]{2, 4};
         Integer durationPatterns[] = new Integer[]{1, 2};
         Random  r                  = new Random();

@@ -111,7 +111,7 @@ public class Maestro {
                 PApplet.println("Maestro Playing Bliblikia:" + numOfPlayingBliblikia);
                 PApplet.println("numOfLast: " + numOfLast);
                 PApplet.println("numOfPreLast: " + numOfPreLast);
-                silence = (numOfPlayingBliblikia - numOfPreLast == 0) && r.nextInt(100) < 20;
+                silence = (numOfPlayingBliblikia - numOfPreLast == 0) && r.nextInt(100) < 10;
                 if (silence)
                     PApplet.println("---------------------------SILENCE!");
 

@@ -1,7 +1,6 @@
 package xpy.sound_flock;
 
 import processing.core.PApplet;
-import xpy.sound_flock.Distortions.Distortion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +44,7 @@ public class Phrase extends PApplet {
     public static final int PITCH_PATTERN_ABOVE          = 5;
     public static final int PITCH_PATTERN_BELOW          = 6;
     public static final int PITCH_PATTERN_INVERTED_PEAKS = 7;
+    public static final int PITCH_PATTERN_NONE           = 8;
 
     public static final int DURATION_PATTERN_RANDOM          = 0;
     public static final int DURATION_PATTERN_FIXED           = 1;
@@ -132,7 +132,7 @@ public class Phrase extends PApplet {
 
                         for (int i = 1; i < numOfNotes; i++) {
                             biggestNoteDuration = Math.min(2f, phraseMeters - currentDuration - ((numOfNotes - i) * .25f));
-                            Note noteToAdd = new Note(getPitchByPattern(pitchFeed), Note.getRandomDuration(Note.getRandomDuration(biggestNoteDuration)));
+                            Note noteToAdd = new Note(getPitchByPattern(pitchFeed), Note.getRandomDuration(biggestNoteDuration));
                             currentDuration += noteToAdd.duration;
                             noteList.add(noteToAdd);
                         }
@@ -154,8 +154,8 @@ public class Phrase extends PApplet {
             }
         }
         Random r = new Random();
-        for (int i = 0; i < noteList.size(); i++) {
-            if (legato && noteList.get(i).duration < 2f) {
+        for (Note aNoteList : noteList) {
+            if (legato && aNoteList.duration < 2f) {
                 legatos.add(r.nextInt(10) > 6);
             } else
                 legatos.add(false);
@@ -174,6 +174,8 @@ public class Phrase extends PApplet {
                 return Note.getRandomPitchBelow(pitch);
             case PITCH_PATTERN_RANDOM:
                 return Note.getPitchOfIndex((new Random()).nextInt(96) - 64);
+            case PITCH_PATTERN_NONE:
+                return pitch;
             default:
                 return pitch;
         }
