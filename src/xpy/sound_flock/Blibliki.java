@@ -34,11 +34,11 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
     private long nextCheck;
     private long beatTime = (long) (60000f / 120f);
 
-    private boolean hasBody    = false;
-    public  boolean hasStarted = false;
-    public  boolean isPaused   = false;
-    public int startingLoop = 0;
-    public boolean leaved = false;
+    private boolean hasBody      = false;
+    public  boolean hasStarted   = false;
+    public  boolean isPaused     = false;
+    public  int     startingLoop = 0;
+    public  boolean leaved       = false;
 
     public Blibliki(Phrase phrase, BaseInstrumentGenerator instrumentGenerator, Body body, AudioOutput out) {
 
@@ -228,7 +228,7 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         PApplet.println("getPhrase().phraseLength: "+getPhrase().phraseLength);
         PApplet.println("((loop-startingLoop) + getPhrase().phraseLength) % getPhrase().phraseLength: "+(((loop-startingLoop) + getPhrase().phraseLength) % getPhrase().phraseLength));
 */
-        return (loops - startingLoop - getPhrase().phraseLength) == 0 ;
+        return ((loops - startingLoop) % getPhrase().phraseLength) == 0;
     }
 
 

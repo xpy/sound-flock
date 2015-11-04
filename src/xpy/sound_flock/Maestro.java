@@ -48,21 +48,21 @@ public class Maestro {
 //        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SYNTH, Phrases.P_TINY_PHRASE, 1, 1, 5, 2, 2));
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SYNTH, Phrases.P_TONE, 1, 0, 1, 2, 2));
 
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_TINY_PHRASE, 3, 1, 8, 2, 1));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_TONE, 2, 1, 1, 2, 1));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_WIDE_PHRASE, 3, 1, 1, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_TINY_PHRASE, 1, 1, 8, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_TONE, 1, 1, 1, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SPARK, Phrases.P_WIDE_PHRASE, 1, 1, 1, 2, 1));
 
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_KICK, Phrases.P_KICK_PHRASE, 1, 0, 0, 0, 10));
 
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SNARE, Phrases.P_WIDE_PHRASE, 5, 0, 0, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_SNARE, Phrases.P_WIDE_PHRASE, 3, 0, 0, 2, 1));
 
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TONE, Phrases.P_TONE, 1, 1, 3, 1, 3));
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TONE, Phrases.P_WIDE_PHRASE, 1, 0, 3, 1, 1));
         bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TONE, Phrases.P_TINY_PHRASE, 1, 0, 1, 1, 2));
 
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_TINY_PHRASE, 2, 1, 5, 2, 1));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_WIDE_PHRASE, 2, 1, 1, 2, 1));
-        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_TONE, 2, 1, 1, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_TINY_PHRASE, 1, 1, 5, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_WIDE_PHRASE, 1, 1, 1, 2, 1));
+        bliblikiRulers.add(new BliblikiRuler(BliblikiRuler.B_TSIK, Phrases.P_TONE, 1, 1, 1, 2, 1));
     }
 
 
@@ -80,24 +80,29 @@ public class Maestro {
                 PApplet.println("Maestro Loops:" + loops);
                 PApplet.println("Maestro Bliblikia:" + numOfBliblikia());
                 int numOfLast = 0;
+                int numOfPreLast = 0;
                 // GET numOfLast
+
                 for (BliblikiRuler bliblikiRuler : bliblikiRulers) {
                     for (Blibliki blibliki : bliblikiRuler.bliblikia) {
-                        if (blibliki.hasStarted && !blibliki.isPaused) {
-                            PApplet.println("blibliki.isLastLoop(): " + blibliki.isLastLoop(loops));
-                            PApplet.println("blibliki.startingLoop: " + blibliki.startingLoop);
-                            PApplet.println("blibliki.loops: " + loops);
-                            PApplet.println("blibliki.getPhrase().phraseLength: " + blibliki.getPhrase().phraseLength);
-                        }
-                        if (silence || (loops - blibliki.startingLoop - blibliki.getPhrase().phraseLength == 0)) {
-                            if (!blibliki.isPaused && bliblikiRuler.leaver > 0) {
-                                blibliki.isPaused = silence || r.nextInt(20) < bliblikiRuler.leaver;
+//                        if (blibliki.hasStarted && !blibliki.isPaused) {
+//                            PApplet.println("blibliki.isLastLoop(): " + blibliki.isLastLoop(loops));
+//                            PApplet.println("blibliki.startingLoop: " + blibliki.startingLoop);
+//                            PApplet.println("blibliki.loops: " + loops);
+//                            PApplet.println("blibliki.getPhrase().phraseLength: " + blibliki.getPhrase().phraseLength);
+//                        }
+                        if (silence /*|| (loops - blibliki.startingLoop - blibliki.getPhrase().phraseLength == 0)*/) {
+                            if (!blibliki.isPaused /*&& bliblikiRuler.leaver > 0*/) {
+                                blibliki.isPaused = silence /*|| r.nextInt(20) < bliblikiRuler.leaver*/;
                                 if (blibliki.isPaused)
                                     blibliki.leaved = true;
                             }
                         }
-                        if (blibliki.hasStarted && !blibliki.isPaused && blibliki.isLastLoop(loops)) {
-                            numOfLast++;
+                        if (blibliki.hasStarted && !blibliki.isPaused) {
+                            if (blibliki.isLastLoop(loops))
+                                numOfLast++;
+                            if (blibliki.isLastLoop(loops + 1))
+                                numOfPreLast++;
                         }
                     }
                 }
@@ -105,7 +110,8 @@ public class Maestro {
                 int numOfPlayingBliblikia = numOfPlayingBliblikia();
                 PApplet.println("Maestro Playing Bliblikia:" + numOfPlayingBliblikia);
                 PApplet.println("numOfLast: " + numOfLast);
-                silence = (numOfPlayingBliblikia - numOfLast == 0) && r.nextInt(100) < 10;
+                PApplet.println("numOfPreLast: " + numOfPreLast);
+                silence = (numOfPlayingBliblikia - numOfPreLast == 0) && r.nextInt(100) < 20;
                 if (silence)
                     PApplet.println("---------------------------SILENCE!");
 
@@ -118,9 +124,9 @@ public class Maestro {
                     for (Blibliki blibliki : bliblikiRuler.bliblikia) {
 
                         if (!silence && !blibliki.leaved) {
-                            if (blibliki.isPaused && bliblikiRuler.returner > 0 && numOfLast == numOfPlayingBliblikia) {
-                                blibliki.isPaused = r.nextInt(20) > bliblikiRuler.returner;
-                                if (!blibliki.isPaused)
+                            if (blibliki.isPaused /*&& bliblikiRuler.returner > 0 */ && numOfLast == numOfPlayingBliblikia) {
+                                blibliki.isPaused = false;//r.nextInt(20) > bliblikiRuler.returner;
+//                                if (!blibliki.isPaused)
                                     blibliki.startingLoop = loops - blibliki.getPhrase().phraseLength;
                             }
                         }
