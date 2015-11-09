@@ -1,6 +1,5 @@
 package xpy.sound_flock;
 
-import Boids.Flock.Flock;
 import ddf.minim.AudioOutput;
 import processing.core.*;
 import xpy.sound_flock.Body.Body;

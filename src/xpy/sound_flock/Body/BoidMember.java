@@ -1,7 +1,6 @@
 package xpy.sound_flock.Body;
 
-import Boids.Boid.Boid;
-import Boids.Flock.Flock;
+import Boids.FlockWorld.*;
 import ddf.minim.ugens.EnvelopeFollower;
 import processing.core.PApplet;
 import tests.Maestro;
