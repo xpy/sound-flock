@@ -38,8 +38,10 @@ public class ConstellationMember implements Member {
 
                 if (envf.getLastValues().length > 0) {
                     float enfValue = envf.getLastValues()[0] * 10;
-                    if (enfValue > 0)
+                    if (enfValue > 0){
                         node.bounce();
+                        node.drawBurst(50);
+                    }
                 }
 
             }

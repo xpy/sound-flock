@@ -32,7 +32,7 @@ public class Maestro {
 
     public static void main(String args[]) {
         // full-screen mode can be activated via parameters to PApplets main method.
-        PApplet.main(new String[]{"xpy.sound_flock.Sound_flock"});
+        PApplet.main(new String[]{"tests.Maestro"});
     }
 
     public Maestro(PApplet pa, AudioOutput out) {

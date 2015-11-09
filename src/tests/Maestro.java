@@ -5,6 +5,7 @@ import ddf.minim.*;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PGraphics3D;
+import processing.opengl.PGraphics2D;
 import xpy.sound_flock.Blibliki;
 import xpy.sound_flock.BliblikiRuler;
 import xpy.sound_flock.Body.Body;
@@ -35,29 +36,34 @@ public class Maestro extends PApplet {
 
     public static void main(String args[]) {
         // full-screen mode can be activated via parameters to PApplets main method.
-        PApplet.main(new String[] {"tests.Maestro"});
+        PApplet.main(new String[]{"tests.Maestro"});
     }
+
+    public void settings() {
+        size(800, 600, P2D);
+//        fullScreen(P2D, SPAN);
+
+    }
+
     public void setup() {
         // initialize the drawing window
-        size(800, 600, P3D);
 
         // initialize the minim and out objects
         minim = new Minim(this);
 //        minim.debugOn();
         out = minim.getLineOut(Minim.MONO, 2048);
         out.setTempo(120);
-        println("out.getVolume(): " + out.getVolume());
 //        recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_" + System.currentTimeMillis() + ".wav");
-        recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_1.wav");
 
         maestro = new xpy.sound_flock.Maestro(this, out);
-        if (record)
+        if (record) {
+            recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_1.wav");
             recorder.beginRecord();
+        }
         maestro.start();
         Constellation.offset = 50;
         Constellation.offsetStep = 50;
         background(0);
-        currentLayer = createGraphics(width, height, P3D);
 
     }
 
