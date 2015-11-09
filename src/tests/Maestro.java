@@ -1,16 +1,12 @@
 package tests;
 
+import Boids.FlockWorld.World;
 import Constellation.*;
 import ddf.minim.*;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.opengl.PGraphics3D;
-import processing.opengl.PGraphics2D;
 import xpy.sound_flock.Blibliki;
-import xpy.sound_flock.BliblikiRuler;
-import xpy.sound_flock.Body.Body;
-import xpy.sound_flock.Body.ConstellationMember;
-import xpy.sound_flock.Body.Member;
+import Boids.*;
 
 import java.util.ArrayList;
 import java.util.List;

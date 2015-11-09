@@ -1,5 +1,6 @@
 package xpy.sound_flock;
 
+import Boids.FlockWorld.World;
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.Sink;
 import processing.core.PApplet;
@@ -25,6 +26,7 @@ public class Maestro {
 
     public final static Sink sink = new Sink();
 
+    public static World fw = new World();
 
     public boolean             lastForAll     = false;
     public List<BliblikiRuler> bliblikiRulers = new ArrayList<>();
@@ -163,7 +165,7 @@ public class Maestro {
                     aBliblikia.getBody().update();
             }
         }
-
+        fw.update();
 
     }
 

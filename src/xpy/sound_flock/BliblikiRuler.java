@@ -2,6 +2,7 @@ package xpy.sound_flock;
 
 import ddf.minim.AudioOutput;
 import processing.core.PApplet;
+import xpy.sound_flock.Body.BoidBody;
 import xpy.sound_flock.Body.ConstellationBody;
 import xpy.sound_flock.Distortions.Distortion;
 import xpy.sound_flock.Distortions.PhraseDistortionGenerator;
@@ -68,17 +69,17 @@ public class BliblikiRuler {
 
         switch (bliblikiIndex) {
             default:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SynthInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SynthInstrumentGenerator(), new BoidBody(pa), out);
             case B_SPARK:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SparkInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SparkInstrumentGenerator(), new BoidBody(pa), out);
             case B_KICK:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new KickInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new KickInstrumentGenerator(), new BoidBody(pa), out);
             case B_SNARE:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SnareInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SnareInstrumentGenerator(), new BoidBody(pa), out);
             case B_TONE:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new ToneInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new ToneInstrumentGenerator(), new BoidBody(pa), out);
             case B_TSIK:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new TsikInstrumentGenerator(), new ConstellationBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new TsikInstrumentGenerator(), new BoidBody(pa), out);
         }
 
     }

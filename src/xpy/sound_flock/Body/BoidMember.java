@@ -29,7 +29,7 @@ public class BoidMember implements Member {
 
     public BoidMember(PApplet pa, Note note) {
         this.note = note;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 20; i++) {
             boids.add(new Boid(pa, pa.width / 2, pa.height / 2));
         }
     }
@@ -43,7 +43,6 @@ public class BoidMember implements Member {
     public void _update(Flock flock) {
 
         for (Boid b : boids) {
-
             for (BaseInstrumentGenerator.BaseInstrument instrument : instruments) {
                 if (hasStarted || instrument.isPlaying) {
                     hasStarted = true;
@@ -55,8 +54,8 @@ public class BoidMember implements Member {
                             b.colorBurst += 20;
         /*            if (sizeBurst < 5)
                         sizeBurst += 20 * enfValue;*/
-                        if (flock.speedBurst < 2)
-                            flock.speedBurst += .05f;
+//                        if (flock.speedBurst < 2)
+//                            flock.speedBurst += .05f;
                         flock.separationBurst += .5f;
                     }
 

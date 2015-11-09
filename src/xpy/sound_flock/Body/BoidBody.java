@@ -2,6 +2,7 @@ package xpy.sound_flock.Body;
 
 import Boids.FlockWorld.*;
 import processing.core.PApplet;
+import xpy.sound_flock.Maestro;
 import xpy.sound_flock.Phrase;
 
 import java.util.ArrayList;
@@ -32,9 +33,10 @@ public class BoidBody extends Flock implements Body {
         red = r.nextInt(100) + 50;
         green = r.nextInt(100) + 50;
         blue = r.nextInt(100) + 50;
-        neighborDist = 100;
+//        neighborDist = 50;
         separationBurstReduce = 4;
-        cohesionFactor = .5f;
+//        cohesionFactor = .5f;
+        Maestro.fw.addFlock(this);
     }
 
 
@@ -59,6 +61,23 @@ public class BoidBody extends Flock implements Body {
 
     public void attachMember(Member member) {
         this.members.add((BoidMember) member);
+    }
+
+    @Override
+    public void run(World fw) {
+            for (Boid b : getBoids()) {
+                b.run(fw, this);  // Passing the entire list of boids to each boid individually
+            }
+/*
+            for (Avoid a : avoids) {
+                a.run();  // Passing the entire list of boids to each boid individually
+            }
+            for (Approach a : approaches) {
+                a.run();  // Passing the entire list of boids to each boid individually
+            }
+*/
+            normalize();
+
     }
 
     @Override
