@@ -74,8 +74,8 @@ public class Maestro {
 
     public void update() {
         Random r = new Random();
+        out.pauseNotes();
         if (System.currentTimeMillis() - nextCheck >= 0) {
-            out.pauseNotes();
             int nextMeterStart = out.nextMeterStart(meterLength);
 
             if (loops < numOfLoops) {
@@ -156,7 +156,6 @@ public class Maestro {
 
             loops++;
 
-            out.resumeNotes();
         }
 
         for (BliblikiRuler bliblikiRuler : bliblikiRulers) {
@@ -165,6 +164,8 @@ public class Maestro {
                     aBliblikia.getBody().update();
             }
         }
+        out.resumeNotes();
+
         fw.update();
 
     }

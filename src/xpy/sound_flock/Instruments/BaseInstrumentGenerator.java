@@ -216,11 +216,11 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
         @Override
         public void noteOff() {
+            setComplete();
             finalADSR.unpatchAfterRelease(out);
             // finalADSR2.unpatchAfterRelease(envelopeFollower);
             finalADSR.noteOff();
             // finalADSR2.noteOff();
-            setComplete();
 
 
         }

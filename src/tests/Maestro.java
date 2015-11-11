@@ -36,7 +36,7 @@ public class Maestro extends PApplet {
     }
 
     public void settings() {
-        size(800, 600, P2D);
+        size(800, 600, P3D);
 //        fullScreen(P2D, SPAN);
 
     }
@@ -82,7 +82,8 @@ public class Maestro extends PApplet {
         }
 */
         background(0);
-
+//        fill(0, 0, 0, 5);
+//        rect(0, 0, width, height);
         maestro.update();
 
         if (record && maestro.loops >= maestro.numOfLoops + 4 && recorder.isRecording()) {

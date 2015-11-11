@@ -1,0 +1,81 @@
+package xpy.sound_flock.ChainParticle;
+
+import processing.core.PApplet;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * Chain
+ * Created by xpy on 11-Nov-15.
+ */
+public class Chain {
+
+    public List<ChainParticle> particles     = new ArrayList<>();
+    public List<ChainParticle> deadParticles = new ArrayList<>();
+    PApplet pa;
+    public int color;
+
+    public float x;
+    public float y;
+    public float speed;
+    public float yBounce = 0;
+    public float maxY    = 100;
+
+    public Chain(PApplet pa, float x, float y) {
+        Random r = new Random();
+        this.pa = pa;
+        this.x = x;
+        this.y = y;
+        this.speed = (r.nextFloat() * -5) - 5;
+
+        color = pa.color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
+
+    }
+
+    public ChainParticle addParticle() {
+        ChainParticle particle = new ChainParticle(pa, 0, (float) (maxY * Math.sin(yBounce)));
+        addParticle(particle);
+        return particle;
+    }
+
+    public void addParticle(ChainParticle particle) {
+        this.particles.add(particle);
+    }
+
+    public void removeParticle(ChainParticle particle) {
+        this.particles.remove(particle);
+    }
+
+    public void run() {
+        this.update();
+        for (ChainParticle particle : particles) {
+            particle.run(this);
+            if (particle.size <= 0 || particle.getX(this) < -100) {
+                deadParticles.add(particle);
+            }
+        }
+        for (ChainParticle particle : deadParticles) {
+            removeParticle(particle);
+        }
+        deadParticles.clear();
+    }
+
+    public void update() {
+
+        yBounce += .025f;
+    }
+
+    public float getX() {
+        return this.pa.width * .875f;
+
+    }
+
+    public float getY() {
+        return this.y = this.pa.height / 2;
+
+
+    }
+
+}

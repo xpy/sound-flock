@@ -30,7 +30,9 @@ public class BoidMember implements Member {
     public BoidMember(PApplet pa, Note note) {
         this.note = note;
         for (int i = 0; i < 20; i++) {
-            boids.add(new Boid(pa, pa.width / 2, pa.height / 2));
+            Boid b = new Boid(pa, pa.width / 2, pa.height / 2);
+
+            boids.add(b);
         }
     }
 
@@ -54,9 +56,10 @@ public class BoidMember implements Member {
                             b.colorBurst += 20;
         /*            if (sizeBurst < 5)
                         sizeBurst += 20 * enfValue;*/
-//                        if (flock.speedBurst < 2)
-//                            flock.speedBurst += .05f;
-                        flock.separationBurst += .5f;
+                        if (flock.speedBurst < 2)
+                            flock.speedBurst += .005f;
+//                        if (flock.separationBurst > 1)
+//                            flock.separationBurst -= .5f;
                     }
 
                 }

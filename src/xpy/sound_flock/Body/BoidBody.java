@@ -30,10 +30,12 @@ public class BoidBody extends Flock implements Body {
         Random r = new Random();
         this.x = r.nextFloat() * (this.pa.width - 100) + 50;
         this.y = r.nextFloat() * (this.pa.height - 100) + 50;
-        red = r.nextInt(100) + 50;
-        green = r.nextInt(100) + 50;
-        blue = r.nextInt(100) + 50;
+        red = r.nextInt(255);
+        green =  r.nextInt(255);
+        blue =  r.nextInt(255);
 //        neighborDist = 50;
+        size = 2f;
+        neighborDist = 500;
         separationBurstReduce = 4;
 //        cohesionFactor = .5f;
         Maestro.fw.addFlock(this);
@@ -65,7 +67,9 @@ public class BoidBody extends Flock implements Body {
 
     @Override
     public void run(World fw) {
-            for (Boid b : getBoids()) {
+        frameIndex = frameIndex >= frameSkip ? 0 : frameIndex + 1;
+
+        for (Boid b : getBoids()) {
                 b.run(fw, this);  // Passing the entire list of boids to each boid individually
             }
 /*
