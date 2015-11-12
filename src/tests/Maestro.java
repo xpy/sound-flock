@@ -28,6 +28,7 @@ public class Maestro extends PApplet {
 
     public static int numOfLayers = 1;
     public        int layerDelay  = 0;
+    public        int recordingIndex  = 0;
     List<PGraphics> layers = new ArrayList<>();
 
     public static void main(String args[]) {
@@ -53,7 +54,7 @@ public class Maestro extends PApplet {
 
         maestro = new xpy.sound_flock.Maestro(this, out);
         if (record) {
-            recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_1.wav");
+            recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_"+recordingIndex+".wav");
             recorder.beginRecord();
         }
         maestro.start();
@@ -89,6 +90,11 @@ public class Maestro extends PApplet {
         if (record && maestro.loops >= maestro.numOfLoops + 4 && recorder.isRecording()) {
             recorder.endRecord();
             recorder.save();
+            recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_"+(recordingIndex++)+".wav");
+            recorder.beginRecord();
+
+            maestro = new xpy.sound_flock.Maestro(this, out);
+            maestro.start();
         }
 
 
