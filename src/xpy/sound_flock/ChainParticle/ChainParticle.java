@@ -18,7 +18,7 @@ public class ChainParticle {
     public float rotation   = 0;
     public float sizeChange = .5f;
     public float reachY;
-    private int yRestoration = 2;
+    private int   yRestoration = 2;
     private float bounceVolume = .25f;
 
 
@@ -42,8 +42,10 @@ public class ChainParticle {
         x += chain.speed;
         rotation += rotationSpeed;
         size -= sizeChange;
+        size = Math.max(0,size);
+
         if (y != reachY) {
-            float dif =  Math.abs(y - reachY)/10f;
+            float dif = Math.abs(y - reachY) / 10f;
             y += dif * (y < reachY ? 1 : -1);
         }/* else {
             reachY = (float) Math.floor(reachY * -bounceVolume);
@@ -57,9 +59,19 @@ public class ChainParticle {
         pa.pushMatrix();
         pa.translate(getX(chain), getY(chain));
         pa.rotateZ(rotation);
-//        pa.rect(size / -2, size / -2, size, size);
 //        pa.ellipse(size / -2, size / -2, size, size);
-        pa.triangle(size / -2, size / 2, 0, size/-2,size/2,size/2);
+
+        switch (chain.shape) {
+            case Chain.P_SQUARE:
+                pa.rect(size / -2, size / -2, size, size);
+                break;
+            case Chain.P_ELLIPSE:
+                pa.ellipse(size / -2, size / -2, size, size);
+                break;
+            case Chain.P_TRIANGLE:
+                pa.triangle(size / -2, size / 2, 0, size / -2, size / 2, size / 2);
+                break;
+        }
         pa.popMatrix();
     }
 

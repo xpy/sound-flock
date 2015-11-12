@@ -26,7 +26,7 @@ public class Maestro {
 
     public final static Sink sink = new Sink();
 
-    public static World fw = new World();
+//    public static World fw = new World();
 
     public boolean             lastForAll     = false;
     public List<BliblikiRuler> bliblikiRulers = new ArrayList<>();
@@ -157,6 +157,7 @@ public class Maestro {
             loops++;
 
         }
+        out.resumeNotes();
 
         for (BliblikiRuler bliblikiRuler : bliblikiRulers) {
             for (Blibliki aBliblikia : bliblikiRuler.bliblikia) {
@@ -164,9 +165,8 @@ public class Maestro {
                     aBliblikia.getBody().update();
             }
         }
-        out.resumeNotes();
 
-        fw.update();
+//        fw.update();
 
     }
 

@@ -23,12 +23,21 @@ public class Chain {
     public float yBounce = 0;
     public float maxY    = 100;
 
+    public static final int P_ELLIPSE  = 0;
+    public static final int P_TRIANGLE = 1;
+    public static final int P_SQUARE   = 2;
+
+    public int shape;
+    private int removeTime      = 60;
+    private int removeTimeIndex = 0;
+
     public Chain(PApplet pa, float x, float y) {
         Random r = new Random();
         this.pa = pa;
         this.x = x;
         this.y = y;
         this.speed = (r.nextFloat() * -5) - 5;
+        this.shape = r.nextInt(3);
 
         color = pa.color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
 
@@ -56,10 +65,11 @@ public class Chain {
                 deadParticles.add(particle);
             }
         }
-        for (ChainParticle particle : deadParticles) {
-            removeParticle(particle);
+        if (removeTime == removeTimeIndex++) {
+            removeTimeIndex = 0;
+            deadParticles.forEach(this::removeParticle);
+            deadParticles.clear();
         }
-        deadParticles.clear();
     }
 
     public void update() {

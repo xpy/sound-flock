@@ -189,12 +189,12 @@ public class Blibliki extends PApplet/* implements BitListener*/ {
         distortionApplications.get(index).distortion.revert();
     }
 
-    public void addLoopEvent(LoopEvent loopEvent) {
-        loopEvents.add(loopEvent);
-    }
-
     public Distortion getDistortion(int index) {
         return distortionApplications.get(index).distortion;
+    }
+
+    public void addLoopEvent(LoopEvent loopEvent) {
+        loopEvents.add(loopEvent);
     }
 
     public static class LoopEvent {

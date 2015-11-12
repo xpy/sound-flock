@@ -26,7 +26,7 @@ public class ChainMember implements Member {
 
     public boolean hasStarted = false;
     public boolean idleIsDrawn;
-    public int delay      = 2;
+    public int delay      = 4;
     public int delayIndex = 0;
 
     public ChainMember(PApplet pa, Note note, ChainBody chainBody) {
@@ -38,18 +38,41 @@ public class ChainMember implements Member {
 
     public void update(Body body) {
 
-        pa.noStroke();
         idleIsDrawn = false;
         for (BaseInstrumentGenerator.BaseInstrument instrument : instruments) {
-            if (instrument.isPlaying) {
+            if (instrument.getClass().getSimpleName().equals("KickInstrument")) {
+                PApplet.println("KickInstrument");
+                PApplet.println("instrument.isPlaying: " + instrument.isPlaying);
+                PApplet.println("instrument.hasStarted: " + instrument.hasStarted);
+                PApplet.println("instrument.isComplete: " + instrument.isComplete);
+
+            }
+
+            if (instrument.isPlaying || instrument.hasStarted) {
                 hasStarted = true;
                 EnvelopeFollower envf = instrument.getEnvFollower();
                 ADSR adsr = instrument.finalADSR;
-
+                float value = -1;
+                if (instrument.hasStarted) {
+                    instrument.hasStarted = false;
+                    if (instrument.getClass().getSimpleName().equals("KickInstrument"))
+                        value = 1f;
+                }
                 if (adsr.getLastValues().length > 0) {
+
+                    value = envf.getLastValues()[0];
+                }
+                if (value <= 0 && adsr.getLastValues().length > 0) {
+
+                    value = adsr.getLastValues()[0];
+                }
+                if (value >= 0) {
+                    value = Math.abs(value);
+
 //                    PApplet.println("abs(envf.getLastValues()[0]): "+Math.abs(envf.getLastValues()[0]));
+/*
                     if (instrument.getClass().getSimpleName().equals("KickInstrument")) {
-                        PApplet.println("adsr.getLastValues().length: "+adsr.getLastValues().length);
+                        PApplet.println("adsr.getLastValues().length: " + adsr.getLastValues().length);
                         for (float f : envf.getLastValues()) {
                             PApplet.println("KICK VALUES: " + f);
                         }
@@ -57,9 +80,11 @@ public class ChainMember implements Member {
                             PApplet.println("KICK ADSR VALUES: " + f);
                         }
                     }
-                    float enfValue = Math.abs(adsr.getLastValues()[0]) * 100;
-                    enfValue = Math.min(50, enfValue);
-                    if (enfValue > 0f) {
+                    */
+
+                    float enfValue = Math.abs(value) * 100;
+                    enfValue = Math.min(10, enfValue);
+                    if (enfValue >= 0f) {
                         // Draw Here
                         if (delayIndex == 0) {
                             ChainParticle p = chainBody.chain.addParticle();
@@ -70,10 +95,6 @@ public class ChainMember implements Member {
                     }
                 }
             }
-        }
-
-        if (hasStarted && !idleIsDrawn) {
-
         }
 
         for (Iterator<BaseInstrumentGenerator.BaseInstrument> iterator = instruments.iterator(); iterator.hasNext(); ) {
@@ -90,6 +111,45 @@ public class ChainMember implements Member {
     @Override
     public void attachInstrument(BaseInstrumentGenerator.BaseInstrument instrument) {
         this.instruments.add(instrument);
+        instrument.addStartEvent(new BaseInstrumentGenerator.StartEvent() {
+            @Override
+            public synchronized void fire(BaseInstrumentGenerator.BaseInstrument instr) {
+                if (instr.isPlaying || instr.hasStarted) {
+                    hasStarted = true;
+                    EnvelopeFollower envf = instr.getEnvFollower();
+                    ADSR adsr = instr.finalADSR;
+                    float value = -1;
+                    if (instr.hasStarted) {
+                        instr.hasStarted = false;
+                        if (instr.getClass().getSimpleName().equals("Kickinstr"))
+                            value = 1f;
+                    }
+                    if (adsr.getLastValues().length > 0) {
+
+                        value = envf.getLastValues()[0];
+                    }
+                    if (value <= 0 && adsr.getLastValues().length > 0) {
+
+                        value = adsr.getLastValues()[0];
+                    }
+                    if (value >= 0) {
+                        value = Math.abs(value);
+
+                        float enfValue = Math.abs(value) * 100;
+                        enfValue = Math.min(10, enfValue);
+                        if (enfValue >= 0f) {
+                            // Draw Here
+                            if (delayIndex == 0) {
+                                ChainParticle p = chainBody.chain.addParticle();
+                                p.size *= enfValue + 1;
+                                idleIsDrawn = true;
+                            }
+                            delayIndex = delayIndex == delay ? 0 : delayIndex + 1;
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override

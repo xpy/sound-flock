@@ -7,6 +7,9 @@ import ddf.minim.ugens.*;
 import processing.core.PApplet;
 import xpy.sound_flock.Note;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * BaseInstrumentGenerator
  * Created by xpy on 02-Oct-15.
@@ -170,10 +173,12 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         public float frequency;
         public float amplitude;
 
-        protected boolean isComplete                 = false;
-        public    boolean isPlaying                  = false;
-        protected long    completesAt                = 0;
-        protected int     envelopeFollowerBufferSize = 2048;
+        public    boolean         isComplete                 = false;
+        public    boolean         isPlaying                  = false;
+        public    boolean         hasStarted                 = false;
+        protected long            completesAt                = 0;
+        protected int             envelopeFollowerBufferSize = 2048;
+        private   List<StartEvent> startEvents                 = new ArrayList<>();
 
         public AudioOutput out;
         public Sink             sink             = xpy.sound_flock.Maestro.sink;
@@ -255,6 +260,10 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
             finalADSR.noteOn();
             // finalADSR2.noteOn();
             isPlaying = true;
+            hasStarted = true;
+            for (StartEvent startEvent : startEvents) {
+                startEvent.fire(this);
+            }
 
         }
 
@@ -271,7 +280,19 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
                 amplitude = amplitude * (.6f + .4f* (1 - (frequency-500) /5000));
 
             }
- */           return amplitude;
+ */
+            return amplitude;
+        }
+
+        public void addStartEvent(StartEvent StartEvent) {
+            startEvents.add(StartEvent);
+        }
+
+
+    }
+    public static class StartEvent {
+        public void fire(BaseInstrument instrument) {
+
         }
     }
 }

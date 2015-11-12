@@ -38,7 +38,7 @@ public class BoidBody extends Flock implements Body {
         neighborDist = 500;
         separationBurstReduce = 4;
 //        cohesionFactor = .5f;
-        Maestro.fw.addFlock(this);
+//        Maestro.fw.addFlock(this);
     }
 
 

@@ -32,8 +32,8 @@ public class ChainBody implements Body {
     public void update() {
 
         chain.run();
-        for (int i = 0; i < members.size(); i++) {
-            members.get(i).update(this);
+        for (Member member : members) {
+            member.update(this);
         }
 
     }

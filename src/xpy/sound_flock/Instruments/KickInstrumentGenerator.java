@@ -64,14 +64,14 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
         }
 
         public void noteOn(float dur) {
-            adsrModulator.noteOn();
             super.noteOn(dur);
+            adsrModulator.noteOn();
 
         }
 
         public void noteOff() {
-            adsrModulator.noteOff();
             super.noteOff();
+            adsrModulator.noteOff();
         }
 
     }

@@ -38,7 +38,7 @@ public class Maestro extends PApplet {
 
     public void settings() {
         size(800, 600, P3D);
-//        fullScreen(P2D, SPAN);
+//        fullScreen(P3D, SPAN);
 
     }
 
