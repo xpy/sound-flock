@@ -19,7 +19,7 @@ public class KickInstrumentGenerator extends BaseInstrumentGenerator {
         template = createTemplate();
         maxPitch = Note.getPitchOfIndex(-12);
         minPitch = Note.getPitchOfIndex(-24);
-        amplitude = .7f;
+        amplitude = .5f;
         maxDuration = .025f;
         minDuration = .025f;
     }

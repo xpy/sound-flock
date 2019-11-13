@@ -173,12 +173,12 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         public float frequency;
         public float amplitude;
 
-        public    boolean         isComplete                 = false;
-        public    boolean         isPlaying                  = false;
-        public    boolean         hasStarted                 = false;
-        protected long            completesAt                = 0;
-        protected int             envelopeFollowerBufferSize = 2048;
-        private   List<StartEvent> startEvents                 = new ArrayList<>();
+        public    boolean          isComplete                 = false;
+        public    boolean          isPlaying                  = false;
+        public    boolean          hasStarted                 = false;
+        protected long             completesAt                = 0;
+        protected int              envelopeFollowerBufferSize = 2048;
+        private   List<StartEvent> startEvents                = new ArrayList<>();
 
         public AudioOutput out;
         public Sink             sink             = xpy.sound_flock.Maestro.sink;
@@ -188,6 +188,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
         public ADSR       finalADSR;
         public ADSR       finalADSR2;
         public UGen       preFinalUgen;
+        public float instanceDuration = 0;
 
         @Override
         public Sink getSink() {
@@ -261,6 +262,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
             // finalADSR2.noteOn();
             isPlaying = true;
             hasStarted = true;
+            instanceDuration = duration;
             for (StartEvent startEvent : startEvents) {
                 startEvent.fire(this);
             }
@@ -290,6 +292,7 @@ public abstract class BaseInstrumentGenerator implements InstrumentGenerator {
 
 
     }
+
     public static class StartEvent {
         public void fire(BaseInstrument instrument) {
 

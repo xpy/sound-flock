@@ -43,7 +43,7 @@ public class Chain {
 
     }
 
-    public ChainParticle addParticle() {
+    public synchronized ChainParticle addParticle() {
         ChainParticle particle = new ChainParticle(pa, 0, (float) (maxY * Math.sin(yBounce)));
         addParticle(particle);
         return particle;
@@ -57,7 +57,7 @@ public class Chain {
         this.particles.remove(particle);
     }
 
-    public void run() {
+    public synchronized void run() {
         this.update();
         for (ChainParticle particle : particles) {
             particle.run(this);

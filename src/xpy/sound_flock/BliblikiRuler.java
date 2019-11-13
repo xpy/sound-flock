@@ -68,17 +68,17 @@ public class BliblikiRuler {
 
         switch (bliblikiIndex) {
             default:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SynthInstrumentGenerator(), new ChainBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SynthInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_SPARK:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SparkInstrumentGenerator(), new ChainBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SparkInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_KICK:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new KickInstrumentGenerator(), new ChainBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new KickInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_SNARE:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SnareInstrumentGenerator(), new ChainBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new SnareInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_TONE:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new ToneInstrumentGenerator(), new ChainBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new ToneInstrumentGenerator(), new ConstellationBody(pa), out);
             case B_TSIK:
-                return new Blibliki(Phrases.getPhrase(phraseType, 4), new TsikInstrumentGenerator(), new ChainBody(pa), out);
+                return new Blibliki(Phrases.getPhrase(phraseType, 4), new TsikInstrumentGenerator(), new ConstellationBody(pa), out);
         }
 
     }

@@ -15,7 +15,7 @@ public class SparkInstrumentGenerator extends BaseInstrumentGenerator {
 
     public SparkInstrumentGenerator() {
         template = createTemplate();
-        amplitude=.3f;
+        amplitude=.4f;
         maxDuration = .25f;
         minDuration = .125f;
 

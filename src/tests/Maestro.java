@@ -37,13 +37,13 @@ public class Maestro extends PApplet {
     }
 
     public void settings() {
-        size(800, 600, P3D);
-//        fullScreen(P3D, SPAN);
-
+//        size(800, 600, P3D);
+        fullScreen(P3D, SPAN);
     }
 
     public void setup() {
         // initialize the drawing window
+        noCursor();
 
         // initialize the minim and out objects
         minim = new Minim(this);
@@ -65,7 +65,7 @@ public class Maestro extends PApplet {
     }
 
 
-    public void draw() {
+    public synchronized void draw() {
 
         // erase the window to black
 /*
@@ -92,7 +92,7 @@ public class Maestro extends PApplet {
             recorder.save();
             recorder = minim.createRecorder(out, "E:\\maestro\\Maestro_"+(recordingIndex++)+".wav");
             recorder.beginRecord();
-
+            Constellation.offset =50;
             maestro = new xpy.sound_flock.Maestro(this, out);
             maestro.start();
         }

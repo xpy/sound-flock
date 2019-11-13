@@ -29,7 +29,7 @@ public class ChainBody implements Body {
         chain = new Chain(pa, x, y);
     }
 
-    public void update() {
+    public synchronized void update() {
 
         chain.run();
         for (Member member : members) {

@@ -72,7 +72,7 @@ public class Maestro {
         nextCheck = System.currentTimeMillis() + out.nextMeterStart(meterLength) + 100;
     }
 
-    public void update() {
+    public synchronized void update() {
         Random r = new Random();
         out.pauseNotes();
         if (System.currentTimeMillis() - nextCheck >= 0) {
